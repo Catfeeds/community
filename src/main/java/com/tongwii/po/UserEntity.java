@@ -4,9 +4,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * Author: Zeral
@@ -27,7 +26,7 @@ public class UserEntity implements Serializable {
     private String idCard;
     private String phone;
     private String clientId;
-    private Timestamp addTime;
+    private Date addTime;
     private Byte state;
     private Collection<AreaEntity> areasById;
     private Collection<FileEntity> filesById;
@@ -168,11 +167,11 @@ public class UserEntity implements Serializable {
 
     @Basic
     @Column(name = "add_time")
-    public Timestamp getAddTime() {
+    public Date getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(Date addTime) {
         this.addTime = addTime;
     }
 

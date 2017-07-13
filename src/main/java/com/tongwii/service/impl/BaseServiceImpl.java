@@ -9,8 +9,7 @@ import java.util.List;
 import com.tongwii.dao.BaseDao;
 import com.tongwii.service.IBaseService;
 import com.tongwii.service.IPageInfo;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public abstract class BaseServiceImpl<M extends Serializable> implements IBaseService<M> {
 
-	private final Logger log = LogManager.getLogger((Class<Object>) getSuperClassGenricType(getClass(), 0));
+	private final Logger log = Logger.getLogger((Class<Object>) getSuperClassGenricType(getClass(), 0));
 
 	@Autowired
 	public abstract BaseDao<M, String> getDao();

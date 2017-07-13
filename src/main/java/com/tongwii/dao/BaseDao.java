@@ -40,7 +40,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 	private SessionFactory sessionFactory;
 
 	public Session getCurrentSession() {
-		return sessionFactory.openSession();
+		return sessionFactory.getCurrentSession();
 	}
 
 	public void save(M model) {

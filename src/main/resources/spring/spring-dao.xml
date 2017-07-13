@@ -31,7 +31,7 @@
     </bean>
 
     <!--3.配置SqlSessionFactory对象-->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource">
             <ref bean="dataSource" />
         </property>

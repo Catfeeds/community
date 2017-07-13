@@ -1,7 +1,6 @@
 package com.tongwii.service.impl;
 
 import com.tongwii.dao.BaseDao;
-import com.tongwii.dao.FileDao;
 import com.tongwii.dao.UserDao;
 import com.tongwii.po.FileEntity;
 import com.tongwii.po.UserEntity;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -44,7 +44,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
     @Override
     public void save(UserEntity userEntity) {
         userEntity.setPassword(md5PasswordEncoder.encoder(userEntity.getPassword()));
-        super.save(userEntity);
+        userEntity.setAddTime(new Date());
+        userDao.save(userEntity);
     }
 
     @Override
