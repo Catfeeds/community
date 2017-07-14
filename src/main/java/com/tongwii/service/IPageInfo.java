@@ -58,8 +58,15 @@ public interface IPageInfo {
 
 	/**
 	 * 给分页对象设置数据
-	 * @param lsemp
+	 * @param Zeral
 	 */
-	void setPagelist(List<?> lsemp);
+	void setPageData(List<?> lsemp);
+
+	/**
+	 * 获取分页数据
+	 * @author Zeral
+	 * @return
+	 */
+	List<?> getPageData();
 
 }
