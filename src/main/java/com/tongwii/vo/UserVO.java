@@ -1,5 +1,8 @@
 package com.tongwii.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tongwii.util.CustomDateSerializer;
+
 import java.util.Date;
 
 /**
@@ -12,6 +15,7 @@ public class UserVO {
     private String id;
     private String account;
     private String nickName;
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date birthday;
     private String signature;
     private Byte sex;

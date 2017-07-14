@@ -85,10 +85,9 @@ public class UserController {
 
 	// 上传用户头像
 	@RequestMapping(value = "/uploadAvatar", method = RequestMethod.POST)
-	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, HttpSession session, HttpServletResponse response) {
+	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, @RequestParam("token")String token, HttpServletResponse response) {
 		try {
 			System.out.println("=========开始上传头像======================================");
-			String token = (String) session.getAttribute("token");
 			UserEntity userEntity = TokenUtil.getUserInfoFormToken(token);
 			if(Objects.nonNull(userEntity)) {
 				// 上传文件并更新用户地址

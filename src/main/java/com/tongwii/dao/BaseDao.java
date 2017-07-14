@@ -138,6 +138,21 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 	}
 
 	/**
+	 * 根据hql查询唯一结果
+	 *
+	 * @param hql
+	 * @param paramlist
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public M findUniqueByHql(String hql, final Object... paramlist) {
+		Query query = getCurrentSession().createQuery(hql);
+		query.setMaxResults(1);
+		setParameters(query, paramlist);
+		return (M) query.uniqueResult();
+	}
+
+	/**
 	 * 获取所有记录
 	 * 
 	 * @return

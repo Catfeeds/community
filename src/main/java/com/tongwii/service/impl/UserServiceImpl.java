@@ -57,7 +57,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
         String relativeUrl = FileUtil.uploadFile(file, id + suffix);
         FileEntity fileEntity = new FileEntity();
         fileEntity.setFileName(file.getOriginalFilename());
-        fileEntity.setFileType(suffix);
+        fileEntity.setFileType(FileUtil.rtnFileType(file.getOriginalFilename()));
         fileEntity.setFilePath(relativeUrl);
         fileEntity.setUploadUserId(userId);
         fileService.save(fileEntity);
