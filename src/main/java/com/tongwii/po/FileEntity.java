@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * Author: Zeral
- * Date: 2017/7/11
+ * @author: Zeral
+ * @date: 2017/7/13
  */
 @Entity
 @Table(name = "file", schema = "cloud_community", catalog = "")
@@ -17,7 +17,7 @@ public class FileEntity implements Serializable {
     private String fileName;
     private String filePath;
     private String fileType;
-    private String desc;
+    private String des;
     private Byte state;
     private String uploadUserId;
     private UserEntity userByUploadUserId;
@@ -67,13 +67,13 @@ public class FileEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "desc")
-    public String getDesc() {
-        return desc;
+    @Column(name = "des")
+    public String getDes() {
+        return des;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDes(String des) {
+        this.des = des;
     }
 
     @Basic
@@ -107,7 +107,7 @@ public class FileEntity implements Serializable {
         if (fileName != null ? !fileName.equals(that.fileName) : that.fileName != null) return false;
         if (filePath != null ? !filePath.equals(that.filePath) : that.filePath != null) return false;
         if (fileType != null ? !fileType.equals(that.fileType) : that.fileType != null) return false;
-        if (desc != null ? !desc.equals(that.desc) : that.desc != null) return false;
+        if (des != null ? !des.equals(that.des) : that.des != null) return false;
         if (state != null ? !state.equals(that.state) : that.state != null) return false;
         if (uploadUserId != null ? !uploadUserId.equals(that.uploadUserId) : that.uploadUserId != null) return false;
 
@@ -120,7 +120,7 @@ public class FileEntity implements Serializable {
         result = 31 * result + (fileName != null ? fileName.hashCode() : 0);
         result = 31 * result + (filePath != null ? filePath.hashCode() : 0);
         result = 31 * result + (fileType != null ? fileType.hashCode() : 0);
-        result = 31 * result + (desc != null ? desc.hashCode() : 0);
+        result = 31 * result + (des != null ? des.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (uploadUserId != null ? uploadUserId.hashCode() : 0);
         return result;

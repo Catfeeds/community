@@ -18,8 +18,12 @@ public interface UserConstants {
 	
 	/**用户状态*/
 	
-	public final static Integer USER_STATUS_ACTIVE = 1;//在校
+	public final static Byte USER_STATUS_ACTIVE = 1;//正常使用
 	
-	public final static Integer USER_STATUS_LEAVE = 2;//离校
-	
+	public final static Byte USER_STATUS_LEAVE = -1;//注销
+
+	/**性别状态*/
+	public final static Integer UNKNOWN_SEX = 0;
+	public final static Integer USER_SEX_MALE = 1;
+	public final static Integer USER_SEX_FAMALE = 2;
 }

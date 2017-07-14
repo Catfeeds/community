@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * Author: Zeral
- * Date: 2017/7/11
+ * @author: Zeral
+ * @date: 2017/7/13
  */
 @Entity
 @Table(name = "subgroup", schema = "cloud_community", catalog = "")
@@ -16,7 +16,7 @@ public class SubGroupEntity implements Serializable {
     private String id;
     private String name;
     private String parentId;
-    private String desc;
+    private String des;
     private Collection<GroupRoleEntity> groupRolesById;
     private SubGroupEntity subgroupByParentId;
     private Collection<SubGroupEntity> subgroupsById;
@@ -55,13 +55,13 @@ public class SubGroupEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "desc")
-    public String getDesc() {
-        return desc;
+    @Column(name = "des")
+    public String getDes() {
+        return des;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDes(String desc) {
+        this.des = desc;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class SubGroupEntity implements Serializable {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (parentId != null ? !parentId.equals(that.parentId) : that.parentId != null) return false;
-        if (desc != null ? !desc.equals(that.desc) : that.desc != null) return false;
+        if (des != null ? !des.equals(that.des) : that.des != null) return false;
 
         return true;
     }
@@ -84,7 +84,7 @@ public class SubGroupEntity implements Serializable {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (parentId != null ? parentId.hashCode() : 0);
-        result = 31 * result + (desc != null ? desc.hashCode() : 0);
+        result = 31 * result + (des != null ? des.hashCode() : 0);
         return result;
     }
 

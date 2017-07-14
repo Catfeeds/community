@@ -1,5 +1,6 @@
 package com.tongwii.service.impl;
 
+import com.tongwii.constant.UserConstants;
 import com.tongwii.dao.BaseDao;
 import com.tongwii.dao.UserDao;
 import com.tongwii.po.FileEntity;
@@ -45,6 +46,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
     public void save(UserEntity userEntity) {
         userEntity.setPassword(md5PasswordEncoder.encoder(userEntity.getPassword()));
         userEntity.setAddTime(new Date());
+        userEntity.setState(UserConstants.USER_STATUS_ACTIVE);
         userDao.save(userEntity);
     }
 

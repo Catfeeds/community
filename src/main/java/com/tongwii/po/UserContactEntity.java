@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Author: Zeral
- * Date: 2017/7/11
+ * @author: Zeral
+ * @date: 2017/7/13
  */
 @Entity
 @Table(name = "user_contact", schema = "cloud_community", catalog = "")
@@ -15,7 +15,7 @@ public class UserContactEntity implements Serializable {
     private String id;
     private String userId;
     private String friendId;
-    private String dec;
+    private String des;
     private UserEntity userByUserId;
     private UserEntity userByFriendId;
 
@@ -52,13 +52,13 @@ public class UserContactEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "dec")
-    public String getDec() {
-        return dec;
+    @Column(name = "des")
+    public String getDes() {
+        return des;
     }
 
-    public void setDec(String dec) {
-        this.dec = dec;
+    public void setDes(String dec) {
+        this.des = dec;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class UserContactEntity implements Serializable {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
         if (friendId != null ? !friendId.equals(that.friendId) : that.friendId != null) return false;
-        if (dec != null ? !dec.equals(that.dec) : that.dec != null) return false;
+        if (des != null ? !des.equals(that.des) : that.des != null) return false;
 
         return true;
     }
@@ -81,7 +81,7 @@ public class UserContactEntity implements Serializable {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (userId != null ? userId.hashCode() : 0);
         result = 31 * result + (friendId != null ? friendId.hashCode() : 0);
-        result = 31 * result + (dec != null ? dec.hashCode() : 0);
+        result = 31 * result + (des != null ? des.hashCode() : 0);
         return result;
     }
 

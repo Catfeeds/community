@@ -1,25 +1,24 @@
 package com.tongwii.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.constant.ResultConstants;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.IUserService;
 import com.tongwii.util.TokenUtil;
+import com.tongwii.util.VOUtil;
+import com.tongwii.vo.UserVO;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
-@SessionAttributes("token")
 public class UserController {
 	@Autowired
 	private IUserService userService;
@@ -47,7 +46,7 @@ public class UserController {
 
 	// 用户登录接口
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-	public TongWIIResult login(@RequestBody UserEntity user, @RequestHeader("Host") String host, Model model) {
+	public TongWIIResult login(@RequestBody UserEntity user, @RequestHeader("Host") String host, HttpSession session) {
 		try {
 			if(StringUtils.isEmpty(user.getAccount())){
 				result.errorResult("用户账号不可为空");
@@ -66,11 +65,13 @@ public class UserController {
 			if (findUser.getPassword().equals(user.getPassword())) {
 				// 用户设置token
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("account", user.getAccount());
-				jsonObject.put("userId", user.getId());
+				jsonObject.put("account", findUser.getAccount());
+				jsonObject.put("userId", findUser.getId());
 				String token = TokenUtil.createToken(host, jsonObject.toString());
-				model.addAttribute("token", token);
-				result.successResult("登陆成功", findUser);
+				session.setAttribute("token", token);
+				UserVO userVO = VOUtil.transformUserToVO(findUser);
+				userVO.setToken(token);
+				result.successResult("登陆成功", userVO);
 				return result;
 			} else {
 				result.errorResult("密码错误！");
@@ -84,10 +85,10 @@ public class UserController {
 
 	// 上传用户头像
 	@RequestMapping(value = "/uploadAvatar", method = RequestMethod.POST)
-	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
+	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, HttpSession session, HttpServletResponse response) {
 		try {
 			System.out.println("=========开始上传头像======================================");
-			String token = request.getSession().getAttribute("token").toString();
+			String token = (String) session.getAttribute("token");
 			UserEntity userEntity = TokenUtil.getUserInfoFormToken(token);
 			if(Objects.nonNull(userEntity)) {
 				// 上传文件并更新用户地址

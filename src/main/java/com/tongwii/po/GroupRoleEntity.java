@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Author: Zeral
- * Date: 2017/7/11
+ * @author: Zeral
+ * @date: 2017/7/13
  */
 @Entity
 @Table(name = "group_role", schema = "cloud_community", catalog = "")
@@ -15,7 +15,7 @@ public class GroupRoleEntity implements Serializable {
     private String id;
     private String groupId;
     private String roleId;
-    private String dec;
+    private String des;
     private SubGroupEntity subgroupByGroupId;
     private RoleEntity roleByRoleId;
 
@@ -52,13 +52,13 @@ public class GroupRoleEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "dec")
-    public String getDec() {
-        return dec;
+    @Column(name = "des")
+    public String getDes() {
+        return des;
     }
 
-    public void setDec(String dec) {
-        this.dec = dec;
+    public void setDes(String dec) {
+        this.des = dec;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class GroupRoleEntity implements Serializable {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (groupId != null ? !groupId.equals(that.groupId) : that.groupId != null) return false;
         if (roleId != null ? !roleId.equals(that.roleId) : that.roleId != null) return false;
-        if (dec != null ? !dec.equals(that.dec) : that.dec != null) return false;
+        if (des != null ? !des.equals(that.des) : that.des != null) return false;
 
         return true;
     }
@@ -81,7 +81,7 @@ public class GroupRoleEntity implements Serializable {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (groupId != null ? groupId.hashCode() : 0);
         result = 31 * result + (roleId != null ? roleId.hashCode() : 0);
-        result = 31 * result + (dec != null ? dec.hashCode() : 0);
+        result = 31 * result + (des != null ? des.hashCode() : 0);
         return result;
     }
 

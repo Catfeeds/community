@@ -1,14 +1,15 @@
 package com.tongwii.po;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.sql.Date;
-import java.util.Collection;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+
 /**
- * Author: Zeral
- * Date: 2017/7/11
+ * @author: Zeral
+ * @date: 2017/7/13
  */
 @Entity
 @Table(name = "area", schema = "cloud_community", catalog = "")

@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * Author: Zeral
- * Date: 2017/7/11
+ * @author: Zeral
+ * @date: 2017/7/13
  */
 @Entity
 @Table(name = "message_comment", schema = "cloud_community", catalog = "")

@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 import java.util.Collection;
 
 /**
- * Author: Zeral
- * Date: 2017/7/11
+ * @author: Zeral
+ * @date: 2017/7/13
  */
 @Entity
 @Table(name = "message", schema = "cloud_community", catalog = "")
