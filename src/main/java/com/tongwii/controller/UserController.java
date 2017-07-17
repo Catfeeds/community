@@ -28,6 +28,7 @@ public class UserController {
 	
 	// 用户注册接口
 	@RequestMapping(value = "/regist", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
+	@ResponseBody
 	public TongWIIResult regist(@RequestBody UserEntity user)  {
 		if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
 			result.errorResult("用户已存在！");

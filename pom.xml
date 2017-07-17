@@ -31,7 +31,46 @@
     <commons-lang>2.6</commons-lang>
   </properties>
 
+  <!-- 中央仓库 -->
+  <repositories>
+    <repository>
+      <id>central</id>
+      <name>tongwii repository central.</name>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+  <!--getui-->
+    <repository>
+      <id>getui-nexus</id>
+      <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
+    </repository>
+
+  </repositories>
+
+
+
+  <!-- 插件仓库 -->
+  <pluginRepositories>
+    <pluginRepository>
+      <id>central</id>
+      <name>tongwii pluginRepository central.</name>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </pluginRepository>
+  </pluginRepositories>
+
   <dependencies>
+    <!-- getuipeizhi -->
+    <dependency>
+      <groupId>com.gexin.platform</groupId>
+      <artifactId>gexin-rp-sdk-http</artifactId>
+      <version>4.0.1.9</version>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

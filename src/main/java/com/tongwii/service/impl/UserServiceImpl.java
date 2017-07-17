@@ -46,7 +46,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
     public void save(UserEntity userEntity) {
         userEntity.setPassword(md5PasswordEncoder.encoder(userEntity.getPassword()));
         userEntity.setAddTime(new Date());
-        userEntity.setState(UserConstants.USER_STATUS_ACTIVE);
+        userEntity.setState(UserConstants.USER_EXIST.byteValue());
         userDao.save(userEntity);
     }
 
@@ -64,4 +64,5 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
         userDao.updateAvatorById(userId, fileEntity.getId());
         return relativeUrl;
     }
+
 }

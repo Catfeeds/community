@@ -138,21 +138,6 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 	}
 
 	/**
-	 * 根据hql查询唯一结果
-	 *
-	 * @param hql
-	 * @param paramlist
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public M findUniqueByHql(String hql, final Object... paramlist) {
-		Query query = getCurrentSession().createQuery(hql);
-		query.setMaxResults(1);
-		setParameters(query, paramlist);
-		return (M) query.uniqueResult();
-	}
-
-	/**
 	 * 获取所有记录
 	 * 
 	 * @return
@@ -294,6 +279,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		setParameters(query, paramlist);
 		query.setFirstResult(pageInfo.getOffset());
 		query.setMaxResults(pageInfo.getPageSize());
+
 		List<M> results = query.list();
 		String countHQL = hql.replaceFirst("(?i).*?from", "select count(*) from");
 		long count  = this.getCount(countHQL, paramlist);
@@ -406,7 +392,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 	 * 根据查询条件返回唯一一条记录
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> T unique(final String hql, final Object... paramlist) {
+	protected <T> T findUniqueByHql(final String hql, final Object... paramlist) {
 		Query query = getCurrentSession().createQuery(hql);
 		setParameters(query, paramlist);
 		return (T) query.uniqueResult();
@@ -440,7 +426,9 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 	}
 
 	/**
-	 * 执行批处理语句.如 之间insert, update, delete 等.
+	 * hql执行批处理语句.如insert, update, delete 等.
+	 *
+	 * @return int 返回执行结果受影响的行数
 	 */
 	protected int executeBulk(final String hql, final Object... paramlist) {
 		Query query = getCurrentSession().createQuery(hql);
@@ -449,6 +437,11 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		return result == null ? 0 : ((Integer) result).intValue();
 	}
 
+	/**
+	 * sql执行批处理语句.如insert, update, delete 等.
+	 *
+	 * @return int 返回执行结果受影响的行数
+	 */
 	public int executeNativeBulk(final String natvieSQL,
 			final Object... paramlist) {
 		Query query = getCurrentSession().createSQLQuery(natvieSQL);
