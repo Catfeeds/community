@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
+ * 用户实体
+ *
  * Author: Zeral
  * Date: 2017/7/11
  */

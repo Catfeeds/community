@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
+ * 消息评论
+ *
  * @author: Zeral
  * @date: 2017/7/13
  */

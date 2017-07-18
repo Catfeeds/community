@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.Collection;
 
 /**
+ * 消息实体
+ *
  * @author: Zeral
  * @date: 2017/7/13
  */
