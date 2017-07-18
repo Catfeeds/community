@@ -21,10 +21,11 @@ public class ResidenceEntity implements Serializable {
     private Integer floorCount;
     private String regionId;
     private String serverUrl;
-    private Collection<FloorEntity> floorsById;
+    private Collection<AreaEntity> areaById;
     private UserEntity userByUserId;
     private RegionEntity regionByRegionId;
 
+    @Basic
     @Id
     @GeneratedValue(generator = "paymentableGenerator")
     @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
@@ -116,12 +117,12 @@ public class ResidenceEntity implements Serializable {
     }
 
     @OneToMany(mappedBy = "residenceByResidenceId")
-    public Collection<FloorEntity> getFloorsById() {
-        return floorsById;
+    public Collection<AreaEntity> getAreaById() {
+        return areaById;
     }
 
-    public void setFloorsById(Collection<FloorEntity> floorsById) {
-        this.floorsById = floorsById;
+    public void setAreaById(Collection<AreaEntity> floorsById) {
+        this.areaById = floorsById;
     }
 
     @ManyToOne
