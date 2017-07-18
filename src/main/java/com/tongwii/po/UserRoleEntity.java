@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
+ * 用户角色关系实体
+ *
  * @author: Zeral
  * @date: 2017/7/13
  */

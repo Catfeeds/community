@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
+ * 分区实体
+ *
  * @author: Zeral
  * @date: 2017/7/13
  */
@@ -18,9 +20,16 @@ public class AreaEntity implements Serializable {
     private String name;
     private Date buildDate;
     private String chargeId;
+    private String residenceId;
     private UserEntity userByChargeId;
     private Collection<FloorEntity> floorsById;
+    private ResidenceEntity residenceByResidenceId;
 
+    public void setBuildDate(java.sql.Date buildDate) {
+        this.buildDate = buildDate;
+    }
+
+    @Basic
     @Id
     @GeneratedValue(generator = "paymentableGenerator")
     @GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
@@ -63,6 +72,16 @@ public class AreaEntity implements Serializable {
         this.chargeId = chargeId;
     }
 
+    @Basic
+    @Column(name = "residence_id")
+    public String getResidenceId() {
+        return residenceId;
+    }
+
+    public void setResidenceId(String residenceId) {
+        this.residenceId = residenceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +92,7 @@ public class AreaEntity implements Serializable {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (buildDate != null ? !buildDate.equals(that.buildDate) : that.buildDate != null) return false;
+        if (residenceId != null ? !residenceId.equals(that.residenceId) : that.residenceId != null) return false;
         if (chargeId != null ? !chargeId.equals(that.chargeId) : that.chargeId != null) return false;
 
         return true;
@@ -84,6 +104,7 @@ public class AreaEntity implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (buildDate != null ? buildDate.hashCode() : 0);
         result = 31 * result + (chargeId != null ? chargeId.hashCode() : 0);
+        result = 31 * result + (residenceId != null ? residenceId.hashCode() : 0);
         return result;
     }
 
@@ -104,5 +125,15 @@ public class AreaEntity implements Serializable {
 
     public void setFloorsById(Collection<FloorEntity> floorsById) {
         this.floorsById = floorsById;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "residence_id", referencedColumnName = "id", insertable = false, updatable = false)
+    public ResidenceEntity getResidenceByResidenceId() {
+        return residenceByResidenceId;
+    }
+
+    public void setResidenceByResidenceId(ResidenceEntity residenceByResidenceId) {
+        this.residenceByResidenceId = residenceByResidenceId;
     }
 }

@@ -6,14 +6,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.util.CycleDetectionStrategy;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
 
-/**
- *
- * 处理返回结果
- *
- */
 public class TongWIIResult implements Serializable {
 	/**
 	 * 处理结果状态

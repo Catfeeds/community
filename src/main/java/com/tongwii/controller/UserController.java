@@ -26,45 +26,45 @@ public class UserController {
 	private TongWIIResult result = new TongWIIResult();
 
 	
-	// ÓÃ»§×¢²á½Ó¿Ú
+	// ç”¨æˆ·æ³¨å†Œæ¥å£
 	@RequestMapping(value = "/regist", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
 	@ResponseBody
 	public TongWIIResult regist(@RequestBody UserEntity user)  {
 		if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
-			result.errorResult("ÓÃ»§ÒÑ´æÔÚ£¡");
+			result.errorResult("ç”¨æˆ·å·²å­˜åœ¨ï¼");
 			return result;
 		}
-		// ÔÚ´Ëµ÷ÓÃÓÃ»§×¢²áµÄ·şÎñ
+		// åœ¨æ­¤è°ƒç”¨ç”¨æˆ·æ³¨å†Œçš„æœåŠ¡
 		try {
 			userService.save(user);
-			result.successResult("×¢²á³É¹¦", user);
+			result.successResult("æ³¨å†ŒæˆåŠŸ", user);
 			return result;
 		} catch (Exception e) {
-			result.errorResult("×¢²áÊ§°Ü", e.getMessage());
+			result.errorResult("æ³¨å†Œå¤±è´¥", e.getMessage());
 		}
 		return result;
 	}
 
-	// ÓÃ»§µÇÂ¼½Ó¿Ú
+	// ç”¨æˆ·ç™»å½•æ¥å£
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
 	public TongWIIResult login(@RequestBody UserEntity user, @RequestHeader("Host") String host, HttpSession session) {
 		try {
 			if(StringUtils.isEmpty(user.getAccount())){
-				result.errorResult("ÓÃ»§ÕËºÅ²»¿ÉÎª¿Õ");
+				result.errorResult("ç”¨æˆ·è´¦å·ä¸å¯ä¸ºç©º");
                 return result;
             }
 			if(StringUtils.isEmpty(user.getPassword())){
-				result.errorResult("ÃÜÂë²»¿ÉÎª¿Õ");
+				result.errorResult("å¯†ç ä¸å¯ä¸ºç©º");
                 return result;
             }
-			//Í¨¹ıÓÃ»§Ãû²éÑ¯ÓÃ»§µÄËùÓĞĞÅÏ¢
+			//é€šè¿‡ç”¨æˆ·åæŸ¥è¯¢ç”¨æˆ·çš„æ‰€æœ‰ä¿¡æ¯
 			UserEntity findUser = userService.findByAccount(user.getAccount());
 			if(Objects.isNull(findUser)){
-				result.errorResult("ÓÃ»§²»´æÔÚ");
+				result.errorResult("ç”¨æˆ·ä¸å­˜åœ¨");
                 return result;
             }
 			if (findUser.getPassword().equals(user.getPassword())) {
-				// ÓÃ»§ÉèÖÃtoken
+				// ç”¨æˆ·è®¾ç½®token
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("account", findUser.getAccount());
 				jsonObject.put("userId", findUser.getId());
@@ -72,40 +72,40 @@ public class UserController {
 				session.setAttribute("token", token);
 				UserVO userVO = VOUtil.transformUserToVO(findUser);
 				userVO.setToken(token);
-				result.successResult("µÇÂ½³É¹¦", userVO);
+				result.successResult("ç™»é™†æˆåŠŸ", userVO);
 				return result;
 			} else {
-				result.errorResult("ÃÜÂë´íÎó£¡");
+				result.errorResult("å¯†ç é”™è¯¯ï¼");
 				return result;
 			}
 		} catch (Exception e) {
-			result.errorResult("µÇÂ½³ö´í£¡", e.getMessage());
+			result.errorResult("ç™»é™†å‡ºé”™ï¼", e.getMessage());
 			return result;
 		}
 	}
 
-	// ÉÏ´«ÓÃ»§Í·Ïñ
+	// ä¸Šä¼ ç”¨æˆ·å¤´åƒ
 	@RequestMapping(value = "/uploadAvatar", method = RequestMethod.POST)
 	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, @RequestParam("token")String token, HttpServletResponse response) {
 		try {
-			System.out.println("=========¿ªÊ¼ÉÏ´«Í·Ïñ======================================");
+			System.out.println("=========å¼€å§‹ä¸Šä¼ å¤´åƒ======================================");
 			UserEntity userEntity = TokenUtil.getUserInfoFormToken(token);
 			if(Objects.nonNull(userEntity)) {
-				// ÉÏ´«ÎÄ¼ş²¢¸üĞÂÓÃ»§µØÖ·
+				// ä¸Šä¼ æ–‡ä»¶å¹¶æ›´æ–°ç”¨æˆ·åœ°å€
 				String uploadUrl = userService.updateUserAvatorById(userEntity.getId(), file);
 
-				result.successResult("Í·ÏñÉÏ´«³É¹¦", uploadUrl);
-				System.out.println("==========Í·ÏñÉÏ´«Íê±Ï======================================");
-				// Ê¹ÓÃÁËÉÏ´«ÎÄ¼şµÄÊä³öÁ÷ºÍresponseµÄ·µ»Øjson»á³ö´í£¬ÖØÖÃresponse
+				result.successResult("å¤´åƒä¸Šä¼ æˆåŠŸ", uploadUrl);
+				System.out.println("==========å¤´åƒä¸Šä¼ å®Œæ¯•======================================");
+				// ä½¿ç”¨äº†ä¸Šä¼ æ–‡ä»¶çš„è¾“å‡ºæµå’Œresponseçš„è¿”å›jsonä¼šå‡ºé”™ï¼Œé‡ç½®response
 				response.reset();
 				return result;
 			} else {
 				result.setStatus(ResultConstants.ILLEGAL);
-				result.setInfo("µÇÂ½×´Ì¬²»ºÏ·¨");
+				result.setInfo("ç™»é™†çŠ¶æ€ä¸åˆæ³•");
 				return result;
 			}
 		} catch (Exception e) {
-			result.errorResult("Í·ÏñÉÏ´«Ê§°Ü");
+			result.errorResult("å¤´åƒä¸Šä¼ å¤±è´¥");
 			response.reset();
 			return result;
 		}

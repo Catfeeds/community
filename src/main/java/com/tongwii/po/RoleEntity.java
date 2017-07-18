@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
+ * 角色实体
+ *
  * @author: Zeral
  * @date: 2017/7/13
  */
