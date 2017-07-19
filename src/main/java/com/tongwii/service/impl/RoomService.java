@@ -1,11 +1,14 @@
 package com.tongwii.service.impl;
 
+import com.tongwii.bean.TongWIIResult;
 import com.tongwii.dao.BaseDao;
 import com.tongwii.dao.RoomDao;
 import com.tongwii.po.RoomEntity;
 import com.tongwii.service.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by admin on 2017/7/14.
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class RoomService extends BaseServiceImpl<RoomEntity> implements IRoomService{
     @Autowired
     private RoomDao roomDao;
+
     @Override
     public RoomEntity findRoomByCode(String roomCode) {
         RoomEntity roomEntity = roomDao.findRoomsByRoomCode(roomCode);
@@ -23,5 +27,10 @@ public class RoomService extends BaseServiceImpl<RoomEntity> implements IRoomSer
     @Override
     public BaseDao getDao() {
         return roomDao;
+    }
+
+    @Override
+    public List<RoomEntity> findRoomForChose(String unitId, String areaId) {
+        return roomDao.findRoomForChose(unitId, areaId);
     }
 }

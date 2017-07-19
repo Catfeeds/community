@@ -9,5 +9,10 @@ import com.tongwii.po.UserEntity;
  * Created by admin on 2017/7/13.
  */
 public interface IPushService {
-    public TongWIIResult listMesssgePush(MessageEntity pushInfo, String roomCode);
+    /**
+     * 消息推送列表
+     * @param pushInfo
+     * @param roomCode
+     * */
+    TongWIIResult listMesssgePush(MessageEntity pushInfo, String roomCode);
 }

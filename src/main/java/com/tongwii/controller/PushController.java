@@ -19,22 +19,18 @@ public class PushController {
     @Autowired
     private IPushService pushService;
     private TongWIIResult result = new TongWIIResult();
-    // 按照一个房间推送消息
-    @RequestMapping(value = "/pushMessageToSingleRoom", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-    public TongWIIResult pushMessageToSingleRoom(@RequestHeader("roomCode")String roomCode,@RequestBody MessageEntity messageEntity){
+    // 根据单个房间推送消息
+    @RequestMapping(value = "/pushMessageToSingleRoom", method = RequestMethod.POST)
+    public TongWIIResult pushMessageToSingleRoom(String roomCode, @RequestBody MessageEntity messageEntity){
         // 判空
         if(messageEntity.getTitle().isEmpty() && messageEntity.getContent().isEmpty()){
-            result.errorResult("消息不可为空!");
+            result.errorResult("消息体为空!");
             return result;
         }
         if(roomCode.isEmpty()){
-            result.errorResult("推送目标不可为空!");
+            result.errorResult("推送目标为空!");
             return result;
         }
-       /* if(userId.isEmpty()){
-            result.errorResult("非法推送!");
-            return result;
-        }*/
         result = pushService.listMesssgePush(messageEntity,roomCode);
         return result;
     }

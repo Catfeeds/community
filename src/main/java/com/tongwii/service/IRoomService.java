@@ -2,16 +2,34 @@ package com.tongwii.service;
 
 import com.tongwii.po.RoomEntity;
 
+import java.util.List;
+
 /**
  * Created by admin on 2017/7/13.
  */
 public interface IRoomService extends IBaseService<RoomEntity>{
     /**
-    * æ ¹æ®roomIdæŸ¥è¯¢ä¸€æ¡è®°å½•
+     * ¸ù¾İroomId²éÑ¯Ò»Ìõ¼ÇÂ¼
      *
      * @param roomCode
      * @return RoomEntity
-    * */
-    public RoomEntity findRoomByCode(String roomCode);
+     * */
+    RoomEntity findRoomByCode(String roomCode);
+
+    /**
+     * ¸ù¾İÂ¥ÓîĞÅÏ¢Óëµ¥ÔªºÅĞÅÏ¢²éÑ¯·¿¼äĞÅÏ¢
+     * @param unitId
+     *
+     * @return roomList
+     * */
+    List<RoomEntity> findRoomForChose(String unitId, String areaId);
+
+    /**
+     * ¸ù¾İID²éÑ¯room±í£¨½öÓĞÒ»ÌõÊı¾İ£©
+     * @param id
+     *
+     * @return roomEntity
+     * */
+    RoomEntity findById(String id);
 
 }

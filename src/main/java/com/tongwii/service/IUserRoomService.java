@@ -17,5 +17,5 @@ public interface IUserRoomService extends IBaseService<UserRoomEntity> {
      * @param roomId
      * return userIdList
      * */
-   public List<UserEntity> findUsersByRoomId(String roomId);
+   List<UserEntity> findUsersByRoomId(String roomId);
 }
