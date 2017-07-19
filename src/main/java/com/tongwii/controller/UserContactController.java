@@ -94,7 +94,6 @@ public class UserContactController {
         return result;
     }
 
-
     /**
      * 删除联系人
      * @param contactId
