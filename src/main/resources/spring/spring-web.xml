@@ -48,13 +48,20 @@
     </bean>
 
     <websocket:handlers>
-        <websocket:mapping path="/webSocket" handler="myWebSocketHandler"/>
+        <websocket:mapping path="/call" handler="myWebSocketHandler"/>
         <websocket:handshake-interceptors>
             <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
         </websocket:handshake-interceptors>
     </websocket:handlers>
 
-    <bean id="myWebSocketHandler" class="com.tongwii.webRtc.MyWebSocketHandler"/>
+    <bean id="myWebSocketHandler" class="com.tongwii.webRtc.CallHandler"/>
+
+    <bean id="kurento" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass" value="org.kurento.client.KurentoClient" />
+        <property name="targetMethod" value="create" />
+    </bean>
+
+    <bean id="registry" class="com.tongwii.webRtc.UserRegistry"/>
 
     <!-- 配置webSocket消息的最大缓冲区长度 -->
     <bean class="org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean">
