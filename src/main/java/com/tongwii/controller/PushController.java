@@ -23,7 +23,7 @@ public class PushController {
     @RequestMapping(value = "/pushMessageToSingleRoom", method = RequestMethod.POST)
     public TongWIIResult pushMessageToSingleRoom(String roomCode, @RequestBody MessageEntity messageEntity){
         // 判空
-        if(messageEntity.getTitle().isEmpty() && messageEntity.getContent().isEmpty()){
+        if(messageEntity.getTitle().isEmpty() || messageEntity.getContent().isEmpty() || messageEntity.getTitle().equals("") || messageEntity.getContent().equals("")){
             result.errorResult("消息体为空!");
             return result;
         }
