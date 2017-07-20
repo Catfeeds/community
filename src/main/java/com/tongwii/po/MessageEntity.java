@@ -20,10 +20,12 @@ public class MessageEntity implements Serializable {
     private String title;
     private String content;
     private String fileId;
+    private String residenceId;
     private Timestamp createTime;
     private String createUserId;
     private String messageTypeId;
     private Byte processState;
+    private ResidenceEntity residenceByResidenceId;
     private Timestamp repairStartTime;
     private Timestamp repairEndTime;
     private FileEntity fileByFileId;
@@ -133,6 +135,16 @@ public class MessageEntity implements Serializable {
         this.repairEndTime = repairEndTime;
     }
 
+    @Basic
+    @Column(name = "residence_id")
+    public String getResidenceId() {
+        return residenceId;
+    }
+
+    public void setResidenceId(String residenceId) {
+        this.residenceId = residenceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -201,6 +213,20 @@ public class MessageEntity implements Serializable {
     public void setMessageTypeByMessageTypeId(MessageTypeEntity messageTypeByMessageTypeId) {
         this.messageTypeByMessageTypeId = messageTypeByMessageTypeId;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "residence_id", referencedColumnName = "id", insertable = false, updatable = false)
+    public ResidenceEntity getResidenceByResidenceId() {
+        return residenceByResidenceId;
+    }
+
+    public void setResidenceByResidenceId(ResidenceEntity residenceByResidenceId) {
+        this.residenceByResidenceId = residenceByResidenceId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "residence_id", referencedColumnName = "id", insertable = false, updatable = false)
+
 
     @OneToMany(mappedBy = "messageByMessageId")
     public Collection<MessageCommentEntity> getMessageCommentsById() {
