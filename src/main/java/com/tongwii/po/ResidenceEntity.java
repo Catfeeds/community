@@ -126,7 +126,7 @@ public class ResidenceEntity implements Serializable {
         this.areaById = floorsById;
     }
 
-    @OneToMany(mappedBy = "ResidenceByResidenceId")
+    @OneToMany(mappedBy = "residenceByResidenceId")
     public Collection<MessageEntity> getMessageById() {
         return messageById;
     }

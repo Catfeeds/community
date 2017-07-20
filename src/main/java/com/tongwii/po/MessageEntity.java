@@ -224,10 +224,6 @@ public class MessageEntity implements Serializable {
         this.residenceByResidenceId = residenceByResidenceId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "residence_id", referencedColumnName = "id", insertable = false, updatable = false)
-
-
     @OneToMany(mappedBy = "messageByMessageId")
     public Collection<MessageCommentEntity> getMessageCommentsById() {
         return messageCommentsById;
