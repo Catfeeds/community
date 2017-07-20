@@ -27,8 +27,7 @@ public class UserController {
 
 	
 	// 用户注册接口
-	@RequestMapping(value = "/regist", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-	@ResponseBody
+	@PostMapping("/regist")
 	public TongWIIResult regist(@RequestBody UserEntity user)  {
 		if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
 			result.errorResult("用户已存在！");
@@ -46,7 +45,7 @@ public class UserController {
 	}
 
 	// 用户登录接口
-	@RequestMapping(value = "/login", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
+	@PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public TongWIIResult login(@RequestBody UserEntity user, @RequestHeader("Host") String host, HttpSession session) {
 		try {
 			if(StringUtils.isEmpty(user.getAccount())){
@@ -85,7 +84,7 @@ public class UserController {
 	}
 
 	// 上传用户头像
-	@RequestMapping(value = "/uploadAvatar", method = RequestMethod.POST)
+	@PostMapping(path = "/uploadAvatar", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, @RequestParam("token")String token, HttpServletResponse response) {
 		try {
 			System.out.println("=========开始上传头像======================================");
@@ -111,9 +110,8 @@ public class UserController {
 		}
 	}
 
-	@RequestMapping(value = "/test")
+	@GetMapping(value = "/test")
 	public String test() {
 		return "hello";
-		
 	}
 }
