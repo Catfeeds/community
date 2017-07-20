@@ -22,6 +22,7 @@ public class ResidenceEntity implements Serializable {
     private String regionId;
     private String serverUrl;
     private Collection<AreaEntity> areaById;
+    private Collection<MessageEntity> messageById;
     private UserEntity userByUserId;
     private RegionEntity regionByRegionId;
 
@@ -123,6 +124,15 @@ public class ResidenceEntity implements Serializable {
 
     public void setAreaById(Collection<AreaEntity> floorsById) {
         this.areaById = floorsById;
+    }
+
+    @OneToMany(mappedBy = "ResidenceByResidenceId")
+    public Collection<MessageEntity> getMessageById() {
+        return messageById;
+    }
+
+    public void setMessageById(Collection<MessageEntity> messageById) {
+        this.messageById = messageById;
     }
 
     @ManyToOne
