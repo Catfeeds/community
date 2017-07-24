@@ -12,7 +12,7 @@ public interface IPageInfo {
 	/**
 	 * 默认每页显示最大数
 	 */
-	public static final int DEFAULT_PAGE_SIZE = 10;
+	static final int DEFAULT_PAGE_SIZE = 10;
 
 	/**
 	 * 获取记录总条数
@@ -58,7 +58,7 @@ public interface IPageInfo {
 
 	/**
 	 * 给分页对象设置数据
-	 * @param Zeral
+	 * @param lsemp
 	 */
 	void setPageData(List<?> lsemp);
 

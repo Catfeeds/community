@@ -1,5 +1,6 @@
 package com.tongwii.po;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -21,8 +22,11 @@ public class RoomEntity implements Serializable {
     private String huXing;
     private String ownerId;
     private String unitId;
+//    @Ignore
     private UserEntity userByOwnerId;
+//    @Ignore
     private FloorEntity floorByUnitId;
+//    @Ignore
     private Collection<UserRoomEntity> userRoomsById;
 
     @Id

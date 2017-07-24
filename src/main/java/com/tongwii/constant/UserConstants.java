@@ -18,8 +18,19 @@ public interface UserConstants {
 	
 	/**用户状态*/
 	
-	public final static Byte USER_STATUS_ACTIVE = 1;//正常使用
+//	public final static Integer USER_STATUS_ACTIVE = 1;//在校
 	
+//	public final static Integer USER_STATUS_LEAVE = 2;//离校
+
+	public final static Integer USER_LIVE = 3;//用戶处于居住状态
+
+	public final static Integer USER_NOT_LIVE = 4;//用户处于不居住状态
+
+	public final static Integer USER_DEAD = -1;//用户注销状态
+
+	/**获取用户返回状态**/
+	public final static Integer USER_EXIST = 0;//用户存在
+	public final static Integer USER_NOT_EXIST = -1;//用户不存在
 	public final static Byte USER_STATUS_LEAVE = -1;//注销
 
 	/**性别状态*/

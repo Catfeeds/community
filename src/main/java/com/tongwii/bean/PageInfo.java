@@ -75,6 +75,7 @@ public class PageInfo implements IPageInfo, Serializable {
 
     public void setPageSize(int pageSize) {
         if(pageSize < 1) {
+
             this.pageSize = DEFAULT_SIZE;
         } else {
             this.pageSize = pageSize;
