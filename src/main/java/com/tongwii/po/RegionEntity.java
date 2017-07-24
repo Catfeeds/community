@@ -19,7 +19,6 @@ public class RegionEntity implements Serializable {
     private String regionCode;
     private String name;
     private String parentCode;
-    private Collection<ResidenceEntity> residencesById;
 
     @Id
     @GeneratedValue(generator = "paymentableGenerator")
@@ -85,14 +84,5 @@ public class RegionEntity implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (parentCode != null ? parentCode.hashCode() : 0);
         return result;
-    }
-
-    @OneToMany(mappedBy = "regionByRegionId")
-    public Collection<ResidenceEntity> getResidencesById() {
-        return residencesById;
-    }
-
-    public void setResidencesById(Collection<ResidenceEntity> residencesById) {
-        this.residencesById = residencesById;
     }
 }

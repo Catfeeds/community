@@ -32,7 +32,12 @@
   </properties>
 
     <repositories>
-        <repository>
+      <repository>
+        <id>getui-nexus</id>
+        <name>getui repository</name>
+        <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
+      </repository>
+      <repository>
             <id>kurento-snapshots</id>
             <name>Kurento Snapshot Repository</name>
             <url>http://maven.kurento.org/archiva/repository/snapshots/</url>
@@ -59,6 +64,13 @@
     </pluginRepositories>
 
   <dependencies>
+
+    <!-- getuipeizhi -->
+    <dependency>
+      <groupId>com.gexin.platform</groupId>
+      <artifactId>gexin-rp-sdk-http</artifactId>
+      <version>4.0.1.9</version>
+    </dependency>
 
     <dependency>
         <groupId>org.kurento</groupId>

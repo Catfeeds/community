@@ -8,6 +8,7 @@ import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UrlPathHelper;
 
@@ -39,9 +40,10 @@ public class RequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         httpServletResponse.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
+        httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         String path = urlPathHelper.getLookupPathForRequest(httpServletRequest);
 
-        if (path.equals("/login") || path.equals("/registUser")) {
+        if (path.equals("/login") || path.equals("/registUser") || path.endsWith("html") || path.endsWith("js") || path.endsWith("css")) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         } else {
