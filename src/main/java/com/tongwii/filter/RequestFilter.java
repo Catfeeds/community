@@ -1,16 +1,22 @@
 package com.tongwii.filter;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.constant.ResultConstants;
+import com.tongwii.po.UserEntity;
+import com.tongwii.service.IUserService;
 import com.tongwii.util.TokenUtil;
-import io.jsonwebtoken.Claims;
 import net.sf.json.JSONObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UrlPathHelper;
 
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -19,42 +25,44 @@ import java.io.IOException;
  * Author: zeral
  * Date: 2017/6/30
  */
-public class RequestFilter implements Filter {
+public class RequestFilter extends OncePerRequestFilter {
+    private static final Logger logger = LogManager.getLogger();
+
+    private static final String TOKEN = "token";
+
+    @Autowired
+    private IUserService userService;
+
     private TongWIIResult tongWIIResult = new TongWIIResult();
     private UrlPathHelper urlPathHelper = new UrlPathHelper();
 
-
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+        httpServletResponse.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
+        String path = urlPathHelper.getLookupPathForRequest(httpServletRequest);
 
-    }
-
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest)servletRequest;
-        HttpServletResponse resp = (HttpServletResponse)servletResponse;
-        resp.setCharacterEncoding("utf-8");
-        String path = urlPathHelper.getLookupPathForRequest(req);
         if (path.equals("/login") || path.equals("/registUser")) {
-            filterChain.doFilter(req, resp);
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         } else {
-            String token = req.getHeader("token");
-            TongWIIResult checkTokenResult = TokenUtil.checkToken(token);
-            Claims claims = (Claims) checkTokenResult.getData();
-            if(checkTokenResult.getStatus() == ResultConstants.SUCCESS && req.getHeader("host").equals(claims.getIssuer())) {
-                filterChain.doFilter(req, resp);
-                return;
+            String token = httpServletRequest.getHeader(TOKEN);
+            String userId = TokenUtil.getUserIdFromToken(token);
+            if(null != token && null != userId) {
+                UserEntity userDetails = userService.findById(userId);
+                if(TokenUtil.validateToken(token, userDetails, httpServletRequest.getServerName())) {
+                    filterChain.doFilter(httpServletRequest, httpServletResponse);
+                    return;
+                } else {
+                    tongWIIResult.errorResult("认证失败");
+                    httpServletResponse.getWriter().write(JSONObject.fromObject(tongWIIResult).toString());
+                    return;
+                }
             } else {
-                tongWIIResult.setStatus(ResultConstants.ILLEGAL);
-                tongWIIResult.setInfo("请求不合法");
-                resp.getWriter().write(JSONObject.fromObject(tongWIIResult).toString());
+                tongWIIResult.errorResult("请求非法");
+                httpServletResponse.getWriter().write(JSONObject.fromObject(tongWIIResult).toString());
+                return;
             }
         }
     }
 
-    @Override
-    public void destroy() {
-
-    }
 }

@@ -1,20 +1,17 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.constant.ResultConstants;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.IUserService;
 import com.tongwii.util.TokenUtil;
 import com.tongwii.util.VOUtil;
 import com.tongwii.vo.UserVO;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 @RestController
@@ -46,7 +43,7 @@ public class UserController {
 
 	// 用户登录接口
 	@PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public TongWIIResult login(@RequestBody UserEntity user, @RequestHeader("Host") String host, HttpSession session) {
+	public TongWIIResult login(@RequestBody UserEntity user, @RequestHeader("Host") String host) {
 		try {
 			if(StringUtils.isEmpty(user.getAccount())){
 				result.errorResult("用户账号不可为空");
@@ -64,11 +61,7 @@ public class UserController {
             }
 			if (findUser.getPassword().equals(user.getPassword())) {
 				// 用户设置token
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("account", findUser.getAccount());
-				jsonObject.put("userId", findUser.getId());
-				String token = TokenUtil.createToken(host, jsonObject.toString());
-				session.setAttribute("token", token);
+				String token = TokenUtil.generateToken(host, findUser);
 				UserVO userVO = VOUtil.transformUserToVO(findUser);
 				userVO.setToken(token);
 				result.successResult("登陆成功", userVO);
@@ -88,21 +81,15 @@ public class UserController {
 	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, @RequestParam("token")String token, HttpServletResponse response) {
 		try {
 			System.out.println("=========开始上传头像======================================");
-			UserEntity userEntity = TokenUtil.getUserInfoFormToken(token);
-			if(Objects.nonNull(userEntity)) {
-				// 上传文件并更新用户地址
-				String uploadUrl = userService.updateUserAvatorById(userEntity.getId(), file);
+			String userId = TokenUtil.getUserIdFromToken(token);
+			// 上传文件并更新用户地址
+			String uploadUrl = userService.updateUserAvatorById(userId, file);
 
-				result.successResult("头像上传成功", uploadUrl);
-				System.out.println("==========头像上传完毕======================================");
-				// 使用了上传文件的输出流和response的返回json会出错，重置response
-				response.reset();
-				return result;
-			} else {
-				result.setStatus(ResultConstants.ILLEGAL);
-				result.setInfo("登陆状态不合法");
-				return result;
-			}
+			result.successResult("头像上传成功", uploadUrl);
+			System.out.println("==========头像上传完毕======================================");
+			// 使用了上传文件的输出流和response的返回json会出错，重置response
+			response.reset();
+			return result;
 		} catch (Exception e) {
 			result.errorResult("头像上传失败");
 			response.reset();
