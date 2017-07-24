@@ -25,10 +25,6 @@ public class AreaEntity implements Serializable {
     private Collection<FloorEntity> floorsById;
     private ResidenceEntity residenceByResidenceId;
 
-    public void setBuildDate(java.sql.Date buildDate) {
-        this.buildDate = buildDate;
-    }
-
     @Basic
     @Id
     @GeneratedValue(generator = "paymentableGenerator")

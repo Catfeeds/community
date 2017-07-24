@@ -43,7 +43,7 @@ public class RequestFilter extends OncePerRequestFilter {
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         String path = urlPathHelper.getLookupPathForRequest(httpServletRequest);
 
-        if (path.equals("/login") || path.equals("/registUser") || path.endsWith("html") || path.endsWith("js") || path.endsWith("css")) {
+        if (path.equals("/user/login") || path.equals("/user/regist") || path.endsWith("html") || path.endsWith("js") || path.endsWith("css")) {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         } else {
