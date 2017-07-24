@@ -1,113 +1,200 @@
 package com.tongwii.util;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.constant.ResultConstants;
 import com.tongwii.po.UserEntity;
-import io.jsonwebtoken.*;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Author: Zeral
  * Date: 2017/6/29
  */
 public class TokenUtil {
+    /**
+     * 签名密钥
+     */
     public static final String SECRET = "tongwii";
-    public static final long EXPIRATE = 72*60*60*1000;
+    /**
+     * token有效时间
+     */
+    public static final Integer EXPIRATE = 72*60*60*1000;
+    /**
+     * token用户账号key
+     */
+    private static final String CLAIM_KEY_USERACCOUNT  = "account";
+    /**
+     * token用户idkey
+     */
+    private static final String CLAIM_KEY_USERID  = "userId";
+    /**
+     * token用户请求Host key
+     */
+    private static final String CLAIM_KEY_HOST  = "host";
 
     private static TongWIIResult tongWIIResult = new TongWIIResult();
 
     /**
+     * 生成过期时间
      *
-     * @param issuer 请求域名
-     * @param subject 请求体
-     * @return Token
+     * @return
      */
-    //Sample method to construct a JWT
-    public static String createToken(String issuer, String subject) {
-
-        // 使用HS256加密算法
-        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-
-        // 当前时间
-        long nowMillis = System.currentTimeMillis();
-        Date now = new Date(nowMillis);
-
-        // 使用定制的加密数据
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET);
-        Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-
-        // token生成
-        JwtBuilder builder = Jwts.builder()
-                .setIssuedAt(now)
-                .setIssuer(issuer)
-                .setSubject(subject)
-                .signWith(signatureAlgorithm, signingKey);
-
-        // 添加token有效期
-        long expMillis = nowMillis + EXPIRATE;
-        Date exp = new Date(expMillis);
-        builder.setExpiration(exp);
-
-        //序列化token得到字符串
-        return builder.compact();
+    private static Date generateExpirationDate () {
+        Calendar instance = Calendar.getInstance();
+        instance.setTime( new Date() );
+        instance.add( Calendar.SECOND, EXPIRATE);
+        return instance.getTime();
     }
 
     /**
-     * 检查token是否有效
+     * 构建token
+     *
+     * @param host       the host
+     * @param userEntity the user entity
+     * @return string string
+     */
+    public static String generateToken (String host, UserEntity userEntity) {
+        Map< String, Object > claims = new HashMap<>();
+        claims.put( CLAIM_KEY_USERACCOUNT, userEntity.getAccount());
+        claims.put( CLAIM_KEY_USERID, userEntity.getId());
+        claims.put(CLAIM_KEY_HOST, host);
+        return generateToken( claims );
+    }
+
+    /**
+     * 构建token
+     *
+     * @param claims
+     * @return
+     */
+    private static String generateToken ( Map< String, Object > claims ) {
+        return Jwts.builder()
+                .setClaims( claims )
+                .setExpiration( generateExpirationDate() )
+                .signWith( SignatureAlgorithm.HS512, SECRET )
+                .compact();
+    }
+
+    /**
+     * 验证token
+     *
+     * @param token       the token
+     * @param userEntity  the user entity
+     * @param requestHost the request host
+     * @return boolean
+     */
+    public static Boolean validateToken ( String token, UserEntity userEntity, String requestHost) {
+        final String username = getUserAccountFromToken(token);
+        final String userId = getUserIdFromToken(token);
+        final String host = getHostFromToken(token);
+        return ( username.equals( userEntity.getAccount() ) // 用户名校验
+                && userId.equals(userEntity.getId())
+                && ! isTokenExpired( token )           // token有效期校验
+                &&  requestHost.startsWith(host)
+        );
+    }
+
+
+    /**
+     * token是否过期
+     *
+     * @param token
+     * @return expiration > 当前时间
+     */
+    private static Boolean isTokenExpired ( String token ) {
+        final Date expiration = getExpirationDateFromToken( token );
+        return expiration.before( new Date() );
+    }
+
+
+    /**
      * @param token
      * @return
      */
-    public static TongWIIResult checkToken(String token) {
+    private static Claims getClaimsFromToken ( String token ) {
+        Claims claims;
         try {
-            if (StringUtils.isNotEmpty(token)) {
-                Claims claims = Jwts.parser()
-                        .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET))
-                        .parseClaimsJws(token).getBody();
-                //得到body后我们可以从body中获取我们需要的信息
-                tongWIIResult.setStatus(ResultConstants.SUCCESS);
-                tongWIIResult.setInfo("验证成功");
-                tongWIIResult.setData(claims);
-            } else {
-                tongWIIResult.setStatus(ResultConstants.ERROR);
-                tongWIIResult.setInfo("token不存在");
-            }
-        } catch (SignatureException | MalformedJwtException e) {
-            tongWIIResult.setStatus(ResultConstants.ERROR);
-            tongWIIResult.setInfo("Token无效");
-            // jwt 解析错误
-        } catch (ExpiredJwtException e) {
-            tongWIIResult.setStatus(ResultConstants.ERROR);
-            tongWIIResult.setInfo("Token失效");
-            // jwt 已经过期，在设置jwt的时候如果设置了过期时间，这里会自动判断jwt是否已经过期，如果过期则会抛出这个异常，我们可以抓住这个异常并作相关处理。
+            claims = Jwts.parser()
+                    .setSigningKey( SECRET ) // 签名密钥
+                    .parseClaimsJws( token ) // token
+                    .getBody();
+        } catch ( Exception e ) {
+            claims = null;
         }
-        return tongWIIResult;
+        return claims;
+    }
+
+    /**
+     * 根据token得到用户账户
+     *
+     * @param token
+     * @return
+     */
+    public static String getUserAccountFromToken ( String token ) {
+        String userAccount;
+        try {
+            final Claims claims = getClaimsFromToken( token );
+            userAccount = claims.get(CLAIM_KEY_USERACCOUNT).toString();
+        } catch ( Exception e ) {
+            userAccount = null;
+        }
+        return userAccount;
+    }
+
+    /**
+     * 根据token得到用户host
+     *
+     * @param token
+     * @return
+     */
+    private static String getHostFromToken ( String token ) {
+        String host;
+        try {
+            final Claims claims = getClaimsFromToken( token );
+            host = claims.get(CLAIM_KEY_HOST).toString();
+        } catch ( Exception e ) {
+            host = null;
+        }
+        return host;
+    }
+
+    /**
+     * 根据token得到用户id
+     *
+     * @param token
+     * @return
+     */
+    public static String getUserIdFromToken ( String token ) {
+        String userId;
+        try {
+            final Claims claims = getClaimsFromToken( token );
+            userId = claims.get(CLAIM_KEY_USERID).toString();
+        } catch ( Exception e ) {
+            userId = null;
+        }
+        return userId;
     }
 
 
     /**
-     * 从token中解析出用户账户和id
+     * 得到token过期时间
      *
      * @param token
-     * @return UserEntity 解析出的用户信息，包含账号和id，不存在返回null
+     * @return
      */
-    public static UserEntity getUserInfoFormToken(String token) {
-        TongWIIResult tongWIIResult = checkToken(token);
-        if(tongWIIResult.getStatus() == ResultConstants.SUCCESS) {
-            Claims claims = (Claims) tongWIIResult.getData();
-            String userInfo = claims.getSubject();
-            JSONObject object = JSONObject.fromObject(userInfo);
-            UserEntity userEntity = new UserEntity();
-            userEntity.setAccount(object.get("account").toString());
-            userEntity.setId(object.get("userId").toString());
-            return userEntity;
+    public static Date getExpirationDateFromToken ( String token ) {
+        Date expiration;
+        try {
+            final Claims claims = getClaimsFromToken( token );
+            expiration = claims.getExpiration();
+        } catch ( Exception e ) {
+            expiration = null;
         }
-        return null;
+        return expiration;
     }
-
 }
