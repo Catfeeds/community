@@ -68,5 +68,4 @@
         <property name="maxTextMessageBufferSize" value="8192"/>
         <property name="maxBinaryMessageBufferSize" value="8192"/>
     </bean>
-
 </beans>

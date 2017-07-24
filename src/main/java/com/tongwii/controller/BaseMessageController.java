@@ -27,7 +27,7 @@ public class BaseMessageController {
     private static TongWIIResult result = new TongWIIResult();
 
     /**
-     *Ìí¼ÓÏûÏ¢½Ó¿Ú
+     *æ·»åŠ æ¶ˆæ¯æ¥å£
      *
      * @param messageEntity
      * @return result
@@ -35,39 +35,39 @@ public class BaseMessageController {
     @RequestMapping(value = "/insertMessage", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
     public TongWIIResult insertMessage(@RequestBody MessageEntity messageEntity){
         if(messageEntity.getTitle().isEmpty() && messageEntity.getContent().isEmpty()){
-            result.errorResult("ÏûÏ¢Ìå²»¿ÉÎª¿Õ!");
+            result.errorResult("æ¶ˆæ¯ä½“ä¸å¯ä¸ºç©º!");
             return result;
         }
         try {
             messageEntity.setCreateTime( new Timestamp(System.currentTimeMillis()));
             messageService.save(messageEntity);
-            result.successResult("ÏûÏ¢Ìí¼Ó³É¹¦!",messageEntity);
+            result.successResult("æ¶ˆæ¯æ·»åŠ æˆåŠŸ!",messageEntity);
         }catch (Exception e){
-            result.errorResult("ÏûÏ¢Ìí¼ÓÊ§°Ü!");
+            result.errorResult("æ¶ˆæ¯æ·»åŠ å¤±è´¥!");
         }
         return result;
     }
     /**
-     * ĞŞ¸ÄÏûÏ¢µÄ½ø¶È
+     * ä¿®æ”¹æ¶ˆæ¯çš„è¿›åº¦
      *
      *@param messageEntity
      *@return result
      * */
     @RequestMapping(value = "/updateProcessOfMessage", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
     public TongWIIResult updateProcessOfMessage(@RequestBody MessageEntity messageEntity){
-        // ´ËÏûÏ¢ÊµÌå°üº¬idÓëProcessµÄĞÅÏ¢£¬Í¨¹ıidÕÒµ½¸ÃÌõÏûÏ¢µÄÊı¾İ¼ÇÂ¼£¬²¢½«ProcessµÄ×´Ì¬¸ü¸Ä³É´«À´µÄÖµ
-        // ÅĞ¿Õ
+        // æ­¤æ¶ˆæ¯å®ä½“åŒ…å«idä¸Processçš„ä¿¡æ¯ï¼Œé€šè¿‡idæ‰¾åˆ°è¯¥æ¡æ¶ˆæ¯çš„æ•°æ®è®°å½•ï¼Œå¹¶å°†Processçš„çŠ¶æ€æ›´æ”¹æˆä¼ æ¥çš„å€¼
+        // åˆ¤ç©º
         if(messageEntity.getId().isEmpty() || messageEntity.getProcessState().toString().isEmpty()){
-            result.errorResult("ÏûÏ¢¼ÇÂ¼²»´æÔÚ!");
+            result.errorResult("æ¶ˆæ¯è®°å½•ä¸å­˜åœ¨!");
             return result;
         }
-        // ´Ë´¦¸ü¸ÄÏûÏ¢½ø¶È×´Ì¬
-        result.successResult("ĞŞ¸Ä×´Ì¬³É¹¦!", messageService.updateMessageProcess(messageEntity.getId(),messageEntity.getProcessState()&0xff));
+        // æ­¤å¤„æ›´æ”¹æ¶ˆæ¯è¿›åº¦çŠ¶æ€
+        result.successResult("ä¿®æ”¹çŠ¶æ€æˆåŠŸ!", messageService.updateMessageProcess(messageEntity.getId(),messageEntity.getProcessState()&0xff));
         return null;
     }
 
     /**
-     * Í¨¹ıÏûÏ¢ÀàĞÍ²éÑ¯ÏûÏ¢
+     * é€šè¿‡æ¶ˆæ¯ç±»å‹æŸ¥è¯¢æ¶ˆæ¯
      *
      * @param messageTypeId
      * @return result
@@ -75,12 +75,12 @@ public class BaseMessageController {
     @RequestMapping(value = "/selectMessageByType", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
     public TongWIIResult selectMessageByType(@RequestHeader("messageTypeId") String messageTypeId,@RequestBody PageInfo pageInfo){
         if (messageTypeId == null || messageTypeId.isEmpty()){
-            result.errorResult("ÏûÏ¢ÀàĞÍ²»¿ÉÎª¿Õ!");
+            result.errorResult("æ¶ˆæ¯ç±»å‹ä¸å¯ä¸ºç©º!");
             return result;
         }
         List<MessageEntity> messageEntities = messageService.selectMessageByType(pageInfo, messageTypeId);
         if(messageEntities.isEmpty() || messageEntities==null){
-            result.errorResult("ĞÅÏ¢²éÑ¯Ê§°Ü!");
+            result.errorResult("ä¿¡æ¯æŸ¥è¯¢å¤±è´¥!");
             return result;
         }
         JSONArray messageJsonArray = new JSONArray();
@@ -89,12 +89,12 @@ public class BaseMessageController {
             messageObject.put("title",messageEntity.getTitle());
             messageObject.put("content", messageEntity.getContent());
             messageObject.put("createTime",messageEntity.getCreateTime());
-            // Í¨¹ıuserId²éÑ¯userName
+            // é€šè¿‡userIdæŸ¥è¯¢userName
             UserEntity userEntity = userService.findById(messageEntity.getCreateUserId());
             messageObject.put("createUser", userEntity.getAccount());
             messageJsonArray.add(messageObject);
         }
-       result.successResult("²éÑ¯³É¹¦!", messageJsonArray);
+        result.successResult("æŸ¥è¯¢æˆåŠŸ!", messageJsonArray);
         return result;
     }
 
