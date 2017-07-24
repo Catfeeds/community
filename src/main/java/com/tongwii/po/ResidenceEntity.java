@@ -24,7 +24,7 @@ public class ResidenceEntity implements Serializable {
     private Collection<AreaEntity> areaById;
     private Collection<MessageEntity> messageById;
     private UserEntity userByUserId;
-    private RegionEntity regionByRegionId;
+
 
     @Basic
     @Id
@@ -143,15 +143,5 @@ public class ResidenceEntity implements Serializable {
 
     public void setUserByUserId(UserEntity userByUserId) {
         this.userByUserId = userByUserId;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "region_id", referencedColumnName = "id", insertable = false, updatable = false)
-    public RegionEntity getRegionByRegionId() {
-        return regionByRegionId;
-    }
-
-    public void setRegionByRegionId(RegionEntity regionByRegionId) {
-        this.regionByRegionId = regionByRegionId;
     }
 }
