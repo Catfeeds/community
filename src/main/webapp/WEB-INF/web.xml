@@ -113,11 +113,19 @@
   </filter-mapping>
 
   <filter>
-    <filter-name>RequestFilter</filter-name>
-    <filter-class>com.tongwii.filter.RequestFilter</filter-class>
+    <filter-name>personalUserLoginStatusFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    <init-param>
+      <param-name>targetBeanName</param-name>
+      <param-value>requestFilter</param-value>
+    </init-param>
+    <init-param>
+      <param-name>targetFilterLifecycle</param-name>
+      <param-value>true</param-value>
+    </init-param>
   </filter>
   <filter-mapping>
-    <filter-name>RequestFilter</filter-name>
+    <filter-name>personalUserLoginStatusFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 

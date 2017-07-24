@@ -47,4 +47,6 @@
     <!-- 使用上下文注解扫描配置 -->
     <context:annotation-config />
 
+    <bean id="requestFilter" class="com.tongwii.filter.RequestFilter" />
+
 </beans>

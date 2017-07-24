@@ -95,7 +95,7 @@ public class TokenUtil {
         return ( username.equals( userEntity.getAccount() ) // 用户名校验
                 && userId.equals(userEntity.getId())
                 && ! isTokenExpired( token )           // token有效期校验
-                &&  requestHost.startsWith(host)
+                &&  host.startsWith(requestHost)
         );
     }
 
