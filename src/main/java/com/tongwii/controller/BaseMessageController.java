@@ -69,16 +69,18 @@ public class BaseMessageController {
     /**
      * 通过消息类型查询消息
      *
-     * @param messageTypeId
+     * @param message
      * @return result
      * */
     @RequestMapping(value = "/selectMessageByType", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-    public TongWIIResult selectMessageByType(@RequestHeader("messageTypeId") String messageTypeId,@RequestBody PageInfo pageInfo){
-        if (messageTypeId == null || messageTypeId.isEmpty()){
+    public TongWIIResult selectMessageByType(@RequestHeader("page") Integer page,@RequestBody MessageEntity message){
+        if (message.getMessageTypeId() == null || message.getMessageTypeId().isEmpty()){
             result.errorResult("消息类型不可为空!");
             return result;
         }
-        List<MessageEntity> messageEntities = messageService.selectMessageByType(pageInfo, messageTypeId);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPage(page);
+        List<MessageEntity> messageEntities = messageService.selectMessageByType(pageInfo, message.getMessageTypeId(), message.getResidenceId());
         if(messageEntities.isEmpty() || messageEntities==null){
             result.errorResult("信息查询失败!");
             return result;
@@ -86,9 +88,12 @@ public class BaseMessageController {
         JSONArray messageJsonArray = new JSONArray();
         JSONObject messageObject = new JSONObject();
         for (MessageEntity messageEntity : messageEntities){
+            messageObject.put("id", messageEntity.getId());
             messageObject.put("title",messageEntity.getTitle());
             messageObject.put("content", messageEntity.getContent());
-            messageObject.put("createTime",messageEntity.getCreateTime());
+            String time = messageEntity.getCreateTime().toString();
+            String createTime = time.substring(0,time.length()-2);
+            messageObject.put("createTime",createTime);
             // 通过userId查询userName
             UserEntity userEntity = userService.findById(messageEntity.getCreateUserId());
             messageObject.put("createUser", userEntity.getAccount());

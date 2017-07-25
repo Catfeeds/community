@@ -10,6 +10,9 @@
   <name>community</name>
   <url>http://www.tongwii.com</url>
 
+
+
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <spring.version>4.3.9.RELEASE</spring.version>
@@ -76,13 +79,6 @@
         <groupId>org.kurento</groupId>
         <artifactId>kurento-client</artifactId>
         <version>6.6.2</version>
-    </dependency>
-
-    <!-- getuipeizhi -->
-    <dependency>
-      <groupId>com.gexin.platform</groupId>
-      <artifactId>gexin-rp-sdk-http</artifactId>
-      <version>4.0.1.9</version>
     </dependency>
 
     <dependency>

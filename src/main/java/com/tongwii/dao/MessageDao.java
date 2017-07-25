@@ -26,12 +26,14 @@ public class MessageDao extends BaseDao<MessageEntity, String> {
     /**
      *按类型查询消息
      * @param messageTypeId
+     * @param pageInfo
+     * @param residenceId
      * @return
      **/
-    public List<MessageEntity> selectMessageByType(IPageInfo pageInfo, String messageTypeId){
+    public List<MessageEntity> selectMessageByType(IPageInfo pageInfo, String messageTypeId, String residenceId){
 //        order by createTime desc
-        String hql = "from MessageEntity where messageTypeId=?";
-        List<MessageEntity> messageEntities = findByHQL(hql,pageInfo,messageTypeId);
+        String hql = "from MessageEntity where messageTypeId=? and residenceId=?";
+        List<MessageEntity> messageEntities = findByHQL(hql,pageInfo,messageTypeId, residenceId);
         return messageEntities;
     }
 	

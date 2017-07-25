@@ -80,6 +80,16 @@ public class UserContactController {
         JSONArray jsonArray = new JSONArray();
 
         for(UserContactEntity userContactEntity : userContactList){
+            //
+
+
+
+
+
+
+
+
+
             UserEntity userEntity = userService.findById(userContactEntity.getFriendId());
             JSONObject object = new JSONObject();
             object.put("contactName", userEntity.getName());

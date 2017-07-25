@@ -27,7 +27,7 @@ public class AreaController {
      * @param residenceId
      * @return result
      * */
-    @RequestMapping(value = "/area/{residenceId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{residenceId}", method = RequestMethod.GET)
     public TongWIIResult findAreaByResidenceId(@PathVariable String residenceId){
         if(residenceId == null || residenceId.isEmpty()){
             result.errorResult("社区实体为空!");

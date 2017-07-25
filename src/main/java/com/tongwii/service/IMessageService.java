@@ -29,7 +29,9 @@ public interface IMessageService extends IBaseService<MessageEntity> {
      * 根据消息类型查询消息
      *
      * @param messageTypeId
+     * @param pageInfo
+     * @param residenceId
      * @return messageList
      * */
-    List<MessageEntity> selectMessageByType(IPageInfo pageInfo, String messageTypeId);
+    List<MessageEntity> selectMessageByType(IPageInfo pageInfo, String messageTypeId, String residenceId);
 }

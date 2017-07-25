@@ -47,7 +47,7 @@
         <property name="maxInMemorySize" value="40960" />
     </bean>
 
-    <websocket:handlers>
+    <!--<websocket:handlers>
         <websocket:mapping path="/call" handler="myWebSocketHandler"/>
         <websocket:handshake-interceptors>
             <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
@@ -63,9 +63,9 @@
 
     <bean id="registry" class="com.tongwii.webRtc.UserRegistry"/>
 
-    <!-- 配置webSocket消息的最大缓冲区长度 -->
+    &lt;!&ndash; 配置webSocket消息的最大缓冲区长度 &ndash;&gt;
     <bean class="org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean">
         <property name="maxTextMessageBufferSize" value="8192"/>
         <property name="maxBinaryMessageBufferSize" value="8192"/>
-    </bean>
+    </bean>-->
 </beans>

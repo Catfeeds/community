@@ -41,7 +41,7 @@ public class MessageServiceImpl extends BaseServiceImpl<MessageEntity> implement
     }
 
     @Override
-    public List<MessageEntity> selectMessageByType(IPageInfo pageInfo, String messageTypeId) {
-        return messageDao.selectMessageByType(pageInfo, messageTypeId);
+    public List<MessageEntity> selectMessageByType(IPageInfo pageInfo, String messageTypeId, String residenceId) {
+        return messageDao.selectMessageByType(pageInfo, messageTypeId, residenceId);
     }
 }
