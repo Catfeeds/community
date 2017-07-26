@@ -2,6 +2,7 @@ package com.tongwii.service.impl;
 
 import com.tongwii.dao.BaseDao;
 import com.tongwii.dao.UserRoomDao;
+import com.tongwii.po.RoomEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.po.UserRoomEntity;
 import com.tongwii.service.IUserRoomService;
@@ -28,5 +29,8 @@ public class UserRoomServiceImpl extends BaseServiceImpl<UserRoomEntity> impleme
         return userRoomDao.findUsersByRoomId(roomId);
     }
 
-
+    @Override
+    public String findRoomByUserId(String userId) {
+        return userRoomDao.findRoomByUserId(userId);
+    }
 }

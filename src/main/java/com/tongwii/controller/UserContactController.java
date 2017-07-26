@@ -3,7 +3,9 @@ package com.tongwii.controller;
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.po.UserContactEntity;
 import com.tongwii.po.UserEntity;
+import com.tongwii.service.IRoomService;
 import com.tongwii.service.IUserContactService;
+import com.tongwii.service.IUserRoomService;
 import com.tongwii.service.IUserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -23,6 +25,10 @@ public class UserContactController {
     private IUserContactService userContactService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IUserRoomService userRoomService;
+    @Autowired
+    private IRoomService roomService;
     private TongWIIResult result = new TongWIIResult();
 
     /**
@@ -80,17 +86,12 @@ public class UserContactController {
         JSONArray jsonArray = new JSONArray();
 
         for(UserContactEntity userContactEntity : userContactList){
-            //
-
-
-
-
-
-
-
-
-
+            //通过fridentId查找userEntity,得到userId,nickname,name,account
             UserEntity userEntity = userService.findById(userContactEntity.getFriendId());
+            //通过userId查询userRoomEntity,得到roomId
+            String roomId = userRoomService.findRoomByUserId(userContactEntity.getFriendId());
+            //通过roomId查询roomEntity,得到roomCode
+            String roomCode = roomService.findById(roomId).getRoomCode();
             JSONObject object = new JSONObject();
             object.put("contactName", userEntity.getName());
             object.put("contactAccount", userEntity.getAccount());
@@ -98,6 +99,7 @@ public class UserContactController {
             object.put("contactDesc", userContactEntity.getDes());
             object.put("contactPhone", userEntity.getPhone());
             object.put("contactId", userContactEntity.getId());
+            object.put("roomCode", roomCode);
             jsonArray.add(object);
         }
         result.successResult("联系人列表获取成功!", jsonArray);
