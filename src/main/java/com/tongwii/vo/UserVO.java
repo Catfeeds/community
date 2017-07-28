@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.tongwii.util.CustomDateSerializer;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户VO
@@ -21,12 +22,12 @@ public class UserVO {
     private Byte sex;
     private String avatarFileSrc;
     private String name;
-    private String password;
     private String idCard;
     private String phone;
     private String clientId;
     private Date addTime;
     private Byte state;
+    private List<RoomVO> rooms;
 
     private String token;
 
@@ -102,14 +103,6 @@ public class UserVO {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getIdCard() {
         return idCard;
     }
@@ -148,5 +141,13 @@ public class UserVO {
 
     public void setState(Byte state) {
         this.state = state;
+    }
+
+    public List<RoomVO> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<RoomVO> rooms) {
+        this.rooms = rooms;
     }
 }

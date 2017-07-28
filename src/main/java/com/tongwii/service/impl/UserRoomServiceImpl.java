@@ -30,7 +30,7 @@ public class UserRoomServiceImpl extends BaseServiceImpl<UserRoomEntity> impleme
     }
 
     @Override
-    public String findRoomByUserId(String userId) {
+    public List<RoomEntity> findRoomByUserId(String userId) {
         return userRoomDao.findRoomByUserId(userId);
     }
 }

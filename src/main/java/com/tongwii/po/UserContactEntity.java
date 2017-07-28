@@ -14,6 +14,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "user_contact", schema = "cloud_community", catalog = "")
 public class UserContactEntity implements Serializable {
+    public static final String UNKNOWN_NAME = "*";
+
     private String id;
     private String userId;
     private String friendId;

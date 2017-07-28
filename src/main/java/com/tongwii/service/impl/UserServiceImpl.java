@@ -8,14 +8,12 @@ import com.tongwii.po.UserEntity;
 import com.tongwii.service.IFileService;
 import com.tongwii.service.IUserService;
 import com.tongwii.util.Encoder.MD5PasswordEncoder;
-import com.tongwii.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * 用户Service
@@ -52,17 +50,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
 
     @Override
     public String updateUserAvatorById(String userId, MultipartFile file) throws IOException {
-        String id = UUID.randomUUID().toString();
-        String suffix = FileUtil.getFileSuffix(file.getOriginalFilename());
-        String relativeUrl = FileUtil.uploadFile(file, id + suffix);
-        FileEntity fileEntity = new FileEntity();
-        fileEntity.setFileName(file.getOriginalFilename());
-        fileEntity.setFileType(FileUtil.rtnFileType(file.getOriginalFilename()));
-        fileEntity.setFilePath(relativeUrl);
-        fileEntity.setUploadUserId(userId);
-        fileService.save(fileEntity);
+        FileEntity fileEntity = fileService.saveAndUploadFile(userId, file);
         userDao.updateAvatorById(userId, fileEntity.getId());
-        return relativeUrl;
+        return fileEntity.getFilePath();
     }
-
 }

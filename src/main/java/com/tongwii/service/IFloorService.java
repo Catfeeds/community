@@ -3,27 +3,40 @@ package com.tongwii.service;
 import com.tongwii.po.FloorEntity;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by admin on 2017/7/18.
  */
 public interface IFloorService {
     /**
-     * ¸ù¾İareaId²éÑ¯floorĞÅÏ¢
-     * @param areaId
-     * @return List
-     * */
+     * æ ¹æ®areaIdæŸ¥è¯¢floorä¿¡æ¯
+     *
+     * @param areaId the area id
+     * @return List list
+     */
     List<FloorEntity> findFloorByAreaId(String areaId);
 
     /**
-     * ¸ù¾İid²éÑ¯floor±í¼ÇÂ¼£¨½öÓĞÒ»Ìõ¼ÇÂ¼£©
-     * @param id
-     * @return FloorEntity
-     * */
+     * æ ¹æ®idæŸ¥è¯¢floorè¡¨è®°å½•ï¼ˆä»…æœ‰ä¸€æ¡è®°å½•ï¼‰
+     *
+     * @param id the id
+     * @return FloorEntity floor entity
+     */
     FloorEntity findById(String id);
 
     /**
-     * ¸üĞÂfloor±í
-     * */
+     * æ›´æ–°floorè¡¨
+     *
+     * @param model the model
+     */
     void update(FloorEntity model);
+
+    /**
+     * æ ¹æ®idæŸ¥è¯¢æ¥¼å®‡çš„æ ‹å’Œå•å…ƒä¿¡æ¯
+     *
+     * @param id the id
+     * @return the list è¯¥MAPåŒ…å«æ ‹ä¿¡æ¯å’Œå•å…ƒä¿¡æ¯
+     */
+    Map<String, FloorEntity> findFloorById(String id);
 }

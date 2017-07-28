@@ -6,13 +6,17 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+/**
+ * The type Floor dao.
+ */
 @Repository
 public class FloorDao extends BaseDao<FloorEntity, String> {
-	/**
-     * 根据areaId查询
-     * @param areaId
-     * @return List
-     * */
+    /**
+     * 鏍规嵁areaId鏌ヨ妤煎畤淇℃伅
+     *
+     * @param areaId the area id
+     * @return List list
+     */
     public List<FloorEntity> findFloorByAreId(String areaId){
         String hql = "from FloorEntity where areaId=?";
         List<FloorEntity> floorEntities = findByHQL(hql,areaId);
@@ -20,5 +24,16 @@ public class FloorDao extends BaseDao<FloorEntity, String> {
             return null;
         }
         return floorEntities;
+    }
+
+    /**
+     * 鏍规嵁code鏌ヨ妤煎畤淇℃伅
+     *
+     * @param code the code
+     * @return the list
+     */
+    public FloorEntity findFloorByCode(String code) {
+        String hql = "from FloorEntity where code = ?";
+        return findUniqueByHql(hql, code);
     }
 }

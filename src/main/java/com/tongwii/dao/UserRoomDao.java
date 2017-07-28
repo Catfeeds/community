@@ -3,8 +3,8 @@ package com.tongwii.dao;
 import com.tongwii.po.RoomEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.po.UserRoomEntity;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,17 +31,20 @@ public class UserRoomDao extends BaseDao<UserRoomEntity, String> {
     }
 
     /**
-     * 通过userId查找住房信息
+     * 通过userId查找住房信息, 不排除一个用户有多个房间的情况
      *
-     * @param userId
-     * @return userEntities
-     * */
-    public String findRoomByUserId(String userId) {
+     * @param userId the user id
+     * @return roomEn room entity
+     */
+    public List<RoomEntity> findRoomByUserId(String userId) {
         String hql = "from UserRoomEntity where userId = ?";
-        UserRoomEntity userRoomEntity = findUniqueByHql(hql, userId);
-        if(userRoomEntity == null){
-            return null;
+        List<UserRoomEntity> userRoomEntities = findByHQL(hql, userId);
+        List<RoomEntity> roomEntities = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(userRoomEntities)) {
+            for (UserRoomEntity userRoomEntity: userRoomEntities) {
+                roomEntities.add(userRoomEntity.getRoomByRoomId());
+            }
         }
-        return userRoomEntity.getRoomId();
+        return roomEntities;
     }
 }

@@ -4,8 +4,13 @@ import com.tongwii.dao.BaseDao;
 import com.tongwii.dao.FileDao;
 import com.tongwii.po.FileEntity;
 import com.tongwii.service.IFileService;
+import com.tongwii.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * fileService实现类
@@ -21,5 +26,24 @@ public class FileServiceImpl extends BaseServiceImpl<FileEntity> implements IFil
     @Override
     public BaseDao<FileEntity, String> getDao() {
         return filedao;
+    }
+
+    @Override
+    public FileEntity saveAndUploadFile(String userId, MultipartFile file) {
+        FileEntity fileEntity = null;
+        try {
+            String id = UUID.randomUUID().toString();
+            String suffix = FileUtil.getFileSuffix(file.getOriginalFilename());
+            String relativeUrl = FileUtil.uploadFile(file, id + suffix);
+            fileEntity = new FileEntity();
+            fileEntity.setFileName(file.getOriginalFilename());
+            fileEntity.setFileType(FileUtil.rtnFileType(file.getOriginalFilename()));
+            fileEntity.setFilePath(relativeUrl);
+            fileEntity.setUploadUserId(userId);
+            save(fileEntity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileEntity;
     }
 }

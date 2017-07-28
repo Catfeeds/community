@@ -15,10 +15,20 @@ import java.util.Collection;
 @Entity
 @Table(name = "floor", schema = "cloud_community", catalog = "")
 public class FloorEntity implements Serializable {
+
+    /**
+     * The constant DONG. 常量-栋
+     */
+    public static final String DONG = "dong";
+    /**
+     * The constant UNIT. 常量-单元
+     */
+    public static final String UNIT = "unit";
+
     private String id;
-    private String dongCode;
+    private String code;
     private String name;
-    private String unitCode;
+    private String parentCode;
     private String principalId;
     private String areaId;
     private UserEntity userByPrincipalId;
@@ -39,13 +49,13 @@ public class FloorEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "dong_code")
-    public String getDongCode() {
-        return dongCode;
+    @Column(name = "code")
+    public String getCode() {
+        return code;
     }
 
-    public void setDongCode(String dongCode) {
-        this.dongCode = dongCode;
+    public void setCode(String dongCode) {
+        this.code = dongCode;
     }
 
     @Basic
@@ -59,13 +69,13 @@ public class FloorEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "unit_code")
-    public String getUnitCode() {
-        return unitCode;
+    @Column(name = "parent_code")
+    public String getParentCode() {
+        return parentCode;
     }
 
-    public void setUnitCode(String unitCode) {
-        this.unitCode = unitCode;
+    public void setParentCode(String unitCode) {
+        this.parentCode = unitCode;
     }
 
     @Basic
@@ -97,9 +107,9 @@ public class FloorEntity implements Serializable {
         FloorEntity that = (FloorEntity) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (dongCode != null ? !dongCode.equals(that.dongCode) : that.dongCode != null) return false;
+        if (code != null ? !code.equals(that.code) : that.code != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (unitCode != null ? !unitCode.equals(that.unitCode) : that.unitCode != null) return false;
+        if (parentCode != null ? !parentCode.equals(that.parentCode) : that.parentCode != null) return false;
         if (principalId != null ? !principalId.equals(that.principalId) : that.principalId != null) return false;
         if (areaId != null ? !areaId.equals(that.areaId) : that.areaId != null) return false;
 
@@ -109,9 +119,9 @@ public class FloorEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (dongCode != null ? dongCode.hashCode() : 0);
+        result = 31 * result + (code != null ? code.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (unitCode != null ? unitCode.hashCode() : 0);
+        result = 31 * result + (parentCode != null ? parentCode.hashCode() : 0);
         result = 31 * result + (principalId != null ? principalId.hashCode() : 0);
         result = 31 * result + (areaId != null ? areaId.hashCode() : 0);
         return result;

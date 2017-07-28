@@ -22,14 +22,13 @@ public class VOUtil {
 		userVO.setIdCard(user.getIdCard());
 		userVO.setBirthday(user.getBirthday());
 		userVO.setName(user.getName());
-		userVO.setPassword(user.getPassword());
 		userVO.setSex(user.getSex());
 		userVO.setState(user.getState());
 		return userVO;
 	}
 	
 	public static final List<UserVO> transformUserToVOList(List<UserEntity> userList) {
-		List<UserVO> userVOList = new ArrayList<UserVO>();
+		List<UserVO> userVOList = new ArrayList<>();
 		for (UserEntity user : userList) {
 			UserVO userVO = transformUserToVO(user);
 			userVOList.add(userVO);

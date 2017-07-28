@@ -3,10 +3,10 @@ package com.tongwii.controller;
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.po.UserContactEntity;
 import com.tongwii.po.UserEntity;
-import com.tongwii.service.IRoomService;
 import com.tongwii.service.IUserContactService;
-import com.tongwii.service.IUserRoomService;
 import com.tongwii.service.IUserService;
+import com.tongwii.util.PinYinUtil;
+import com.tongwii.util.TokenUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by admin on 2017/7/18.
@@ -25,10 +27,7 @@ public class UserContactController {
     private IUserContactService userContactService;
     @Autowired
     private IUserService userService;
-    @Autowired
-    private IUserRoomService userRoomService;
-    @Autowired
-    private IRoomService roomService;
+
     private TongWIIResult result = new TongWIIResult();
 
     /**
@@ -69,41 +68,53 @@ public class UserContactController {
 
     /**
      * 获取联系人列表
-     * @param userId
-     * @return result
-     * */
-    @RequestMapping(value = "/userContacts/{userId}", method = RequestMethod.GET)
-    public TongWIIResult getContactsByUserId(@PathVariable String userId){
-        if(userId == null || userId.isEmpty()){
-            result.errorResult("用户信息不存在!");
+     *
+     * @param token the token
+     * @return result tong wii result
+     */
+    @GetMapping()
+    public TongWIIResult getContactsByUserId(@RequestParam String token){
+        try {
+            String userId = TokenUtil.getUserIdFromToken(token);
+            List<UserContactEntity> userContactList = userContactService.findByUserId(userId);
+            if(CollectionUtils.isEmpty(userContactList)){
+                result.errorResult("此用户没有联系人!");
+                return result;
+            }
+            Map<String, JSONArray> contactMap = new TreeMap<>();
+            for(UserContactEntity userContactEntity : userContactList){
+                UserEntity friend = userContactEntity.getUserByFriendId();
+                String pinYin = friend.getName();
+                if(pinYin.isEmpty()) {
+                    pinYin = friend.getNickName();
+                }
+                String sortString = PinYinUtil.converterToFirstChar(pinYin);
+                JSONObject object = new JSONObject();
+                object.put("contactName", friend.getName());
+                object.put("contactAccount", friend.getAccount());
+                object.put("contactNick", friend.getNickName());
+                object.put("contactDesc", userContactEntity.getDes());
+                object.put("contactPhone", friend.getPhone());
+                object.put("contactId", userContactEntity.getId());
+                if (sortString.matches("[A-Z]")) {
+                    if (!contactMap.containsKey(sortString)) {
+                        contactMap.put(sortString, new JSONArray());
+                    }
+                    contactMap.get(sortString).add(object);
+                } else {
+                    if(!contactMap.containsKey(UserContactEntity.UNKNOWN_NAME)) {
+                        // 存放不是A-Z字母的联系人名称
+                        contactMap.put(UserContactEntity.UNKNOWN_NAME, new JSONArray());
+                    }
+                    contactMap.get(UserContactEntity.UNKNOWN_NAME).add(object);
+                }
+            }
+            result.successResult("联系人列表获取成功!", contactMap);
+            return result;
+        } catch (Exception e) {
+            result.successResult("联系人列表获取失败!", e.getMessage());
             return result;
         }
-        List<UserContactEntity> userContactList = userContactService.findByUserId(userId);
-        if(CollectionUtils.isEmpty(userContactList)){
-            result.errorResult("此用户没有联系人!");
-            return result;
-        }
-        JSONArray jsonArray = new JSONArray();
-
-        for(UserContactEntity userContactEntity : userContactList){
-            //通过fridentId查找userEntity,得到userId,nickname,name,account
-            UserEntity userEntity = userService.findById(userContactEntity.getFriendId());
-            //通过userId查询userRoomEntity,得到roomId
-            String roomId = userRoomService.findRoomByUserId(userContactEntity.getFriendId());
-            //通过roomId查询roomEntity,得到roomCode
-            String roomCode = roomService.findById(roomId).getRoomCode();
-            JSONObject object = new JSONObject();
-            object.put("contactName", userEntity.getName());
-            object.put("contactAccount", userEntity.getAccount());
-            object.put("contactNick", userEntity.getNickName());
-            object.put("contactDesc", userContactEntity.getDes());
-            object.put("contactPhone", userEntity.getPhone());
-            object.put("contactId", userContactEntity.getId());
-            object.put("roomCode", roomCode);
-            jsonArray.add(object);
-        }
-        result.successResult("联系人列表获取成功!", jsonArray);
-        return result;
     }
 
     /**

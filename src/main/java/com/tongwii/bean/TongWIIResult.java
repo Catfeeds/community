@@ -8,6 +8,8 @@ import net.sf.json.util.CycleDetectionStrategy;
 import java.io.Serializable;
 
 public class TongWIIResult implements Serializable {
+	public static final String SUCCESS_INFO = "操作成功";
+	public static final String ERROR_INFO = "操作失败";
 	/**
 	 * 处理结果状态
 	 */
@@ -28,6 +30,15 @@ public class TongWIIResult implements Serializable {
 		this.status = status;
 		this.info = info;
 		this.data = data;
+	}
+
+	/**
+	 * 发送处理成功消息
+	 *
+	 */
+	public void successResult() {
+		this.status = ResultConstants.SUCCESS;
+		this.info = SUCCESS_INFO;
 	}
 
 	/**
@@ -68,6 +79,15 @@ public class TongWIIResult implements Serializable {
 		final JSONObject jsonObject = JSONObject.fromObject(object, jsonConfig);
 
 		this.data = jsonObject;
+	}
+
+	/**
+	 * 发送处理失败消息
+	 *
+	 */
+	public void errorResult() {
+		this.status = ResultConstants.ERROR;
+		this.info = ERROR_INFO;
 	}
 
 	/**

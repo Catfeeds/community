@@ -30,8 +30,9 @@ public interface IUserService extends IBaseService<UserEntity> {
      * 上传用户头像并更新用户头像地址
      *
      * @param userId 用户id
-     * @param file 上传文件
+     * @param file   上传文件
      * @return String 上传文件地址
+     * @throws IOException the io exception
      */
     String updateUserAvatorById(String userId, MultipartFile file) throws IOException;
 }

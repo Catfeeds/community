@@ -20,6 +20,7 @@ public class RoomEntity implements Serializable {
     private String roomCode;
     private Double area;
     private String huXing;
+    private String clientCode;
     private String ownerId;
     private String unitId;
 //    @Ignore
@@ -72,6 +73,16 @@ public class RoomEntity implements Serializable {
     }
 
     @Basic
+    @Column(name = "client_code")
+    public String getClientCode() {
+        return clientCode;
+    }
+
+    public void setClientCode(String clientCode) {
+        this.clientCode = clientCode;
+    }
+
+    @Basic
     @Column(name = "owner_id")
     public String getOwnerId() {
         return ownerId;
@@ -89,34 +100,6 @@ public class RoomEntity implements Serializable {
 
     public void setUnitId(String unitId) {
         this.unitId = unitId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RoomEntity that = (RoomEntity) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (roomCode != null ? !roomCode.equals(that.roomCode) : that.roomCode != null) return false;
-        if (area != null ? !area.equals(that.area) : that.area != null) return false;
-        if (huXing != null ? !huXing.equals(that.huXing) : that.huXing != null) return false;
-        if (ownerId != null ? !ownerId.equals(that.ownerId) : that.ownerId != null) return false;
-        if (unitId != null ? !unitId.equals(that.unitId) : that.unitId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (roomCode != null ? roomCode.hashCode() : 0);
-        result = 31 * result + (area != null ? area.hashCode() : 0);
-        result = 31 * result + (huXing != null ? huXing.hashCode() : 0);
-        result = 31 * result + (ownerId != null ? ownerId.hashCode() : 0);
-        result = 31 * result + (unitId != null ? unitId.hashCode() : 0);
-        return result;
     }
 
     @ManyToOne

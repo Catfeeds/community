@@ -47,8 +47,8 @@ public class FloorController {
         for(FloorEntity floorEntity : floorEntities){
             JSONObject object = new JSONObject();
             object.put("floorName", floorEntity.getName());
-            object.put("dongCode",floorEntity.getDongCode());
-            object.put("floorUnitId",floorEntity.getUnitCode());
+            object.put("dongCode",floorEntity.getCode());
+            object.put("floorUnitId",floorEntity.getParentCode());
             object.put("floorId",floorEntity.getId());
             jsonArray.add(object);
         }
@@ -72,11 +72,11 @@ public class FloorController {
         if(floorEntity.getName() != null && !floorEntity.getName().isEmpty()){
             newFloor.setName(floorEntity.getName());
         }
-        if(floorEntity.getDongCode() != null && !floorEntity.getDongCode().toString().isEmpty()){
-            newFloor.setDongCode(floorEntity.getDongCode());
+        if(floorEntity.getCode() != null && !floorEntity.getCode().toString().isEmpty()){
+            newFloor.setCode(floorEntity.getCode());
         }
-        if(floorEntity.getUnitCode() != null && !floorEntity.getUnitCode().isEmpty() ){
-            newFloor.setUnitCode(floorEntity.getUnitCode());
+        if(floorEntity.getParentCode() != null && !floorEntity.getParentCode().isEmpty() ){
+            newFloor.setParentCode(floorEntity.getParentCode());
         }
         if(floorEntity.getPrincipalId() != null && !floorEntity.getPrincipalId().isEmpty()){
             newFloor.setPrincipalId(floorEntity.getPrincipalId());
@@ -92,8 +92,8 @@ public class FloorController {
         }
         JSONObject object = new JSONObject();
         object.put("name", newFloor.getName());
-        object.put("dongCode", newFloor.getDongCode());
-        object.put("unitCode", newFloor.getUnitCode());
+        object.put("dongCode", newFloor.getCode());
+        object.put("unitCode", newFloor.getParentCode());
         object.put("principalId", newFloor.getPrincipalId());
         object.put("areaId", newFloor.getAreaId());
         result.successResult("修改楼宇实体成功!", object);

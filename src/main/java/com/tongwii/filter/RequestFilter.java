@@ -5,6 +5,7 @@ import com.tongwii.po.UserEntity;
 import com.tongwii.service.IUserService;
 import com.tongwii.util.TokenUtil;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,11 @@ public class RequestFilter extends OncePerRequestFilter {
             return;
         } else {
             String token = httpServletRequest.getHeader(TOKEN);
+            if(StringUtils.isEmpty(token)) {
+                token = httpServletRequest.getParameter(TOKEN);
+            }
             String userId = TokenUtil.getUserIdFromToken(token);
-            if(null != token && null != userId) {
+            if(StringUtils.isNotEmpty(token) && StringUtils.isNotEmpty(userId)) {
                 UserEntity userDetails = userService.findById(userId);
                 if(TokenUtil.validateToken(token, userDetails, httpServletRequest.getServerName())) {
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
