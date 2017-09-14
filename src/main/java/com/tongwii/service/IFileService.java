@@ -17,5 +17,5 @@ public interface IFileService extends IBaseService<FileEntity> {
      * @param file   the file
      * @return the file entity
      */
-    public FileEntity saveAndUploadFile(String userId, MultipartFile file);
+    FileEntity saveAndUploadFile(String userId, MultipartFile file);
 }

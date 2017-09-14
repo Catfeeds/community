@@ -1,12 +1,14 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
+import com.tongwii.core.Result;
 import com.tongwii.po.FloorEntity;
 import com.tongwii.po.RoomEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.IFloorService;
 import com.tongwii.service.IUserRoomService;
 import com.tongwii.service.IUserService;
+import com.tongwii.util.Encoder.MD5PasswordEncoder;
 import com.tongwii.util.TokenUtil;
 import com.tongwii.util.VOUtil;
 import com.tongwii.vo.RoomVO;
@@ -34,7 +36,7 @@ public class UserController {
     private IUserRoomService userRoomService;
 	
 	private TongWIIResult result = new TongWIIResult();
-
+	private MD5PasswordEncoder md5PasswordEncoder = new MD5PasswordEncoder();
 	
 	// 用户注册接口
 	@PostMapping("/regist")
@@ -59,20 +61,20 @@ public class UserController {
 	public TongWIIResult login(@RequestBody UserEntity user, @RequestHeader("Host") String host) {
 		try {
 			if(StringUtils.isEmpty(user.getAccount())){
-				result.errorResult("用户账号不可为空");
+				result.errorResult("用户账号不可为空!");
                 return result;
             }
 			if(StringUtils.isEmpty(user.getPassword())){
-				result.errorResult("密码不可为空");
-                return result;
-            }
+				result.errorResult("密码不可为空!");
+				return result;
+			}
 			//通过用户名查询用户的所有信息
 			UserEntity findUser = userService.findByAccount(user.getAccount());
 			if(Objects.isNull(findUser)){
-				result.errorResult("用户不存在");
+				result.errorResult("用户不存在!");
                 return result;
             }
-			if (findUser.getPassword().equals(user.getPassword())) {
+			if (findUser.getPassword().equals(md5PasswordEncoder.encoder(user.getPassword()))) {
 				// 用户设置token
 				String token = TokenUtil.generateToken(host, findUser);
 				// 基本用户信息
@@ -86,21 +88,22 @@ public class UserController {
                     roomVO.setRoomCode(roomEntity.getRoomCode());
                     roomVO.setChargeName(roomEntity.getUserByOwnerId().getName());
                     roomVO.setChargePhone(roomEntity.getUserByOwnerId().getPhone());
-                    roomVO.setRoomFloor(floorMap.get(FloorEntity.DONG).getName() + floorMap.get(FloorEntity.UNIT).getName() + roomEntity.getRoomCode());
+//                    roomVO.setRoomFloor(floorMap.get(FloorEntity.DONG).getName() + floorMap.get(FloorEntity.UNIT).getName() + roomEntity.getRoomCode());
+					roomVO.setRoomFloor(floorMap.get(FloorEntity.UNIT).getName() + floorMap.get(FloorEntity.UNIT).getParentCode()+ "单元" + roomEntity.getRoomCode());
                     roomVOS.add(roomVO);
                 }
                 // 设置房间信息
                 userVO.setRooms(roomVOS);
                 // 设置token
                 userVO.setToken(token);
-				result.successResult("登陆成功", userVO);
+				result.successResult("登陆成功!", userVO);
 				return result;
 			} else {
-				result.errorResult("密码错误！");
+				result.errorResult("密码错误!");
 				return result;
 			}
 		} catch (Exception e) {
-			result.errorResult("登陆出错！", e.getMessage());
+			result.errorResult("登陆出错!", e.getMessage());
 			return result;
 		}
 	}
@@ -144,17 +147,16 @@ public class UserController {
 
     // 修改用户电话
     @PostMapping("/updatePhone")
-    public TongWIIResult updatePhone(@RequestParam("phone") String phone, @RequestParam("token")String token) {
+    public Result updatePhone(@RequestParam("phone") String phone, @RequestParam("token")String token) {
         try {
             String userId = TokenUtil.getUserIdFromToken(token);
             UserEntity userEntity = userService.findById(userId);
             userEntity.setPhone(phone);
             userService.update(userEntity);
-            result.successResult();
-            return result;
+            return Result.successResult(userEntity);
         } catch (Exception e) {
             result.errorResult();
-            return result;
+            return Result.errorResult("修改失败!");
         }
     }
 

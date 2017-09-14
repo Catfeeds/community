@@ -46,9 +46,9 @@ public class ResidenceController {
             object.put("residenceName", residenceEntity.getName());
             object.put("residenceUrl",residenceEntity.getServerUrl());
             object.put("residenceId",residenceEntity.getId());
+            object.put("floorCount", residenceEntity.getFloorCount());
             jsonArray.add(object);
         }
-
         result.successResult("社区实体信息查询成功!",jsonArray);
         return result;
     }

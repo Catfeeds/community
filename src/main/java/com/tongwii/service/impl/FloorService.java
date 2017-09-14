@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by admin on 2017/7/18.
@@ -37,7 +38,7 @@ public class FloorService extends BaseServiceImpl<FloorEntity> implements IFloor
         FloorEntity unitEntity = findById(id);
         if (Objects.nonNull(unitEntity)) {
             floorMap.put(FloorEntity.UNIT, unitEntity);
-            floorMap.put(FloorEntity.DONG, floorDao.findFloorByCode(unitEntity.getParentCode()));
+//            floorMap.put(FloorEntity.DONG, floorDao.findFloorByCode(unitEntity.getParentCode()));
         }
         return floorMap;
     }

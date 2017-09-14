@@ -2,6 +2,7 @@ package com.tongwii.controller;
 
 import com.tongwii.bean.PageInfo;
 import com.tongwii.bean.TongWIIResult;
+import com.tongwii.core.Result;
 import com.tongwii.po.MessageEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.IMessageService;
@@ -73,17 +74,15 @@ public class BaseMessageController {
      * @return result
      * */
     @RequestMapping(value = "/selectMessageByType", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-    public TongWIIResult selectMessageByType(@RequestHeader("page") Integer page,@RequestBody MessageEntity message){
+    public Result selectMessageByType(@RequestHeader("page") Integer page, @RequestBody MessageEntity message){
         if (message.getMessageTypeId() == null || message.getMessageTypeId().isEmpty()){
-            result.errorResult("消息类型不可为空!");
-            return result;
+            return Result.errorResult("消息类型不可为空!");
         }
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPage(page);
         List<MessageEntity> messageEntities = messageService.selectMessageByType(pageInfo, message.getMessageTypeId(), message.getResidenceId());
         if(messageEntities.isEmpty() || messageEntities==null){
-            result.errorResult("信息查询失败!");
-            return result;
+            return Result.errorResult("信息查询失败!");
         }
         JSONArray messageJsonArray = new JSONArray();
         JSONObject messageObject = new JSONObject();
@@ -99,8 +98,7 @@ public class BaseMessageController {
             messageObject.put("createUser", userEntity.getAccount());
             messageJsonArray.add(messageObject);
         }
-        result.successResult("查询成功!", messageJsonArray);
-        return result;
+        return Result.successResult().add("pageInfo", pageInfo).add("messageInfo",messageJsonArray);
     }
 
 }
