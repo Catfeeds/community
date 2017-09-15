@@ -2,10 +2,10 @@
 <% String path = request.getContextPath(); %>
 <html>
 <head>
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta userId="description" content="">
+    <meta userId="author" content="">
     <!-- Mobile Specific Metas ---->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta userId="viewport" content="width=device-width, initial-scale=1">
     <!-- FONT -->
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
     <!-- CSS --->

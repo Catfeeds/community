@@ -11,7 +11,6 @@ import com.tongwii.constant.MessageConstants;
 import com.tongwii.constant.PushConstants;
 import com.tongwii.constant.UserConstants;
 import com.tongwii.po.MessageEntity;
-import com.tongwii.po.RoomEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.*;
 import com.tongwii.util.PushTemplate;
@@ -67,7 +66,7 @@ public class PushServiceImpl implements IPushService{
         // 通过roomid获取用户实体
         List<UserEntity> userEntities = userRoomService.findUsersByRoomId(roomId);
         if(userEntities == null){
-            result.setStatus(UserConstants.USER_NOT_EXIST);
+            result.setStatus(UserConstants.USER_DISABLE);
             result.setInfo("获取用户列表信息失败!");
             result.setData(userEntities);
             return result;

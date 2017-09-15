@@ -1,19 +1,20 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
+import com.tongwii.constant.CommunityConstants;
 import com.tongwii.core.Result;
 import com.tongwii.po.FloorEntity;
 import com.tongwii.po.RoomEntity;
 import com.tongwii.po.UserEntity;
+import com.tongwii.po.UserRoomEntity;
 import com.tongwii.service.IFloorService;
 import com.tongwii.service.IUserRoomService;
 import com.tongwii.service.IUserService;
-import com.tongwii.util.Encoder.MD5PasswordEncoder;
 import com.tongwii.util.TokenUtil;
 import com.tongwii.util.VOUtil;
 import com.tongwii.vo.RoomVO;
 import com.tongwii.vo.UserVO;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +37,7 @@ public class UserController {
     private IUserRoomService userRoomService;
 	
 	private TongWIIResult result = new TongWIIResult();
-	private MD5PasswordEncoder md5PasswordEncoder = new MD5PasswordEncoder();
-	
+
 	// 用户注册接口
 	@PostMapping("/regist")
 	public TongWIIResult regist(@RequestBody UserEntity user)  {
@@ -74,14 +74,15 @@ public class UserController {
 				result.errorResult("用户不存在!");
                 return result;
             }
-			if (findUser.getPassword().equals(md5PasswordEncoder.encoder(user.getPassword()))) {
+			if (UserEntity.doesPasswordMatch(user.getPassword(), findUser.getPassword())) {
 				// 用户设置token
 				String token = TokenUtil.generateToken(host, findUser);
 				// 基本用户信息
 				UserVO userVO = VOUtil.transformUserToVO(findUser);
-                List<RoomEntity> roomEntities = userRoomService.findRoomByUserId(userVO.getId());
+                List<UserRoomEntity> userRoomEntities = userRoomService.findRoomByUserId(userVO.getId());
                 List<RoomVO> roomVOS = new ArrayList<>();
-                for (RoomEntity roomEntity : roomEntities) {
+                for (UserRoomEntity userRoomEntity : userRoomEntities) {
+                    RoomEntity roomEntity = userRoomEntity.getRoomByRoomId();
                     RoomVO roomVO = new RoomVO();
                     Map<String, FloorEntity> floorMap = floorService.findFloorById(roomEntity.getUnitId());
                     roomVO.setRoomId(roomEntity.getId());
@@ -110,7 +111,7 @@ public class UserController {
 
 	// 上传用户头像
 	@PostMapping(path = "/uploadAvatar", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, @RequestParam("token")String token, HttpServletResponse response) {
+	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, @RequestHeader(CommunityConstants.Token)String token, HttpServletResponse response) {
 		try {
 			System.out.println("=========开始上传头像======================================");
 			String userId = TokenUtil.getUserIdFromToken(token);
@@ -131,7 +132,7 @@ public class UserController {
 
 	// 修改用户头像
 	@PostMapping("/updateNickName")
-	public TongWIIResult updateNickName(@RequestParam("nickName") String nickName, @RequestParam("token")String token) {
+	public TongWIIResult updateNickName(@RequestParam("nickName") String nickName, @RequestHeader(CommunityConstants.Token)String token) {
         try {
             String userId = TokenUtil.getUserIdFromToken(token);
             UserEntity userEntity = userService.findById(userId);
@@ -147,7 +148,7 @@ public class UserController {
 
     // 修改用户电话
     @PostMapping("/updatePhone")
-    public Result updatePhone(@RequestParam("phone") String phone, @RequestParam("token")String token) {
+    public Result updatePhone(@RequestParam("phone") String phone, @RequestHeader(CommunityConstants.Token)String token) {
         try {
             String userId = TokenUtil.getUserIdFromToken(token);
             UserEntity userEntity = userService.findById(userId);

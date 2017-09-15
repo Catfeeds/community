@@ -4,19 +4,19 @@ package com.tongwii.constant;
  * Created by admin on 2017/7/13.
  */
 public interface MessageConstants {
-    /**¶¨ÒåÏûÏ¢ÀàĞÍ**/
-    public final static Integer PUSH_MESSAGE = 1;//¿ìµİÏûÏ¢
-    public final static Integer NEW_MESSAGE = 2;//ĞÂÎÅÏûÏ¢
-    public final static Integer NOTIFY_MESSAGE = 3;//Í¨ÖªÏûÏ¢
-    public final static Integer VOTE_MESSAGE = 4;//Í¶Æ±ÏûÏ¢
-    public final static Integer COMPLAINT_MESSAGE = 5;//Í¶ËßÏûÏ¢
-    public final static Integer HURRY_MESSAGE = 6;//½ô¼±ÏûÏ¢
-    public final static Integer NODE_MESSAGE = 7;//ÌáÊ¾ÏûÏ¢
-    public final static Integer DYNAMIC_MESSAGE = 8;//¶¯Ì¬ÏûÏ¢
-    public final static Integer ONLINE_MESSAGE = 9;//ÔÚÏß·şÎñÏûÏ¢
-    public final static Integer REPLAY_MESSAGE = 10;//»Ø¸´ÏûÏ¢
-    /**¶¨ÒåÏûÏ¢´¦Àí½ø¶È*/
-    public final static Integer UNPROCESS = 0;//Î´´¦Àí
-    public final static Integer PROCESSED = 1;//ÒÑ´¦Àí
+    /**å®šä¹‰æ¶ˆæ¯ç±»å‹**/
+    Integer PUSH_MESSAGE = 1;//å¿«é€’æ¶ˆæ¯
+    Integer NEW_MESSAGE = 2;//æ–°é—»æ¶ˆæ¯
+    Integer NOTIFY_MESSAGE = 3;//é€šçŸ¥æ¶ˆæ¯
+    Integer VOTE_MESSAGE = 4;//æŠ•ç¥¨æ¶ˆæ¯
+    Integer COMPLAINT_MESSAGE = 5;//æŠ•è¯‰æ¶ˆæ¯
+    Integer HURRY_MESSAGE = 6;//ç´§æ€¥æ¶ˆæ¯
+    Integer NODE_MESSAGE = 7;//æç¤ºæ¶ˆæ¯
+    Integer DYNAMIC_MESSAGE = 8;//åŠ¨æ€æ¶ˆæ¯
+    Integer ONLINE_MESSAGE = 9;//åœ¨çº¿æœåŠ¡æ¶ˆæ¯
+    Integer REPLAY_MESSAGE = 10;//å›å¤æ¶ˆæ¯
+    /**å®šä¹‰æ¶ˆæ¯å¤„ç†è¿›åº¦*/
+    Integer UNPROCESS = 0;//æœªå¤„ç†
+    Integer PROCESSED = 1;//å·²å¤„ç†
 
 }

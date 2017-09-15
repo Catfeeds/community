@@ -1,15 +1,14 @@
 package com.tongwii.filter;
 
-import com.tongwii.bean.TongWIIResult;
+import com.tongwii.constant.CommunityConstants;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.IUserService;
 import com.tongwii.util.TokenUtil;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UrlPathHelper;
 
@@ -28,14 +27,9 @@ import java.nio.charset.StandardCharsets;
  * Date: 2017/6/30
  */
 public class RequestFilter extends OncePerRequestFilter {
-    private static final Logger logger = LogManager.getLogger();
-
-    private static final String TOKEN = "token";
-
     @Autowired
     private IUserService userService;
 
-    private TongWIIResult tongWIIResult = new TongWIIResult();
     private UrlPathHelper urlPathHelper = new UrlPathHelper();
 
     @Override
@@ -48,10 +42,7 @@ public class RequestFilter extends OncePerRequestFilter {
             filterChain.doFilter(httpServletRequest, httpServletResponse);
             return;
         } else {
-            String token = httpServletRequest.getHeader(TOKEN);
-            if(StringUtils.isEmpty(token)) {
-                token = httpServletRequest.getParameter(TOKEN);
-            }
+            String token = httpServletRequest.getHeader(CommunityConstants.Token);
             String userId = TokenUtil.getUserIdFromToken(token);
             if(StringUtils.isNotEmpty(token) && StringUtils.isNotEmpty(userId)) {
                 UserEntity userDetails = userService.findById(userId);
@@ -59,13 +50,11 @@ public class RequestFilter extends OncePerRequestFilter {
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
                     return;
                 } else {
-                    tongWIIResult.errorResult("认证失败");
-                    httpServletResponse.getWriter().write(JSONObject.fromObject(tongWIIResult).toString());
+                    httpServletResponse.getWriter().write(new ResponseEntity<>("认证失败", HttpStatus.UNAUTHORIZED).toString());
                     return;
                 }
             } else {
-                tongWIIResult.errorResult("请求非法");
-                httpServletResponse.getWriter().write(JSONObject.fromObject(tongWIIResult).toString());
+                httpServletResponse.getWriter().write(new ResponseEntity<>("非法请求", HttpStatus.UNAUTHORIZED).toString());
                 return;
             }
         }

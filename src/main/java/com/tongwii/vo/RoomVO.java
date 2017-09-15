@@ -20,6 +20,22 @@ public class RoomVO {
      */
     private String roomFloor;
     /**
+     * 社区id
+     */
+    private String residenceId;
+    /**
+     * 社区名称
+     */
+    private String residenceName;
+    /**
+     * 分区id
+     */
+    private String areaId;
+    /**
+     * 分区名称
+     */
+    private String areaName;
+    /**
      * 业主姓名
      */
     private String chargeName;
@@ -27,6 +43,51 @@ public class RoomVO {
      * 业主电话
      */
     private String chargePhone;
+    /**
+     * 用户和房间的关系，具体参考 UserRoomEntity 常量定义
+     *
+     */
+    private Byte type;
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public String getResidenceId() {
+        return residenceId;
+    }
+
+    public void setResidenceId(String residenceId) {
+        this.residenceId = residenceId;
+    }
+
+    public String getResidenceName() {
+        return residenceName;
+    }
+
+    public void setResidenceName(String residenceName) {
+        this.residenceName = residenceName;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
 
     public String getRoomId() {
         return roomId;

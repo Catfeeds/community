@@ -1,6 +1,7 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
+import com.tongwii.constant.CommunityConstants;
 import com.tongwii.po.UserContactEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.IUserContactService;
@@ -9,6 +10,7 @@ import com.tongwii.util.PinYinUtil;
 import com.tongwii.util.TokenUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +75,7 @@ public class UserContactController {
      * @return result tong wii result
      */
     @GetMapping()
-    public TongWIIResult getContactsByUserId(@RequestParam String token){
+    public TongWIIResult getContactsByUserId(@RequestHeader(CommunityConstants.Token) String token){
         try {
             String userId = TokenUtil.getUserIdFromToken(token);
             List<UserContactEntity> userContactList = userContactService.findByUserId(userId);
@@ -95,6 +97,9 @@ public class UserContactController {
                 object.put("contactNick", friend.getNickName());
                 object.put("contactDesc", userContactEntity.getDes());
                 object.put("contactPhone", friend.getPhone());
+                if(StringUtils.isNotEmpty(friend.getAvatarFileId())) {
+                    object.put("contactPhoto", friend.getFileByAvatarFileId().getFilePath());
+                }
                 object.put("contactId", userContactEntity.getId());
                 if (sortString.matches("[A-Z]")) {
                     if (!contactMap.containsKey(sortString)) {

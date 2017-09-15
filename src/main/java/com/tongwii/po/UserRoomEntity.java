@@ -14,9 +14,12 @@ import java.io.Serializable;
 @Entity
 @Table(name = "user_room", schema = "cloud_community", catalog = "")
 public class UserRoomEntity implements Serializable {
+    public static final Byte BIND = 1;
+    public static final Byte UN_BIND = 0;
     private String id;
     private String userId;
     private String roomId;
+    private Byte type;
     private String des;
     private UserEntity userByUserId;
     private RoomEntity roomByRoomId;
@@ -51,6 +54,17 @@ public class UserRoomEntity implements Serializable {
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+
+    @Basic
+    @Column(name = "type")
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 
     @Basic

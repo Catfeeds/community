@@ -7,7 +7,6 @@ import com.tongwii.po.FileEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.IFileService;
 import com.tongwii.service.IUserService;
-import com.tongwii.util.Encoder.MD5PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +27,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
     @Autowired
     private IFileService fileService;
 
-    private MD5PasswordEncoder md5PasswordEncoder = new MD5PasswordEncoder();
-
     @Override
     public BaseDao<UserEntity, String> getDao() {
         return userDao;
@@ -42,9 +39,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
 
     @Override
     public void save(UserEntity userEntity) {
-        userEntity.setPassword(md5PasswordEncoder.encoder(userEntity.getPassword()));
+        userEntity.setPassword(UserEntity.hashPassword(userEntity.getPassword()));
         userEntity.setAddTime(new Date());
-        userEntity.setState(UserConstants.USER_EXIST.byteValue());
+        userEntity.setState(UserConstants.USER_ENABLE.byteValue());
         userDao.save(userEntity);
     }
 

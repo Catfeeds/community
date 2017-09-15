@@ -1,6 +1,7 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
+import com.tongwii.constant.CommunityConstants;
 import com.tongwii.po.FileEntity;
 import com.tongwii.service.IFileService;
 import com.tongwii.util.TokenUtil;
@@ -25,7 +26,7 @@ public class FileController {
      *
      * */
     @PostMapping(path = "/addPicture", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public TongWIIResult addPicture(@RequestParam("file") MultipartFile file, @RequestParam("token")String token, HttpServletResponse response){
+    public TongWIIResult addPicture(@RequestParam("file") MultipartFile file, @RequestHeader(CommunityConstants.Token)String token, HttpServletResponse response){
         try {
             System.out.println("=========开始上传图片======================================");
             String userId = TokenUtil.getUserIdFromToken(token);

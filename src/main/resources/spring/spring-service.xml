@@ -16,8 +16,7 @@
 ">
 
     <!-- 注入事物管理器 -->
-    <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
@@ -46,7 +45,5 @@
 
     <!-- 使用上下文注解扫描配置 -->
     <context:annotation-config />
-
-    <!--<bean id="requestFilter" class="com.tongwii.filter.RequestFilter" />-->
 
 </beans>

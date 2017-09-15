@@ -18,10 +18,10 @@
 package com.tongwii.webRtc;
 
 import net.sf.json.JSONObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.WebRtcEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -38,9 +38,9 @@ import java.util.List;
  */
 public class UserSession {
 
-  private static final Logger log = LogManager.getLogger(UserSession.class);
+  private static Logger log = LoggerFactory.getLogger(UserSession.class);
 
-  private final String name;
+  private final String userId;
   private final WebSocketSession session;
 
   private String sdpOffer;
@@ -49,17 +49,17 @@ public class UserSession {
   private WebRtcEndpoint webRtcEndpoint;
   private final List<IceCandidate> candidateList = new ArrayList<>();
 
-  public UserSession(WebSocketSession session, String name) {
+  public UserSession(WebSocketSession session, String userId) {
     this.session = session;
-    this.name = name;
+    this.userId = userId;
   }
 
   public WebSocketSession getSession() {
     return session;
   }
 
-  public String getName() {
-    return name;
+  public String getUserId() {
+    return userId;
   }
 
   public String getSdpOffer() {
@@ -87,7 +87,7 @@ public class UserSession {
   }
 
   public void sendMessage(JSONObject message) throws IOException {
-    log.debug("Sending message from user '{}': {}", name, message);
+    log.debug("Sending message from user '{}': {}", userId, message);
     session.sendMessage(new TextMessage(message.toString()));
   }
 

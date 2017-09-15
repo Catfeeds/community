@@ -1,6 +1,5 @@
 package com.tongwii.service;
 
-import com.tongwii.po.RoomEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.po.UserRoomEntity;
 
@@ -24,6 +23,6 @@ public interface IUserRoomService extends IBaseService<UserRoomEntity> {
      * @param userId return String
      * @return the list
      */
-    List<RoomEntity> findRoomByUserId(String userId);
+    List<UserRoomEntity> findRoomByUserId(String userId);
 
 }

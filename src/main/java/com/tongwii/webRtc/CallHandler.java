@@ -18,10 +18,10 @@
 package com.tongwii.webRtc;
 
 import net.sf.json.JSONObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -40,7 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CallHandler extends TextWebSocketHandler {
 
-  private static final Logger log = LogManager.getLogger(CallHandler.class);
+
+  private static final Logger log = LoggerFactory.getLogger(CallHandler.class);
 
   private final ConcurrentHashMap<String, CallMediaPipeline> pipelines = new ConcurrentHashMap<>();
 
@@ -56,7 +57,7 @@ public class CallHandler extends TextWebSocketHandler {
     UserSession user = registry.getBySession(session);
 
     if (user != null) {
-      log.debug("Incoming message from user '{}': {}", user.getName(), jsonMessage);
+      log.debug("Incoming message from user '{}': {}", user.getUserId(), jsonMessage);
     } else {
       log.debug("Incoming message from new user: {}", jsonMessage);
     }
@@ -139,7 +140,7 @@ public class CallHandler extends TextWebSocketHandler {
       response.put("id", "incomingCall");
       response.put("from", from);
 
-      UserSession callee = registry.getByName(to);
+      UserSession callee = registry.getByUserId(to);
       callee.sendMessage(response);
       callee.setCallingFrom(from);
     } else {
@@ -154,7 +155,7 @@ public class CallHandler extends TextWebSocketHandler {
       throws IOException {
     String callResponse = jsonMessage.getString("callResponse");
     String from = jsonMessage.getString("from");
-    final UserSession calleer = registry.getByName(from);
+    final UserSession calleer = registry.getByUserId(from);
     String to = calleer.getCallingTo();
 
     if ("accept".equals(callResponse)) {
@@ -210,7 +211,7 @@ public class CallHandler extends TextWebSocketHandler {
 
         pipeline.getCalleeWebRtcEp().gatherCandidates();
 
-        String callerSdpOffer = registry.getByName(from).getSdpOffer();
+        String callerSdpOffer = registry.getByUserId(from).getSdpOffer();
         String callerSdpAnswer = pipeline.generateSdpAnswerForCaller(callerSdpOffer);
         JSONObject response = new JSONObject();
         response.put("id", "callResponse");
@@ -262,9 +263,9 @@ public class CallHandler extends TextWebSocketHandler {
       UserSession stopperUser = registry.getBySession(session);
       if (stopperUser != null) {
         UserSession stoppedUser =
-            (stopperUser.getCallingFrom() != null) ? registry.getByName(stopperUser
+            (stopperUser.getCallingFrom() != null) ? registry.getByUserId(stopperUser
                 .getCallingFrom()) : stopperUser.getCallingTo() != null ? registry
-                    .getByName(stopperUser.getCallingTo()) : null;
+                    .getByUserId(stopperUser.getCallingTo()) : null;
 
                     if (stoppedUser != null) {
                       JSONObject message = new JSONObject();

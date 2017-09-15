@@ -1,6 +1,5 @@
 package com.tongwii.util;
 
-import com.tongwii.bean.TongWIIResult;
 import com.tongwii.po.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -37,8 +36,6 @@ public class TokenUtil {
      */
     private static final String CLAIM_KEY_HOST  = "host";
 
-    private static TongWIIResult tongWIIResult = new TongWIIResult();
-
     /**
      * 生成过期时间
      *
@@ -62,7 +59,7 @@ public class TokenUtil {
         Map< String, Object > claims = new HashMap<>();
         claims.put( CLAIM_KEY_USERACCOUNT, userEntity.getAccount());
         claims.put( CLAIM_KEY_USERID, userEntity.getId());
-        claims.put(CLAIM_KEY_HOST, host);
+        claims.put( CLAIM_KEY_HOST, host);
         return generateToken( claims );
     }
 

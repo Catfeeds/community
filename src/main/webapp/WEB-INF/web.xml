@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         id="WebApp_ID" version="3.0">
+         id="community" version="3.0">
   <display-name>community</display-name>
 <!--  <session-config>
     <session-timeout>60</session-timeout>
@@ -12,64 +12,12 @@
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 
+
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring/spring-*.xml</param-value>
   </context-param>
 
-  <!-- log4j2-begin -->
-  <listener>
-    <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
-  </listener>
-  <filter>
-    <filter-name>log4jServletFilter</filter-name>
-    <filter-class>org.apache.logging.log4j.web.Log4jServletFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>log4jServletFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-    <dispatcher>FORWARD</dispatcher>
-    <dispatcher>INCLUDE</dispatcher>
-    <dispatcher>ERROR</dispatcher>
-  </filter-mapping>
-  <!-- log4j2-end -->
-
-  <!-- Spring监听器 -->
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
-  <!-- 防止Spring内存溢出监听器 -->
-  <listener>
-    <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
-  </listener>
-
-  <!-- session已关闭异常的配置 -->
-  <filter>
-    <filter-name>OpenSessionInViewFilter</filter-name>
-    <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>OpenSessionInViewFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
-  <!--配置DispatcherServlet -->
-  <servlet>
-    <servlet-name>spring-dispatcher</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <!-- 配置SpringMVC需要加载的配置文件 spring-xxx.xml -->
-    <init-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>classpath:spring/spring-web.xml</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>spring-dispatcher</servlet-name>
-    <!--默认匹配所有的请求 -->
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
   <!-- ****************编码过滤begin 该过滤器必须要放在所有过滤器的前面******************** -->
   <filter>
     <filter-name>encoding</filter-name>
@@ -85,9 +33,40 @@
   </filter>
   <filter-mapping>
     <filter-name>encoding</filter-name>
-    <url-pattern>*</url-pattern>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
   <!-- ****************编码过滤end ****************************** -->
+    <!-- Spring监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- session已关闭异常的配置 -->
+    <filter>
+        <filter-name>OpenSessionInViewFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>OpenSessionInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--配置DispatcherServlet -->
+    <servlet>
+        <servlet-name>spring-dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 配置SpringMVC需要加载的配置文件 spring-xxx.xml -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/spring-web.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>spring-dispatcher</servlet-name>
+        <!--默认匹配所有的请求 -->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
 
   <!-- druid -->
   <servlet>
@@ -111,34 +90,4 @@
     <filter-name>DruidWebStatFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-
-  <!--<filter>
-    <filter-name>personalUserLoginStatusFilter</filter-name>
-    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    <init-param>
-      <param-name>targetBeanName</param-name>
-      <param-value>requestFilter</param-value>
-    </init-param>
-    <init-param>
-      <param-name>targetFilterLifecycle</param-name>
-      <param-value>true</param-value>
-    </init-param>-->
-  <!--<filter>
-    <filter-name>RequestFilter</filter-name>
-    <filter-class>com.tongwii.filter.RequestFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>personalUserLoginStatusFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>-->
-
-  <!-- 配置统一错误访问页 -->
-  <error-page>
-    <error-code>404</error-code>
-    <location>/WEB-INF/jsp/404.jsp</location>
-  </error-page>
-  <error-page>
-    <error-code>500</error-code>
-    <location>/WEB-INF/jsp/error.jsp</location>
-  </error-page>
 </web-app>
