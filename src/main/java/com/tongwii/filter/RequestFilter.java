@@ -47,6 +47,7 @@ public class RequestFilter extends OncePerRequestFilter {
             if(StringUtils.isNotEmpty(token) && StringUtils.isNotEmpty(userId)) {
                 UserEntity userDetails = userService.findById(userId);
                 if(TokenUtil.validateToken(token, userDetails, httpServletRequest.getServerName())) {
+                    httpServletRequest.setAttribute("user", userDetails);
                     filterChain.doFilter(httpServletRequest, httpServletResponse);
                     return;
                 } else {

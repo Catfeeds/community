@@ -1,5 +1,6 @@
 package com.tongwii.service.impl;
 
+import com.gexin.fastjson.JSONObject;
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.ListMessage;
 import com.gexin.rp.sdk.base.impl.Target;
@@ -14,7 +15,6 @@ import com.tongwii.po.MessageEntity;
 import com.tongwii.po.UserEntity;
 import com.tongwii.service.*;
 import com.tongwii.util.PushTemplate;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
