@@ -14,16 +14,15 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+# 管理员API路径
 management:
     security:
         roles: ADMIN
     context-path: /management
-    health:
-        mail:
-            enabled: false # When using the MailService, configure an SMTP server and set this to true
+
 spring:
     application:
-        name: jhipster
+        name: community
     jackson:
         serialization.write_dates_as_timestamps: false
     jpa:
@@ -52,48 +51,32 @@ server:
 
 info:
     project:
-        version: #project.version#
+        version: 0.0.1
 
 # ===================================================================
-# JHipster specific properties
+# TongWii specific properties
 #
 # Full reference is available at: http://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-jhipster:
-    async:
-        core-pool-size: 2
-        max-pool-size: 50
-        queue-capacity: 10000
+tongwii:
     # By default CORS is disabled. Uncomment to enable.
-    #cors:
-        #allowed-origins: "*"
-        #allowed-methods: GET, PUT, POST, DELETE, OPTIONS
-        #allowed-headers: "*"
-        #exposed-headers:
-        #allow-credentials: true
-        #max-age: 1800
-    mail:
-        from: jhipster@localhost
+    cors:
+        allowed-origins: "*"
+        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        allowed-headers: "*"
+        exposed-headers:
+        allow-credentials: true
+        max-age: 1800
     swagger:
-        default-include-pattern: /api/.*
-        title: jhipster API
-        description: jhipster API documentation
+        default-include-pattern: /.*
+        title: community 云社区 API
+        description: community 云社区 API文档
         version: 0.0.1
         terms-of-service-url:
-        contact-name:
-        contact-url:
-        contact-email:
+        contact-name: Zeral
+        contact-url: https://github.com/Zeral-Zhang
+        contact-email: zeralzhang@gmail.com
         license:
         license-url:
 
-# ===================================================================
-# Application specific properties
-# Add your own application properties here, see the ApplicationProperties class
-# to have type-safe configuration, like in the TongWiiProperties above
-#
-# More documentation is available at:
-# http://www.jhipster.tech/common-application-properties/
-# ===================================================================
-
-application:

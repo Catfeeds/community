@@ -1,13 +1,11 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.constant.CommunityConstants;
-import com.tongwii.po.UserContactEntity;
-import com.tongwii.po.UserEntity;
+import com.tongwii.domain.UserContactEntity;
+import com.tongwii.domain.UserEntity;
 import com.tongwii.service.IUserContactService;
 import com.tongwii.service.IUserService;
 import com.tongwii.util.PinYinUtil;
-import com.tongwii.util.TokenUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -75,9 +73,10 @@ public class UserContactController {
      * @return result tong wii result
      */
     @GetMapping()
-    public TongWIIResult getContactsByUserId(@RequestHeader(CommunityConstants.Token) String token){
+    public TongWIIResult getContactsByUserId(){
         try {
-            String userId = TokenUtil.getUserIdFromToken(token);
+            // TODO: 2017/9/19
+            String userId = "";
             List<UserContactEntity> userContactList = userContactService.findByUserId(userId);
             if(CollectionUtils.isEmpty(userContactList)){
                 result.errorResult("此用户没有联系人!");

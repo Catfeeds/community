@@ -1,16 +1,16 @@
 package com.tongwii.dao;
 
-import com.tongwii.po.MessageEntity;
+import com.tongwii.core.BaseDao;
+import com.tongwii.domain.MessageEntity;
 import com.tongwii.service.IPageInfo;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class MessageDao extends BaseDao<MessageEntity, String> {
     /**
-     * ÐÞ¸Ämessage×´Ì¬
+     * ï¿½Þ¸ï¿½message×´Ì¬
      * @param messageId
      * @param processState
      * */
@@ -24,7 +24,7 @@ public class MessageDao extends BaseDao<MessageEntity, String> {
     }
 
     /**
-     *°´ÀàÐÍ²éÑ¯ÏûÏ¢
+     *ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½Ñ¯ï¿½ï¿½Ï¢
      * @param messageTypeId
      * @param pageInfo
      * @param residenceId

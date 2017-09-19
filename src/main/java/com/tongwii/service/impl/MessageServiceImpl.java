@@ -1,9 +1,10 @@
 package com.tongwii.service.impl;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.dao.BaseDao;
+import com.tongwii.core.BaseDao;
+import com.tongwii.core.BaseServiceImpl;
 import com.tongwii.dao.MessageDao;
-import com.tongwii.po.MessageEntity;
+import com.tongwii.domain.MessageEntity;
 import com.tongwii.service.IMessageService;
 import com.tongwii.service.IPageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

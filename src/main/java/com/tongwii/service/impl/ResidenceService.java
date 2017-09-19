@@ -1,8 +1,9 @@
 package com.tongwii.service.impl;
 
-import com.tongwii.dao.BaseDao;
+import com.tongwii.core.BaseDao;
+import com.tongwii.core.BaseServiceImpl;
 import com.tongwii.dao.ResidenceDao;
-import com.tongwii.po.ResidenceEntity;
+import com.tongwii.domain.ResidenceEntity;
 import com.tongwii.service.IResidenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

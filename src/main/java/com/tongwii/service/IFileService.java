@@ -1,6 +1,7 @@
 package com.tongwii.service;
 
-import com.tongwii.po.FileEntity;
+import com.tongwii.core.IBaseService;
+import com.tongwii.domain.FileEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

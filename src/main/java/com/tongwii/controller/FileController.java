@@ -1,13 +1,14 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.constant.CommunityConstants;
-import com.tongwii.po.FileEntity;
+import com.tongwii.domain.FileEntity;
 import com.tongwii.service.IFileService;
-import com.tongwii.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,10 +27,11 @@ public class FileController {
      *
      * */
     @PostMapping(path = "/addPicture", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public TongWIIResult addPicture(@RequestParam("file") MultipartFile file, @RequestHeader(CommunityConstants.Token)String token, HttpServletResponse response){
+    public TongWIIResult addPicture(@RequestParam("file") MultipartFile file, HttpServletResponse response){
         try {
             System.out.println("=========开始上传图片======================================");
-            String userId = TokenUtil.getUserIdFromToken(token);
+            // TODO: 2017/9/19
+            String userId = "";
             // 上传文件并更新用户地址
             FileEntity fileEntity = fileService.saveAndUploadFile(userId, file);
             result.successResult("图片上传成功", fileEntity.getId());

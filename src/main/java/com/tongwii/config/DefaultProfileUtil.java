@@ -1,5 +1,6 @@
 package com.tongwii.config;
 
+import com.tongwii.constant.TongWiiConstants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.core.env.Environment;
 

@@ -1,7 +1,8 @@
 package com.tongwii.dao;
 
-import com.tongwii.po.UserEntity;
-import com.tongwii.po.UserRoomEntity;
+import com.tongwii.core.BaseDao;
+import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.UserRoomEntity;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 

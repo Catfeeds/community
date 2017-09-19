@@ -1,6 +1,6 @@
 package com.tongwii.service;
 
-import com.tongwii.po.FloorEntity;
+import com.tongwii.domain.FloorEntity;
 
 import java.util.List;
 import java.util.Map;

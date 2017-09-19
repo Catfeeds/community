@@ -1,12 +1,11 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.constant.CommunityConstants;
 import com.tongwii.core.Result;
-import com.tongwii.po.FloorEntity;
-import com.tongwii.po.RoomEntity;
-import com.tongwii.po.UserEntity;
-import com.tongwii.po.UserRoomEntity;
+import com.tongwii.domain.FloorEntity;
+import com.tongwii.domain.RoomEntity;
+import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.UserRoomEntity;
 import com.tongwii.service.IFloorService;
 import com.tongwii.service.IUserRoomService;
 import com.tongwii.service.IUserService;
@@ -17,6 +16,7 @@ import com.tongwii.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -111,10 +111,11 @@ public class UserController {
 
 	// 上传用户头像
 	@PostMapping(path = "/uploadAvatar", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, @RequestHeader(CommunityConstants.Token)String token, HttpServletResponse response) {
+	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
 		try {
 			System.out.println("=========开始上传头像======================================");
-			String userId = TokenUtil.getUserIdFromToken(token);
+			// TODO: 2017/9/19
+			String userId = "";
 			// 上传文件并更新用户地址
 			String uploadUrl = userService.updateUserAvatorById(userId, file);
 
@@ -132,9 +133,10 @@ public class UserController {
 
 	// 修改用户头像
 	@PostMapping("/updateNickName")
-	public TongWIIResult updateNickName(@RequestParam("nickName") String nickName, @RequestHeader(CommunityConstants.Token)String token) {
+	public TongWIIResult updateNickName(@RequestParam("nickName") String nickName) {
         try {
-            String userId = TokenUtil.getUserIdFromToken(token);
+			// TODO: 2017/9/19
+			String userId = "";
             UserEntity userEntity = userService.findById(userId);
             userEntity.setNickName(nickName);
             userService.update(userEntity);
@@ -148,9 +150,10 @@ public class UserController {
 
     // 修改用户电话
     @PostMapping("/updatePhone")
-    public Result updatePhone(@RequestParam("phone") String phone, @RequestHeader(CommunityConstants.Token)String token) {
+    public Result updatePhone(@RequestParam("phone") String phone) {
         try {
-            String userId = TokenUtil.getUserIdFromToken(token);
+			// TODO: 2017/9/19
+			String userId = "";
             UserEntity userEntity = userService.findById(userId);
             userEntity.setPhone(phone);
             userService.update(userEntity);
@@ -162,7 +165,11 @@ public class UserController {
     }
 
 	@GetMapping(value = "/test")
-	public String test() {
-		return "hello";
+	public ResponseEntity<Object> test() {
+		List<UserEntity> userEntities = userService.findAll();
+		for (UserEntity userEntity : userEntities) {
+			System.out.println(userEntity.toString());
+		}
+		return ResponseEntity.ok(userService.findAll());
 	}
 }

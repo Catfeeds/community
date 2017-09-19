@@ -1,8 +1,9 @@
 package com.tongwii.service.impl;
 
+import com.tongwii.core.BaseServiceImpl;
 import com.tongwii.dao.AreaDao;
-import com.tongwii.dao.BaseDao;
-import com.tongwii.po.AreaEntity;
+import com.tongwii.core.BaseDao;
+import com.tongwii.domain.AreaEntity;
 import com.tongwii.service.IAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

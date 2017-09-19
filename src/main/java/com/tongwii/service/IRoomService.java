@@ -1,15 +1,16 @@
 package com.tongwii.service;
 
-import com.tongwii.po.RoomEntity;
+import com.tongwii.core.IBaseService;
+import com.tongwii.domain.RoomEntity;
 
 import java.util.List;
 
 /**
  * Created by admin on 2017/7/13.
  */
-public interface IRoomService extends IBaseService<RoomEntity>{
+public interface IRoomService extends IBaseService<RoomEntity> {
     /**
-     * ¸ù¾ÝroomId²éÑ¯Ò»Ìõ¼ÇÂ¼
+     * ï¿½ï¿½ï¿½ï¿½roomIdï¿½ï¿½Ñ¯Ò»ï¿½ï¿½ï¿½ï¿½Â¼
      *
      * @param roomCode
      * @return RoomEntity
@@ -17,7 +18,7 @@ public interface IRoomService extends IBaseService<RoomEntity>{
     RoomEntity findRoomByCode(String roomCode);
 
     /**
-     * ¸ù¾ÝÂ¥ÓîÐÅÏ¢Óëµ¥ÔªºÅÐÅÏ¢²éÑ¯·¿¼äÐÅÏ¢
+     * ï¿½ï¿½ï¿½ï¿½Â¥ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ëµ¥Ôªï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
      * @param unitId
      *
      * @return roomList
@@ -25,7 +26,7 @@ public interface IRoomService extends IBaseService<RoomEntity>{
     List<RoomEntity> findRoomForChose(String unitId, String areaId);
 
     /**
-     * ¸ù¾ÝID²éÑ¯room±í£¨½öÓÐÒ»ÌõÊý¾Ý£©
+     * ï¿½ï¿½ï¿½ï¿½IDï¿½ï¿½Ñ¯roomï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½
      * @param id
      *
      * @return roomEntity

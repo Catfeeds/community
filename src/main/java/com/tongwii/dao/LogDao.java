@@ -1,6 +1,7 @@
 package com.tongwii.dao;
 
-import com.tongwii.po.LogEntity;
+import com.tongwii.core.BaseDao;
+import com.tongwii.domain.LogEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository

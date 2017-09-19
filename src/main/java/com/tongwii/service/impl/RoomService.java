@@ -1,9 +1,9 @@
 package com.tongwii.service.impl;
 
-import com.tongwii.bean.TongWIIResult;
-import com.tongwii.dao.BaseDao;
+import com.tongwii.core.BaseDao;
+import com.tongwii.core.BaseServiceImpl;
 import com.tongwii.dao.RoomDao;
-import com.tongwii.po.RoomEntity;
+import com.tongwii.domain.RoomEntity;
 import com.tongwii.service.IRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

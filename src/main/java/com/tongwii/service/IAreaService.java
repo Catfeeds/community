@@ -1,6 +1,6 @@
 package com.tongwii.service;
 
-import com.tongwii.po.AreaEntity;
+import com.tongwii.domain.AreaEntity;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IAreaService {
     /**
-     * ¸ù¾ÝresidenceId²éÑ¯area
+     * ï¿½ï¿½ï¿½ï¿½residenceIdï¿½ï¿½Ñ¯area
      *
      * @param residenceId
      * @return List
@@ -17,14 +17,14 @@ public interface IAreaService {
     List<AreaEntity> findAreaByResidenceId(String residenceId);
 
     /**
-     * ¸ù¾Ýid²éÑ¯area±í¼ÇÂ¼£¨½öÓÐÒ»Ìõ¼ÇÂ¼£©
+     * ï¿½ï¿½ï¿½ï¿½idï¿½ï¿½Ñ¯areaï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½
      * @param id
      * @return AreaEntity
      * */
     AreaEntity findById(String id);
 
     /**
-     * ¸üÐÂarea±í
+     * ï¿½ï¿½ï¿½ï¿½areaï¿½ï¿½
      * */
     void update(AreaEntity model);
 }

@@ -1,6 +1,7 @@
 package com.tongwii.dao;
 
-import com.tongwii.po.ResidenceEntity;
+import com.tongwii.core.BaseDao;
+import com.tongwii.domain.ResidenceEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class ResidenceDao extends BaseDao<ResidenceEntity, String> {
 
     /**
-     * ¸ù¾ÝregionId²éÑ¯residence
+     * ï¿½ï¿½ï¿½ï¿½regionIdï¿½ï¿½Ñ¯residence
      * @param regionId
      * @return List
      * */
@@ -24,7 +25,7 @@ public class ResidenceDao extends BaseDao<ResidenceEntity, String> {
     }
 
     /**
-     * ¸ù¾Ýid²éÑ¯¼ÇÂ¼
+     * ï¿½ï¿½ï¿½ï¿½idï¿½ï¿½Ñ¯ï¿½ï¿½Â¼
      * @param id
      * @return ResidenceEntity
      * */

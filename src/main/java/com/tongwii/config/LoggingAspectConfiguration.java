@@ -1,5 +1,6 @@
 package com.tongwii.config;
 
+import com.tongwii.constant.TongWiiConstants;
 import com.tongwii.logging.LoggingAspect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
 package com.tongwii.util;
 
-import com.tongwii.po.UserEntity;
+import com.tongwii.domain.UserEntity;
 import com.tongwii.vo.UserVO;
 
 import java.util.ArrayList;

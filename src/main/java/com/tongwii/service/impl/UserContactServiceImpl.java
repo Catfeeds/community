@@ -1,8 +1,9 @@
 package com.tongwii.service.impl;
 
-import com.tongwii.dao.BaseDao;
+import com.tongwii.core.BaseDao;
+import com.tongwii.core.BaseServiceImpl;
 import com.tongwii.dao.UserContactDao;
-import com.tongwii.po.UserContactEntity;
+import com.tongwii.domain.UserContactEntity;
 import com.tongwii.service.IUserContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

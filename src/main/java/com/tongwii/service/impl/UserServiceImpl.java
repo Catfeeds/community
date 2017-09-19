@@ -1,10 +1,11 @@
 package com.tongwii.service.impl;
 
 import com.tongwii.constant.UserConstants;
-import com.tongwii.dao.BaseDao;
+import com.tongwii.core.BaseDao;
+import com.tongwii.core.BaseServiceImpl;
 import com.tongwii.dao.UserDao;
-import com.tongwii.po.FileEntity;
-import com.tongwii.po.UserEntity;
+import com.tongwii.domain.FileEntity;
+import com.tongwii.domain.UserEntity;
 import com.tongwii.service.IFileService;
 import com.tongwii.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;

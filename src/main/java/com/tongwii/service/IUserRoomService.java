@@ -1,7 +1,8 @@
 package com.tongwii.service;
 
-import com.tongwii.po.UserEntity;
-import com.tongwii.po.UserRoomEntity;
+import com.tongwii.core.IBaseService;
+import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.UserRoomEntity;
 
 import java.util.List;
 

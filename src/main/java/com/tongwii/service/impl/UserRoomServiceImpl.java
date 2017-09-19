@@ -1,9 +1,10 @@
 package com.tongwii.service.impl;
 
-import com.tongwii.dao.BaseDao;
+import com.tongwii.core.BaseDao;
+import com.tongwii.core.BaseServiceImpl;
 import com.tongwii.dao.UserRoomDao;
-import com.tongwii.po.UserEntity;
-import com.tongwii.po.UserRoomEntity;
+import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.UserRoomEntity;
 import com.tongwii.service.IUserRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

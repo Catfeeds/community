@@ -28,7 +28,6 @@ public class WebConfigurer implements ServletContextInitializer {
     private final TongWiiProperties tongWiiProperties;
 
     public WebConfigurer(Environment env, TongWiiProperties tongWiiProperties) {
-
         this.env = env;
         this.tongWiiProperties = tongWiiProperties;
     }

@@ -1,7 +1,6 @@
 package com.tongwii.logging;
 
-import com.tongwii.config.TongWiiConstants;
-import com.tongwii.config.TongWiiProperties;
+import com.tongwii.constant.TongWiiConstants;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -43,9 +42,9 @@ public class LoggingAspect {
     /**
      * Pointcut that matches all Spring beans in the application's main packages.
      */
-    @Pointcut("within(com.tongwii.community.repository..*)"+
-        " || within(com.tongwii.community.service..*)"+
-        " || within(com.tongwii.community.web.rest..*)")
+    @Pointcut("within(com.tongwii.dao..*)"+
+        " || within(com.tongwii.service..*)"+
+        " || within(com.tongwii.controller..*)")
     public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }

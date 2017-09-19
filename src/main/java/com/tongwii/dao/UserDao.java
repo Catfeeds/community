@@ -1,6 +1,7 @@
 package com.tongwii.dao;
 
-import com.tongwii.po.UserEntity;
+import com.tongwii.core.BaseDao;
+import com.tongwii.domain.UserEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -20,6 +21,21 @@ public class UserDao extends BaseDao<UserEntity, String> {
         List<UserEntity> users = findByHQL(hql, account);
         if(CollectionUtils.isEmpty(users)) {
            return null;
+        }
+        return users.get(0);
+    }
+
+    /**
+     * 根据账号查询用户
+     *
+     * @param account
+     * @return
+     */
+    public UserEntity findByAccountWithRoles(String account) {
+        String hql = "from UserEntity where account = ?";
+        List<UserEntity> users = findByHQL(hql, account);
+        if(CollectionUtils.isEmpty(users)) {
+            return null;
         }
         return users.get(0);
     }

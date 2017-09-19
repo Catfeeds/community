@@ -1,6 +1,6 @@
 package com.tongwii.service;
 
-import com.tongwii.po.UserContactEntity;
+import com.tongwii.domain.UserContactEntity;
 
 import java.util.List;
 
@@ -10,21 +10,21 @@ import java.util.List;
 public interface IUserContactService {
 
     /**
-     * Ìí¼ÓÁªÏµÈË½Ó¿Ú
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½Ë½Ó¿ï¿½
      * @param userContactEntity
      * @return void
      * */
     void addUserContact(UserContactEntity userContactEntity);
 
     /**
-     * ¸ù¾ÝuserId²éÑ¯UserContact±í
+     * ï¿½ï¿½ï¿½ï¿½userIdï¿½ï¿½Ñ¯UserContactï¿½ï¿½
      * @param userId
      * @return
      * */
     List<UserContactEntity> findByUserId(String userId);
 
     /**
-     * É¾³ýÁªÏµÈËÐÅÏ¢
+     * É¾ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ï¢
      * */
     void delete(String id);
 }

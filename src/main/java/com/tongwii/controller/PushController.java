@@ -1,9 +1,7 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.po.MessageEntity;
-import com.tongwii.po.RoomEntity;
-import com.tongwii.po.UserEntity;
+import com.tongwii.domain.MessageEntity;
 import com.tongwii.service.IPushService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

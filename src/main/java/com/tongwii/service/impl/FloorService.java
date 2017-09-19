@@ -1,14 +1,14 @@
 package com.tongwii.service.impl;
 
-import com.tongwii.dao.BaseDao;
+import com.tongwii.core.BaseDao;
+import com.tongwii.core.BaseServiceImpl;
 import com.tongwii.dao.FloorDao;
-import com.tongwii.po.FloorEntity;
+import com.tongwii.domain.FloorEntity;
 import com.tongwii.service.IFloorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Created by admin on 2017/7/18.

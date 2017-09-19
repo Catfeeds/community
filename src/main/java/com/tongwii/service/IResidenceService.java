@@ -1,6 +1,6 @@
 package com.tongwii.service;
 
-import com.tongwii.po.ResidenceEntity;
+import com.tongwii.domain.ResidenceEntity;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IResidenceService {
     /**
-     * ¸ù¾ÝregionId²éÑ¯Residence
+     * ï¿½ï¿½ï¿½ï¿½regionIdï¿½ï¿½Ñ¯Residence
      *
      * @param regionId
      * @return List
@@ -17,14 +17,14 @@ public interface IResidenceService {
     List<ResidenceEntity> findResidenceByRegionId(String regionId);
 
     /**
-     * ¸ù¾Ýid²éÑ¯residence±í£¨½öÄÜ²éÑ¯Ò»Ìõ£©
+     * ï¿½ï¿½ï¿½ï¿½idï¿½ï¿½Ñ¯residenceï¿½ï¿½ï¿½ï¿½ï¿½Ü²ï¿½Ñ¯Ò»ï¿½ï¿½ï¿½ï¿½
      * @param id
      * @return ResidenceEntity
      * */
     ResidenceEntity findById(String id);
 
     /**
-     * ¸üÐÂresidence±í
+     * ï¿½ï¿½ï¿½ï¿½residenceï¿½ï¿½
      * */
     void update(ResidenceEntity model);
 }

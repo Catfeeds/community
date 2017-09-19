@@ -1,6 +1,7 @@
 package com.tongwii.service;
 
-import com.tongwii.po.UserEntity;
+import com.tongwii.core.IBaseService;
+import com.tongwii.domain.UserEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

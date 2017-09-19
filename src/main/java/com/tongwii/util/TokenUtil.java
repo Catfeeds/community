@@ -1,6 +1,6 @@
 package com.tongwii.util;
 
-import com.tongwii.po.UserEntity;
+import com.tongwii.domain.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

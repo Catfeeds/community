@@ -1,6 +1,7 @@
 package com.tongwii.dao;
 
-import com.tongwii.po.MessageCommentEntity;
+import com.tongwii.core.BaseDao;
+import com.tongwii.domain.MessageCommentEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository

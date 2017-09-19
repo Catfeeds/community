@@ -3,7 +3,7 @@ package com.tongwii.controller;
 import com.gexin.fastjson.JSONArray;
 import com.gexin.fastjson.JSONObject;
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.po.AreaEntity;
+import com.tongwii.domain.AreaEntity;
 import com.tongwii.service.IAreaService;
 import com.tongwii.service.IResidenceService;
 import org.springframework.beans.factory.annotation.Autowired;

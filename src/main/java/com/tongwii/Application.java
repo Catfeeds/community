@@ -1,8 +1,8 @@
 package com.tongwii;
 
-import com.tongwii.config.ApplicationProperties;
 import com.tongwii.config.DefaultProfileUtil;
-import com.tongwii.config.TongWiiConstants;
+import com.tongwii.config.TongWiiProperties;
+import com.tongwii.constant.TongWiiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +19,7 @@ import java.util.Collection;
 
 @ComponentScan
 @EnableAutoConfiguration
-@EnableConfigurationProperties(ApplicationProperties.class)
+@EnableConfigurationProperties(TongWiiProperties.class)
 public class Application {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
@@ -72,10 +72,5 @@ public class Application {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"),
             env.getActiveProfiles());
-
-        String configServerStatus = env.getProperty("configserver.status");
-        log.info("\n----------------------------------------------------------\n\t" +
-                "Config Server: \t{}\n----------------------------------------------------------",
-            configServerStatus == null ? "Not found or not setup for this application" : configServerStatus);
     }
 }

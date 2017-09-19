@@ -1,16 +1,14 @@
 package com.tongwii.service;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.po.MessageEntity;
-import com.tongwii.po.RoomEntity;
-import com.tongwii.po.UserEntity;
+import com.tongwii.domain.MessageEntity;
 
 /**
  * Created by admin on 2017/7/13.
  */
 public interface IPushService {
     /**
-     * ÏûÏ¢ÍÆËÍÁÐ±í
+     * ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
      * @param pushInfo
      * @param roomCode
      * */
