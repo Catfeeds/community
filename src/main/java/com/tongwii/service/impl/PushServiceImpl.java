@@ -55,7 +55,6 @@ public class PushServiceImpl implements IPushService{
      * @return result
      * */
     public TongWIIResult listMesssgePush(MessageEntity pushInfo, String roomCode){
-        // TODO Auto-generated method stub
         ListMessage message = new ListMessage();
         IPushResult ret = null;
         IGtPush push = new IGtPush(host,APPKEY, MASTERSECRET);

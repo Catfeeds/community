@@ -35,5 +35,5 @@ public interface IUserService extends IBaseService<UserEntity> {
      * @return String 上传文件地址
      * @throws IOException the io exception
      */
-    String updateUserAvatorById(String userId, MultipartFile file) throws IOException;
+    String updateUserAvatorById(String userId, MultipartFile file);
 }

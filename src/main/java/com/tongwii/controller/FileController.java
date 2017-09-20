@@ -2,6 +2,7 @@ package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.domain.FileEntity;
+import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.IFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,8 +31,7 @@ public class FileController {
     public TongWIIResult addPicture(@RequestParam("file") MultipartFile file, HttpServletResponse response){
         try {
             System.out.println("=========开始上传图片======================================");
-            // TODO: 2017/9/19
-            String userId = "";
+            String userId = SecurityUtils.getCurrentUserId();
             // 上传文件并更新用户地址
             FileEntity fileEntity = fileService.saveAndUploadFile(userId, file);
             result.successResult("图片上传成功", fileEntity.getId());

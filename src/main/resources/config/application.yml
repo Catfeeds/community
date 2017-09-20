@@ -21,6 +21,9 @@ management:
     context-path: /management
 
 spring:
+    profiles:
+        active: dev
+        include: swagger
     application:
         name: community
     jackson:

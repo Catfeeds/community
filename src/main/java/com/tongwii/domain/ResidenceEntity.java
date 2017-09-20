@@ -43,7 +43,7 @@ public class ResidenceEntity implements Serializable {
 
     @Basic
     @Column(name = "code")
-        public String getCode() {
+    public String getCode() {
         return code;
     }
 

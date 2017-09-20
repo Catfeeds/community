@@ -3,12 +3,12 @@ package com.tongwii.security;
 import com.tongwii.constant.UserConstants;
 import com.tongwii.dao.UserDao;
 import com.tongwii.domain.UserEntity;
+import com.tongwii.security.jwt.JwtUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -44,7 +44,7 @@ public class DomainUserDetailsService implements UserDetailsService {
             List<GrantedAuthority> grantedAuthorities = userEntity.getUserRolesById().stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getRoleByRoleId().getCode()))
                     .collect(Collectors.toList());
-            return new User(userEntity.getAccount(), userEntity.getPassword(), grantedAuthorities);
+            return new JwtUser(userEntity.getId(), userEntity.getAccount(), userEntity.getPassword(), userEntity.getState().equals(UserConstants.USER_ENABLE), grantedAuthorities);
         }
     }
 }

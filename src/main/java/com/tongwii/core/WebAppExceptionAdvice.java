@@ -1,11 +1,12 @@
 package com.tongwii.core;
 
-import com.tongwii.constant.ErrorConstants;
+import com.tongwii.constant.ResultConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -21,14 +22,18 @@ public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> processParameterizedValidationError(RuntimeException ex) {
-        return new ResponseEntity<>(ErrorConstants.ERR_INTERNAL_SERVER_ERROR, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> processAccessDeniedException(AccessDeniedException e) {
-        return new ResponseEntity<>(ErrorConstants.ERR_ACCESS_DENIED, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_ACCESS_DENIED), HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> precessBadCredentialsException(BadCredentialsException e) {
+        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_BAD_CREDENTIALS), HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> processException(Exception ex) {
@@ -37,6 +42,6 @@ public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
         } else {
             log.error("An unexpected error occurred: {}", ex.getMessage());
         }
-        return new ResponseEntity<>(ErrorConstants.ERR_INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

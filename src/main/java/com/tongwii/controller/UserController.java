@@ -1,27 +1,24 @@
 package com.tongwii.controller;
 
-import com.tongwii.bean.TongWIIResult;
-import com.tongwii.constant.CommunityConstants;
 import com.tongwii.core.Result;
-import com.tongwii.po.FloorEntity;
-import com.tongwii.po.RoomEntity;
-import com.tongwii.po.UserEntity;
-import com.tongwii.po.UserRoomEntity;
-import com.tongwii.service.IFloorService;
-import com.tongwii.service.IUserRoomService;
+import com.tongwii.domain.UserEntity;
+import com.tongwii.dto.UserDTO;
+import com.tongwii.dto.mapper.UserMapper;
+import com.tongwii.security.SecurityUtils;
+import com.tongwii.security.jwt.JWTConfigurer;
+import com.tongwii.security.jwt.TokenProvider;
 import com.tongwii.service.IUserService;
 import com.tongwii.util.TokenUtil;
-import com.tongwii.util.VOUtil;
-import com.tongwii.vo.RoomVO;
-import com.tongwii.vo.UserVO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,160 +29,83 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 	@Autowired
-    private IFloorService floorService;
+    private TokenProvider tokenProvider;
 	@Autowired
-    private IUserRoomService userRoomService;
-
-	private TongWIIResult result = new TongWIIResult();
-	private MD5PasswordEncoder md5PasswordEncoder = new MD5PasswordEncoder();
+    private AuthenticationManager authenticationManager;
+	@Autowired
+    private UserMapper userMapper;
 
 	// 用户注册接口
 	@PostMapping("/regist")
-	public TongWIIResult regist(@RequestBody UserEntity user)  {
+	public Result regist(@RequestBody UserEntity user)  {
 		if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
-			result.errorResult("用户已存在！");
-			return result;
+			return Result.errorResult("用户已存在");
 		}
 		// 在此调用用户注册的服务
-		try {
-			userService.save(user);
-			result.successResult("注册成功", user);
-			return result;
-		} catch (Exception e) {
-			result.errorResult("注册失败", e.getMessage());
-		}
-		return result;
+        userService.save(user);
+        return Result.successResult("注册成功").add("user", user);
 	}
 
 	// 用户登录接口
-	@PostMapping(path = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public TongWIIResult login(@RequestBody UserEntity user, @RequestHeader("Host") String host) {
-		try {
-			if(StringUtils.isEmpty(user.getAccount())){
-				result.errorResult("用户账号不可为空!");
-                return result;
-            }
-			if(StringUtils.isEmpty(user.getPassword())){
-				result.errorResult("密码不可为空!");
-				return result;
-			}
-			//通过用户名查询用户的所有信息
-			UserEntity findUser = userService.findByAccount(user.getAccount());
-			if(Objects.isNull(findUser)){
-				result.errorResult("用户不存在!");
-                return result;
-            }
-			if (UserEntity.doesPasswordMatch(user.getPassword(), findUser.getPassword())) {
-				// 用户设置token
-				String token = TokenUtil.generateToken(host, findUser);
-				// 基本用户信息
-				UserVO userVO = VOUtil.transformUserToVO(findUser);
-                List<UserRoomEntity> userRoomEntities = userRoomService.findRoomByUserId(userVO.getId());
-                List<RoomVO> roomVOS = new ArrayList<>();
-                for (UserRoomEntity userRoomEntity : userRoomEntities) {
-                    RoomEntity roomEntity = userRoomEntity.getRoomByRoomId();
-                    RoomVO roomVO = new RoomVO();
-                    Map<String, FloorEntity> floorMap = floorService.findFloorById(roomEntity.getUnitId());
-                    roomVO.setRoomId(roomEntity.getId());
-                    roomVO.setRoomCode(roomEntity.getRoomCode());
-                    roomVO.setChargeName(roomEntity.getUserByOwnerId().getName());
-                    roomVO.setChargePhone(roomEntity.getUserByOwnerId().getPhone());
-//                    roomVO.setRoomFloor(floorMap.get(FloorEntity.DONG).getName() + floorMap.get(FloorEntity.UNIT).getName() + roomEntity.getRoomCode());
-					roomVO.setRoomFloor(floorMap.get(FloorEntity.UNIT).getName() + floorMap.get(FloorEntity.UNIT).getParentCode()+ "单元" + roomEntity.getRoomCode());
-                    roomVOS.add(roomVO);
-                }
-                // 设置房间信息
-                userVO.setRooms(roomVOS);
-                // 设置token
-                userVO.setToken(token);
-				result.successResult("登陆成功!", userVO);
-				return result;
-			} else {
-				result.errorResult("密码错误!");
-				return result;
-			}
-		} catch (Exception e) {
-			result.errorResult("登陆出错!", e.getMessage());
-			return result;
-		}
+	@PostMapping("/login")
+	public Result login(@RequestBody UserEntity user) {
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getAccount(), user.getPassword());
+        Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.createToken(authentication);
+        // 基本用户信息
+        UserDTO userDTO = userMapper.userToUserDTO(user);
+        return Result.successResult("登录成功").add(JWTConfigurer.AUTHORIZATION_HEADER,  "Bearer " + jwt).add("userInfo", userDTO);
 	}
 
 	// 上传用户头像
-	@PostMapping(path = "/uploadAvatar", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
-		try {
-			System.out.println("=========开始上传头像======================================");
-			String userId = "";
-			// 上传文件并更新用户地址
-			String uploadUrl = userService.updateUserAvatorById(userId, file);
-
-			result.successResult("头像上传成功", uploadUrl);
-			System.out.println("==========头像上传完毕======================================");
-			// 使用了上传文件的输出流和response的返回json会出错，重置response
-			response.reset();
-			return result;
-		} catch (Exception e) {
-			result.errorResult("头像上传失败");
-			response.reset();
-			return result;
-		}
+	@PostMapping("/uploadAvatar")
+	public Result uploadAvatar(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
+        System.out.println("=========开始上传头像======================================");
+        String userId = SecurityUtils.getCurrentUserId();
+        // 上传文件并更新用户地址
+        String uploadUrl = userService.updateUserAvatorById(userId, file);
+        System.out.println("==========头像上传完毕======================================");
+        // 使用了上传文件的输出流和response的返回json会出错，重置response
+        response.reset();
+        return Result.successResult("头像上传成功").add("uploadUrl", uploadUrl);
 	}
 
 	// 修改用户昵称
 	@PostMapping("/updateNickName")
-	public TongWIIResult updateNickName(@RequestBody Map map) {
-	public Result updateNickName(@RequestBody Map map) {
-	public TongWIIResult updateNickName(@RequestParam("nickName") String nickName) {
-        try {
-			// TODO: 2017/9/19
-			String userId = "";
-            UserEntity userEntity = userService.findById(userId);
-            userEntity.setNickName(map.get("nickName").toString());
-            userService.update(userEntity);
-			return Result.successResult(userEntity);
-        } catch (Exception e) {
-			return Result.errorResult("修改失败!");
-        }
+	public Result updateNickName(@RequestParam("nickName") String nickName) {
+        String userId = SecurityUtils.getCurrentUserId();
+        UserEntity userEntity = userService.findById(userId);
+        userEntity.setNickName(nickName);
+        userService.update(userEntity);
+        return Result.successResult(userEntity);
     }
 
 	// 修改个性签名
 	@PostMapping("/updateSignature")
 	public Result updateSignature(@RequestBody Map map) {
-		try {
-			String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
-			UserEntity userEntity = userService.findById(userId);
-			userEntity.setSignature(map.get("signature").toString());
-			userService.update(userEntity);
-			return Result.successResult(userEntity);
-		} catch (Exception e) {
-			result.errorResult();
-			return Result.errorResult("修改失败!");
-		}
+        String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
+        UserEntity userEntity = userService.findById(userId);
+        userEntity.setSignature(map.get("signature").toString());
+        userService.update(userEntity);
+        return Result.successResult(userEntity);
 	}
 
     // 修改用户电话
     @PostMapping("/updatePhone")
     public Result updatePhone(@RequestParam("phone") String phone) {
-        try {
-			// TODO: 2017/9/19
-			String userId = "";
-            String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
-            UserEntity userEntity = userService.findById(userId);
-            userEntity.setPhone(map.get("phone").toString());
-            userService.update(userEntity);
-            return Result.successResult(userEntity);
-        } catch (Exception e) {
-            result.errorResult();
-            return Result.errorResult("修改失败!");
-        }
+        String userId = SecurityUtils.getCurrentUserId();
+        UserEntity userEntity = userService.findById(userId);
+        userEntity.setPhone(phone);
+        userService.update(userEntity);
+        return Result.successResult(userEntity);
     }
 
 	@GetMapping(value = "/test")
 	public ResponseEntity<Object> test() {
 		List<UserEntity> userEntities = userService.findAll();
-		for (UserEntity userEntity : userEntities) {
-			System.out.println(userEntity.toString());
-		}
-		return ResponseEntity.ok(userService.findAll());
+		return ResponseEntity.ok(userMapper.usersToUserDTOs(userEntities));
 	}
 }
+

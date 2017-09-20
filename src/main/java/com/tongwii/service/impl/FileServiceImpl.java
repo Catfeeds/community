@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.uuid2;
+import java.util.UUID;
 
 /**
  * fileService实现类
@@ -33,7 +33,7 @@ public class FileServiceImpl extends BaseServiceImpl<FileEntity> implements IFil
     public FileEntity saveAndUploadFile(String userId, MultipartFile file) {
         FileEntity fileEntity = null;
         try {
-            String id = uuid2.randomUUID().toString();
+            String id = UUID.randomUUID().toString();
             String suffix = FileUtil.getFileSuffix(file.getOriginalFilename());
             String relativeUrl = FileUtil.uploadFile(file, id + suffix);
             fileEntity = new FileEntity();

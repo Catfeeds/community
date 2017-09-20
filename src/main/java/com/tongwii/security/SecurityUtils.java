@@ -1,5 +1,7 @@
 package com.tongwii.security;
 
+import com.tongwii.security.jwt.JwtUser;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,13 +26,33 @@ public final class SecurityUtils {
         String userName = null;
         if (authentication != null) {
             if (authentication.getPrincipal() instanceof UserDetails) {
-                UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+                JwtUser springSecurityUser = (JwtUser) authentication.getPrincipal();
                 userName = springSecurityUser.getUsername();
             } else if (authentication.getPrincipal() instanceof String) {
                 userName = (String) authentication.getPrincipal();
             }
         }
         return userName;
+    }
+
+    /**
+     * Get the id of the current user.
+     *
+     * @return the id of the current user
+     */
+    public static String getCurrentUserId() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        String id = null;
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof UserDetails) {
+                JwtUser springSecurityUser = (JwtUser) authentication.getPrincipal();
+                id = springSecurityUser.getId();
+            } else if (authentication.getPrincipal() instanceof String) {
+                throw new BadCredentialsException("不允许匿名登录");
+            }
+        }
+        return id;
     }
 
     /**

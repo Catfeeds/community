@@ -1,4 +1,4 @@
 /**
  * MapStruct mappers for mapping domain objects and Data Transfer Objects.
  */
-package com.tongwii.vo.mapper;
+package com.tongwii.dto.mapper;

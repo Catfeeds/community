@@ -35,11 +35,11 @@ public final class HeaderUtil {
         return createAlert(APPLICATION_NAME + "." + entityName + ".deleted", param);
     }
 
-    public static HttpHeaders createFailureAlert(String entityName, String errorKey, String defaultMessage) {
+    public static HttpHeaders createFailureAlert(String errorKey, String defaultMessage) {
         log.error("Entity processing failed, {}", defaultMessage);
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-greatBigExampleApplicationApp-error", "error." + errorKey);
-        headers.add("X-greatBigExampleApplicationApp-params", entityName);
+        headers.add("X-greatBigExampleApplicationApp-detail", defaultMessage);
         return headers;
     }
 }

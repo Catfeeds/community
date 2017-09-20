@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -42,12 +41,12 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
     public void save(UserEntity userEntity) {
         userEntity.setPassword(UserEntity.hashPassword(userEntity.getPassword()));
         userEntity.setAddTime(new Date());
-        userEntity.setState(UserConstants.USER_ENABLE.byteValue());
+        userEntity.setState(UserConstants.USER_ENABLE);
         userDao.save(userEntity);
     }
 
     @Override
-    public String updateUserAvatorById(String userId, MultipartFile file) throws IOException {
+    public String updateUserAvatorById(String userId, MultipartFile file) {
         FileEntity fileEntity = fileService.saveAndUploadFile(userId, file);
         userDao.updateAvatorById(userId, fileEntity.getId());
         return fileEntity.getFilePath();

@@ -1,14 +1,17 @@
 package com.tongwii.controller;
-import com.tongwii.bean.TongWIIResult;
-import com.tongwii.po.RoomEntity;
+
+import com.tongwii.core.Result;
+import com.tongwii.domain.RoomEntity;
 import com.tongwii.service.IRoomService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 /**

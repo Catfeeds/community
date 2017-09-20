@@ -30,21 +30,21 @@ public class TokenProvider {
 
     private long tokenValidityInMillisecondsForRememberMe;
 
-    private final TongWiiProperties jHipsterProperties;
+    private final TongWiiProperties tongWiiProperties;
 
     public TokenProvider(TongWiiProperties jHipsterProperties) {
-        this.jHipsterProperties = jHipsterProperties;
+        this.tongWiiProperties = jHipsterProperties;
     }
 
     @PostConstruct
     public void init() {
         this.secretKey =
-            jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+            tongWiiProperties.getSecurity().getAuthentication().getJwt().getSecret();
 
         this.tokenValidityInMilliseconds =
-            1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
+            1000 * tongWiiProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
         this.tokenValidityInMillisecondsForRememberMe =
-            1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe();
+            1000 * tongWiiProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe();
     }
 
     public String createToken(Authentication authentication, Boolean rememberMe) {
@@ -66,6 +66,10 @@ public class TokenProvider {
             .signWith(SignatureAlgorithm.HS512, secretKey)
             .setExpiration(validity)
             .compact();
+    }
+
+    public String createToken(Authentication authentication) {
+        return this.createToken(authentication, true);
     }
 
     public Authentication getAuthentication(String token) {

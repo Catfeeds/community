@@ -32,13 +32,8 @@ public class MessageServiceImpl extends BaseServiceImpl<MessageEntity> implement
     }
 
     @Override
-    public TongWIIResult updateMessageProcess(String messageId, Integer processState) {
+    public void updateMessageProcess(String messageId, Integer processState) {
         boolean updateResult  = messageDao.updateMessageState(messageId, processState);
-        if(updateResult == false){
-            result.errorResult("修改信息失败!");
-        }
-        result.successResult("修改信息成功!");
-        return result;
     }
 
     @Override

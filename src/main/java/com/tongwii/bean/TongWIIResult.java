@@ -1,9 +1,9 @@
 package com.tongwii.bean;
 
-import com.tongwii.constant.ResultConstants;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 import net.sf.json.util.CycleDetectionStrategy;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
@@ -37,7 +37,7 @@ public class TongWIIResult implements Serializable {
 	 *
 	 */
 	public void successResult() {
-		this.status = ResultConstants.SUCCESS;
+		this.status = HttpStatus.OK.value();
 		this.info = SUCCESS_INFO;
 	}
 
@@ -47,7 +47,7 @@ public class TongWIIResult implements Serializable {
 	 * @param info 成功提示
 	 */
 	public void successResult(String info) {
-		this.status = ResultConstants.SUCCESS;
+		this.status = HttpStatus.OK.value();
 		this.info = info;
 	}
 
@@ -86,7 +86,7 @@ public class TongWIIResult implements Serializable {
 	 *
 	 */
 	public void errorResult() {
-		this.status = ResultConstants.ERROR;
+		this.status = HttpStatus.INTERNAL_SERVER_ERROR.value();
 		this.info = ERROR_INFO;
 	}
 
@@ -96,7 +96,7 @@ public class TongWIIResult implements Serializable {
 	 * @param info 失败提示
 	 */
 	public void errorResult(String info) {
-		this.status = ResultConstants.ERROR;
+		this.status = HttpStatus.INTERNAL_SERVER_ERROR.value();
 		this.info = info;
 	}
 
@@ -134,5 +134,5 @@ public class TongWIIResult implements Serializable {
 	public void setData(Object data) {
 		this.data = data;
 	}
-	
+
 }

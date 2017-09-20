@@ -11,14 +11,14 @@ public class PushTemplate {
 	private static Integer WAIT_PLAY = 2;
 	private static Integer FORCE_PLAY = 1;
     /*
-     * Í¨Öª´ò¿ªÍøÒ³Ä£°å
-     * @param title:Ö÷Ìâ
-     * @param text:ÏûÏ¢ÄÚÈİ
-     * @param logo:ÍÆËÍÍ¨ÖªµÄÍ¼Æ¬
-     * @param url:Á´½Ó
-     * @param isRing:ÊÇ·ñÏìÁå
-     * @param isVibrate:ÊÇ·ñÕğ¶¯
-     * @param isClearable:ÊÇ·ñ¿ÉÇå³ı
+     * é€šçŸ¥æ‰“å¼€ç½‘é¡µæ¨¡æ¿
+     * @param title:ä¸»é¢˜
+     * @param text:æ¶ˆæ¯å†…å®¹
+     * @param logo:æ¨é€é€šçŸ¥çš„å›¾ç‰‡
+     * @param url:é“¾æ¥
+     * @param isRing:æ˜¯å¦å“é“ƒ
+     * @param isVibrate:æ˜¯å¦éœ‡åŠ¨
+     * @param isClearable:æ˜¯å¦å¯æ¸…é™¤
      * 
      * @return LinkTemplate
      * */
@@ -45,9 +45,9 @@ public class PushTemplate {
 	}
 	
 	/*
-	 * Í¸´«ÏûÏ¢Ä£°å
-	 * @param transmissionContent:Í¸´«ÄÚÈİ£¬²»Ö§³Ö×ªÒå×Ö·û
-	 * @param  transmissionType: ÊÕµ½ÏûÏ¢ÊÇ·ñÁ¢¼´Æô¶¯Ó¦ÓÃ£¬1£ºÁ¢¼´Æô¶¯£»2£ºµÈ´ıÓÃ»§Æô¶¯
+	 * é€ä¼ æ¶ˆæ¯æ¨¡æ¿
+	 * @param transmissionContent:é€ä¼ å†…å®¹ï¼Œä¸æ”¯æŒè½¬ä¹‰å­—ç¬¦
+	 * @param  transmissionType: æ”¶åˆ°æ¶ˆæ¯æ˜¯å¦ç«‹å³å¯åŠ¨åº”ç”¨ï¼Œ1ï¼šç«‹å³å¯åŠ¨ï¼›2ï¼šç­‰å¾…ç”¨æˆ·å¯åŠ¨
 	 * 
 	 * @return TransmissionTemplate
 	 * **/
@@ -55,16 +55,16 @@ public class PushTemplate {
 		TransmissionTemplate template = new TransmissionTemplate();
 		template.setAppId(APPID);
 		template.setAppkey(APPKEY);
-		// Í¸´«ÏûÏ¢ÉèÖÃ£¬1ÎªÇ¿ÖÆÆô¶¯Ó¦ÓÃ£¬¿Í»§¶Ë½ÓÊÕµ½ÏûÏ¢ºó¾Í»áÁ¢¼´Æô¶¯Ó¦ÓÃ£»2ÎªµÈ´ıÓ¦ÓÃÆô¶¯
+		// é€ä¼ æ¶ˆæ¯è®¾ç½®ï¼Œ1ä¸ºå¼ºåˆ¶å¯åŠ¨åº”ç”¨ï¼Œå®¢æˆ·ç«¯æ¥æ”¶åˆ°æ¶ˆæ¯åå°±ä¼šç«‹å³å¯åŠ¨åº”ç”¨ï¼›2ä¸ºç­‰å¾…åº”ç”¨å¯åŠ¨
 		template.setTransmissionType(FORCE_PLAY);
 		template.setTransmissionContent(transmissionContent);
 		return template;
 	}
 	/*
-	 * Í¨ÖªÏûÏ¢
-	 * @param title:Ö÷Ìâ
-	 * @param text:ÄÚÈİ
-	 * @param logo:Í¨ÖªÍ¼±êµÄÃû³Æ£¬°üº¬ºó×º
+	 * é€šçŸ¥æ¶ˆæ¯
+	 * @param title:ä¸»é¢˜
+	 * @param text:å†…å®¹
+	 * @param logo:é€šçŸ¥å›¾æ ‡çš„åç§°ï¼ŒåŒ…å«åç¼€
 	 * return NotificationTemplate
 	 * */
 	public NotificationTemplate notificationTemplate(String title, String text, String logo){

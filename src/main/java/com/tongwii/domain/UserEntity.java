@@ -22,7 +22,7 @@ public class UserEntity implements Serializable {
     private String nickName;
     private Date birthday;
     private String signature;
-    private Byte sex;
+    private Integer sex;
     private String avatarFileId;
     private String name;
     private String password;
@@ -30,7 +30,7 @@ public class UserEntity implements Serializable {
     private String phone;
     private String clientId;
     private Date addTime;
-    private Byte state;
+    private Integer state;
     private Collection<AreaEntity> areasById;
     private Collection<FileEntity> filesById;
     private Collection<FloorEntity> floorsById;
@@ -117,11 +117,11 @@ public class UserEntity implements Serializable {
 
     @Basic
     @Column(name = "sex")
-    public Byte getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(Byte sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 
@@ -197,11 +197,11 @@ public class UserEntity implements Serializable {
 
     @Basic
     @Column(name = "state")
-    public Byte getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(Byte state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 

@@ -1,27 +1,14 @@
 package com.tongwii.constant;
 
-/**
- * 返回结果常量类
- * Author: Zeral
- * Date: 2017/7/11
- */
-public interface ResultConstants {
-    /**
-     * 处理结果状态：正常
-     */
-    public static final int SUCCESS = 1;
-    /**
-     * 处理结果状态：异常
-     */
-    public static final int ERROR = 0;
+public final class ResultConstants {
 
-    /**
-     * 处理结果状态：请求不合法
-     */
-    public static final int ILLEGAL = -1;
+    public static final String ERR_ACCESS_DENIED = "拒绝访问";
+    public static final String ERR_BAD_CREDENTIALS = "用户名或密码错误";
+    public static final String ERR_VALIDATION = "验证错误";
+    public static final String ERR_METHOD_NOT_SUPPORTED = "不支持的方法";
+    public static final String ERR_INTERNAL_SERVER_ERROR = "程序出错了";
 
-    /**
-     * 处理结果状态：SQL处理异常
-     */
-    public static final int SQL_EXCEPTION = 300;
+
+    public static final String OK = "操作成功";
+    public static final String ERR_SERVER_UNVALIABLE = "服务无效";
 }

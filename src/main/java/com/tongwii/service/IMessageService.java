@@ -1,6 +1,5 @@
 package com.tongwii.service;
 
-import com.tongwii.bean.TongWIIResult;
 import com.tongwii.core.IBaseService;
 import com.tongwii.domain.MessageEntity;
 
@@ -11,7 +10,6 @@ import java.util.List;
  */
 public interface IMessageService extends IBaseService<MessageEntity> {
     /**
-     * �����Ϣ��Ϣ
      *
      * @param messageEntity
     * */
@@ -19,15 +17,13 @@ public interface IMessageService extends IBaseService<MessageEntity> {
     void save(MessageEntity messageEntity);
 
     /**
-     * ����messageId�޸�processState
      *
      * @param messageId
      * @param processState
      * */
-    TongWIIResult updateMessageProcess(String messageId, Integer processState);
+    void updateMessageProcess(String messageId, Integer processState);
 
     /**
-     * ������Ϣ���Ͳ�ѯ��Ϣ
      *
      * @param messageTypeId
      * @param pageInfo
