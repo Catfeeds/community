@@ -20,8 +20,7 @@ public class LocaleConfiguration extends WebMvcConfigurerAdapter implements Envi
         // unused
     }
 
-
-    @Bean
+    @Bean(name = "localeResolver")
     public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver slr = new AcceptHeaderLocaleResolver();
         slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
