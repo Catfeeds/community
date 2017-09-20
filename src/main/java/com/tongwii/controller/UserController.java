@@ -10,6 +10,7 @@ import com.tongwii.po.UserRoomEntity;
 import com.tongwii.service.IFloorService;
 import com.tongwii.service.IUserRoomService;
 import com.tongwii.service.IUserService;
+import com.tongwii.util.Encoder.MD5PasswordEncoder;
 import com.tongwii.util.TokenUtil;
 import com.tongwii.util.VOUtil;
 import com.tongwii.vo.RoomVO;
@@ -37,7 +38,8 @@ public class UserController {
     private IUserRoomService userRoomService;
 	
 	private TongWIIResult result = new TongWIIResult();
-
+	private MD5PasswordEncoder md5PasswordEncoder = new MD5PasswordEncoder();
+	
 	// 用户注册接口
 	@PostMapping("/regist")
 	public TongWIIResult regist(@RequestBody UserEntity user)  {
@@ -130,29 +132,44 @@ public class UserController {
 		}
 	}
 
-	// 修改用户头像
+	// 修改用户昵称
 	@PostMapping("/updateNickName")
-	public TongWIIResult updateNickName(@RequestParam("nickName") String nickName, @RequestHeader(CommunityConstants.Token)String token) {
+	public TongWIIResult updateNickName(@RequestBody Map map) {
+	public Result updateNickName(@RequestBody Map map) {
         try {
-            String userId = TokenUtil.getUserIdFromToken(token);
+            String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
             UserEntity userEntity = userService.findById(userId);
-            userEntity.setNickName(nickName);
+            userEntity.setNickName(map.get("nickName").toString());
             userService.update(userEntity);
-            result.successResult();
-            return result;
+			return Result.successResult(userEntity);
         } catch (Exception e) {
-            result.errorResult();
-            return result;
+			return Result.errorResult("修改失败!");
         }
     }
+
+	// 修改个性签名
+	@PostMapping("/updateSignature")
+	public Result updateSignature(@RequestBody Map map) {
+		try {
+			String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
+			UserEntity userEntity = userService.findById(userId);
+			userEntity.setSignature(map.get("signature").toString());
+			userService.update(userEntity);
+			return Result.successResult(userEntity);
+		} catch (Exception e) {
+			result.errorResult();
+			return Result.errorResult("修改失败!");
+		}
+	}
 
     // 修改用户电话
     @PostMapping("/updatePhone")
     public Result updatePhone(@RequestParam("phone") String phone, @RequestHeader(CommunityConstants.Token)String token) {
+    public Result updatePhone(@RequestBody Map map) {
         try {
-            String userId = TokenUtil.getUserIdFromToken(token);
+            String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
             UserEntity userEntity = userService.findById(userId);
-            userEntity.setPhone(phone);
+            userEntity.setPhone(map.get("phone").toString());
             userService.update(userEntity);
             return Result.successResult(userEntity);
         } catch (Exception e) {

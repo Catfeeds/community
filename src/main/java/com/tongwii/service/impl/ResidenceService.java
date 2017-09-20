@@ -28,6 +28,11 @@ public class ResidenceService extends BaseServiceImpl<ResidenceEntity> implement
     }
 
     @Override
+    public ResidenceEntity findByCode(String code) {
+        return residenceDao.findByCode(code);
+    }
+
+    @Override
     public ResidenceEntity findById(String id) {
         return residenceDao.findById(id);
     }

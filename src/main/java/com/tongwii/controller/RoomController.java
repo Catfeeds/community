@@ -1,5 +1,6 @@
 package com.tongwii.controller;
 import com.tongwii.bean.TongWIIResult;
+import com.tongwii.core.Result;
 import com.tongwii.po.RoomEntity;
 import com.tongwii.service.IRoomService;
 import net.sf.json.JSONArray;
@@ -19,18 +20,15 @@ import java.util.List;
 public class RoomController {
     @Autowired
     private IRoomService roomService;
-    private TongWIIResult result = new TongWIIResult();
-
     /**
      * 根据单元楼id查询住房信息
      * @param roomEntity
      * @return result
      * */
     @RequestMapping(value = "/selectRoomByUnit", method = RequestMethod.POST)
-    public TongWIIResult selectRoomByUnit(@RequestBody RoomEntity roomEntity){
+    public Result selectRoomByUnit(@RequestBody RoomEntity roomEntity){
         if(roomEntity.getUnitId() == null || roomEntity.getUnitId().isEmpty()){
-            result.errorResult("单元编号为空!");
-            return result;
+            return Result.errorResult("单元编号为空!");
         }
         double area = roomEntity.getArea()/1.0;
         int areaId = (int)area;
@@ -44,8 +42,7 @@ public class RoomController {
                 jsonArray.add(object);
             }
         }
-        result.successResult("房间信息查询成功!", jsonArray);
-        return result;
+        return Result.successResult(jsonArray);
     }
 
     /**
@@ -54,10 +51,9 @@ public class RoomController {
      * @return result
      * */
     @RequestMapping(value = "/updateRoomInfo", method = RequestMethod.POST )
-    public TongWIIResult updateRoomInfo(@RequestBody RoomEntity roomEntity){
+    public Result updateRoomInfo(@RequestBody RoomEntity roomEntity){
         if(roomEntity.getId() == null || roomEntity.getId().isEmpty()){
-            result.errorResult("住房实体不存在!");
-            return result;
+            return Result.errorResult("住房实体不存在!");
         }
         RoomEntity newRoom = roomService.findById(roomEntity.getId());
         if(roomEntity.getRoomCode()!=null && !roomEntity.getRoomCode().isEmpty()){
@@ -78,18 +74,15 @@ public class RoomController {
         try{
             roomService.update(newRoom);
         }catch (Exception e){
-            result.errorResult("修改的信息关联的数据信息不存在!");
-            return result;
+            return Result.errorResult("修改的信息关联的数据信息不存在!");
         }
-
         JSONObject object = new JSONObject();
         object.put("RoomCode", newRoom.getRoomCode());
         object.put("Area", newRoom.getArea());
         object.put("HuXing", newRoom.getHuXing());
         object.put("OwnerId", newRoom.getOwnerId());
         object.put("UnitId", newRoom.getUnitId());
-        result.successResult("住房信息修改成功!", object);
-        return result;
+        return Result.successResult(object);
     }
 
 }

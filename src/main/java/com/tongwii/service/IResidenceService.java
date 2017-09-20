@@ -24,6 +24,12 @@ public interface IResidenceService {
     ResidenceEntity findById(String id);
 
     /**
+     * 根据小区许可证查询记录
+     * @param code
+     * */
+    ResidenceEntity findByCode(String code);
+
+    /**
      * 更新residence表
      * */
     void update(ResidenceEntity model);

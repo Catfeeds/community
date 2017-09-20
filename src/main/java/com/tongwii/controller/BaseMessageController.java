@@ -25,7 +25,6 @@ public class BaseMessageController {
     private IMessageService messageService;
     @Autowired
     private IUserService userService;
-    private static TongWIIResult result = new TongWIIResult();
 
     /**
      *添加消息接口
@@ -34,19 +33,18 @@ public class BaseMessageController {
      * @return result
      **/
     @RequestMapping(value = "/insertMessage", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-    public TongWIIResult insertMessage(@RequestBody MessageEntity messageEntity){
+    public Result insertMessage(@RequestBody MessageEntity messageEntity){
         if(messageEntity.getTitle().isEmpty() && messageEntity.getContent().isEmpty()){
-            result.errorResult("消息体不可为空!");
-            return result;
+            return Result.errorResult("消息体不可为空!");
         }
         try {
             messageEntity.setCreateTime( new Timestamp(System.currentTimeMillis()));
             messageService.save(messageEntity);
-            result.successResult("消息添加成功!",messageEntity);
+            return Result.successResult(messageEntity);
         }catch (Exception e){
-            result.errorResult("消息添加失败!");
+            return Result.failResult("消息添加失败!");
         }
-        return result;
+
     }
     /**
      * 修改消息的进度
@@ -55,16 +53,15 @@ public class BaseMessageController {
      *@return result
      * */
     @RequestMapping(value = "/updateProcessOfMessage", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-    public TongWIIResult updateProcessOfMessage(@RequestBody MessageEntity messageEntity){
+    public Result updateProcessOfMessage(@RequestBody MessageEntity messageEntity){
         // 此消息实体包含id与Process的信息，通过id找到该条消息的数据记录，并将Process的状态更改成传来的值
         // 判空
         if(messageEntity.getId().isEmpty() || messageEntity.getProcessState().toString().isEmpty()){
-            result.errorResult("消息记录不存在!");
-            return result;
+            return Result.errorResult("消息记录不存在!");
         }
         // 此处更改消息进度状态
-        result.successResult("修改状态成功!", messageService.updateMessageProcess(messageEntity.getId(),messageEntity.getProcessState()&0xff));
-        return null;
+        messageService.updateMessageProcess(messageEntity.getId(),messageEntity.getProcessState()&0xff);
+        return Result.successResult("修改状态成功!");
     }
 
     /**
@@ -100,5 +97,7 @@ public class BaseMessageController {
         }
         return Result.successResult().add("pageInfo", pageInfo).add("messageInfo",messageJsonArray);
     }
+
+
 
 }

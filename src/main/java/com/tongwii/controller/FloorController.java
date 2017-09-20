@@ -3,6 +3,7 @@ package com.tongwii.controller;
 import com.gexin.fastjson.JSONArray;
 import com.gexin.fastjson.JSONObject;
 import com.tongwii.bean.TongWIIResult;
+import com.tongwii.core.Result;
 import com.tongwii.po.FloorEntity;
 import com.tongwii.service.IAreaService;
 import com.tongwii.service.IFloorService;
@@ -21,27 +22,23 @@ public class FloorController {
     private IFloorService floorService;
     @Autowired
     private IAreaService areaService;
-    private TongWIIResult result = new TongWIIResult();
     /**
      * 根据aresId查询floor列表
      * @param areaId
      * @return result
      * */
     @RequestMapping(value = "/floor/{areaId}", method = RequestMethod.GET)
-    public TongWIIResult findFloorByAreaId(@PathVariable String areaId){
+    public Result findFloorByAreaId(@PathVariable String areaId){
         if(areaId == null || areaId.isEmpty()){
-            result.errorResult("楼宇实体信息为空!");
-            return  result;
+            return Result.errorResult("楼宇实体信息为空!");
         }
         if(areaService.findById(areaId) == null){
-            result.errorResult("小区分区实体为空!");
-            return result;
+            return Result.errorResult("小区分区实体为空!");
         }
         List<FloorEntity> floorEntities = floorService.findFloorByAreaId(areaId);
 
         if(floorEntities == null){
-            result.errorResult("此分区没有楼宇实体!");
-            return result;
+            return Result.errorResult("此分区没有楼宇实体!");
         }
         JSONArray jsonArray = new JSONArray();
         for(FloorEntity floorEntity : floorEntities){
@@ -53,8 +50,7 @@ public class FloorController {
             jsonArray.add(object);
         }
 
-        result.successResult("楼宇实体信息查询成功!",jsonArray);
-        return result;
+        return Result.successResult(jsonArray);
     }
 
     /**
@@ -63,10 +59,9 @@ public class FloorController {
      * @return result
      * */
     @RequestMapping(value = "/updateFloorInfo", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
-    public TongWIIResult updateFloorInfo(@RequestBody FloorEntity floorEntity){
+    public Result updateFloorInfo(@RequestBody FloorEntity floorEntity){
         if(floorEntity.getId() == null || floorEntity.getId().isEmpty()){
-            result.errorResult("楼宇实体不存在!");
-            return result;
+            return Result.errorResult("楼宇实体不存在!");
         }
         FloorEntity newFloor= floorService.findById(floorEntity.getId());
         if(floorEntity.getName() != null && !floorEntity.getName().isEmpty()){
@@ -87,8 +82,7 @@ public class FloorController {
         try{
             floorService.update(newFloor);
         }catch (Exception e){
-            result.errorResult("楼宇信息修改失败!");
-            return result;
+            return Result.errorResult("楼宇信息修改失败!");
         }
         JSONObject object = new JSONObject();
         object.put("name", newFloor.getName());
@@ -96,8 +90,7 @@ public class FloorController {
         object.put("unitCode", newFloor.getParentCode());
         object.put("principalId", newFloor.getPrincipalId());
         object.put("areaId", newFloor.getAreaId());
-        result.successResult("修改楼宇实体成功!", object);
-        return result;
+        return Result.successResult(object);
     }
 
 }

@@ -16,6 +16,7 @@ import java.util.Collection;
 @Table(name = "residence", schema = "cloud_community", catalog = "")
 public class ResidenceEntity implements Serializable {
     private String id;
+    private String code;
     private String name;
     private String userId;
     private Integer floorCount;
@@ -37,6 +38,17 @@ public class ResidenceEntity implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+
+    @Basic
+    @Column(name = "code")
+        public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Basic
