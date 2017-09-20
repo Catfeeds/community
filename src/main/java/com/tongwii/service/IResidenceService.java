@@ -1,6 +1,6 @@
 package com.tongwii.service;
 
-import com.tongwii.domain.ResidenceEntity;
+import com.tongwii.po.ResidenceEntity;
 
 import java.util.List;
 
@@ -22,6 +22,12 @@ public interface IResidenceService {
      * @return ResidenceEntity
      * */
     ResidenceEntity findById(String id);
+
+    /**
+     * ����С�����֤��ѯ��¼
+     * @param code
+     * */
+    ResidenceEntity findByCode(String code);
 
     /**
      * ����residence��

@@ -1,11 +1,12 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
+import com.tongwii.constant.CommunityConstants;
 import com.tongwii.core.Result;
-import com.tongwii.domain.FloorEntity;
-import com.tongwii.domain.RoomEntity;
-import com.tongwii.domain.UserEntity;
-import com.tongwii.domain.UserRoomEntity;
+import com.tongwii.po.FloorEntity;
+import com.tongwii.po.RoomEntity;
+import com.tongwii.po.UserEntity;
+import com.tongwii.po.UserRoomEntity;
 import com.tongwii.service.IFloorService;
 import com.tongwii.service.IUserRoomService;
 import com.tongwii.service.IUserService;
@@ -16,7 +17,6 @@ import com.tongwii.vo.UserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,8 +35,9 @@ public class UserController {
     private IFloorService floorService;
 	@Autowired
     private IUserRoomService userRoomService;
-	
+
 	private TongWIIResult result = new TongWIIResult();
+	private MD5PasswordEncoder md5PasswordEncoder = new MD5PasswordEncoder();
 
 	// 用户注册接口
 	@PostMapping("/regist")
@@ -114,7 +115,6 @@ public class UserController {
 	public TongWIIResult uploadAvatar(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
 		try {
 			System.out.println("=========开始上传头像======================================");
-			// TODO: 2017/9/19
 			String userId = "";
 			// 上传文件并更新用户地址
 			String uploadUrl = userService.updateUserAvatorById(userId, file);
@@ -131,22 +131,37 @@ public class UserController {
 		}
 	}
 
-	// 修改用户头像
+	// 修改用户昵称
 	@PostMapping("/updateNickName")
+	public TongWIIResult updateNickName(@RequestBody Map map) {
+	public Result updateNickName(@RequestBody Map map) {
 	public TongWIIResult updateNickName(@RequestParam("nickName") String nickName) {
         try {
 			// TODO: 2017/9/19
 			String userId = "";
             UserEntity userEntity = userService.findById(userId);
-            userEntity.setNickName(nickName);
+            userEntity.setNickName(map.get("nickName").toString());
             userService.update(userEntity);
-            result.successResult();
-            return result;
+			return Result.successResult(userEntity);
         } catch (Exception e) {
-            result.errorResult();
-            return result;
+			return Result.errorResult("修改失败!");
         }
     }
+
+	// 修改个性签名
+	@PostMapping("/updateSignature")
+	public Result updateSignature(@RequestBody Map map) {
+		try {
+			String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
+			UserEntity userEntity = userService.findById(userId);
+			userEntity.setSignature(map.get("signature").toString());
+			userService.update(userEntity);
+			return Result.successResult(userEntity);
+		} catch (Exception e) {
+			result.errorResult();
+			return Result.errorResult("修改失败!");
+		}
+	}
 
     // 修改用户电话
     @PostMapping("/updatePhone")
@@ -154,8 +169,9 @@ public class UserController {
         try {
 			// TODO: 2017/9/19
 			String userId = "";
+            String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
             UserEntity userEntity = userService.findById(userId);
-            userEntity.setPhone(phone);
+            userEntity.setPhone(map.get("phone").toString());
             userService.update(userEntity);
             return Result.successResult(userEntity);
         } catch (Exception e) {

@@ -38,4 +38,17 @@ public class ResidenceDao extends BaseDao<ResidenceEntity, String> {
         return residenceEntity;
     }
 
+    /**
+     * 根据code查询记录
+     * @param code
+     * @return ResidenceEntity
+     * */
+    public ResidenceEntity findByCode(String code){
+        String hql = "from ResidenceEntity where code=? ";
+        ResidenceEntity residenceEntity= findUniqueByHql(hql, code);
+        if(residenceEntity == null){
+            return null;
+        }
+        return residenceEntity;
+    }
 }

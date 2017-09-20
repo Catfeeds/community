@@ -32,10 +32,4 @@ public class PushController {
         result = pushService.listMesssgePush(messageEntity,roomCode);
         return result;
     }
-
-    @RequestMapping(value = "/test")
-    public void test(@RequestHeader("userId")String userId, @RequestBody MessageEntity messageEntity){
-        String user = userId;
-        String title = messageEntity.getTitle();
-    }
 }

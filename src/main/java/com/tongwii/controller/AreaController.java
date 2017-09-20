@@ -3,7 +3,7 @@ package com.tongwii.controller;
 import com.gexin.fastjson.JSONArray;
 import com.gexin.fastjson.JSONObject;
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.domain.AreaEntity;
+import com.tongwii.po.AreaEntity;
 import com.tongwii.service.IAreaService;
 import com.tongwii.service.IResidenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,27 +21,23 @@ public class AreaController {
     private IAreaService areaService;
     @Autowired
     private IResidenceService residenceService;
-    private TongWIIResult result = new TongWIIResult();
     /**
      * 根据residenceId查询area表
      * @param residenceId
      * @return result
      * */
     @RequestMapping(value = "/{residenceId}", method = RequestMethod.GET)
-    public TongWIIResult findAreaByResidenceId(@PathVariable String residenceId){
+    public Result findAreaByResidenceId(@PathVariable String residenceId){
         if(residenceId == null || residenceId.isEmpty()){
-            result.errorResult("社区实体为空!");
-            return  result;
+            return Result.errorResult("社区实体为空!");
         }
         if(residenceService.findById(residenceId) == null){
-            result.errorResult("社区实体不存在!");
-            return  result;
+            return Result.errorResult("社区实体不存在!");
         }
         List<AreaEntity> areaEntities = areaService.findAreaByResidenceId(residenceId);
 
         if(areaEntities == null){
-            result.errorResult("社区下无分区!");
-            return result;
+            return Result.errorResult("社区下无分区!");
         }
         JSONArray jsonArray = new JSONArray();
         for(AreaEntity areaEntity1 : areaEntities){
@@ -51,8 +47,7 @@ public class AreaController {
             jsonArray.add(object);
         }
 
-        result.successResult("分区信息查询成功!",jsonArray);
-        return result;
+        return Result.successResult(jsonArray);
     }
     /**
      * 修改area表
@@ -60,10 +55,9 @@ public class AreaController {
      * @return result
      */
     @RequestMapping(value = "/updateAreaInfo", method = RequestMethod.POST)
-    public TongWIIResult updateAreaInfo(@RequestBody AreaEntity areaEntity){
+    public Result updateAreaInfo(@RequestBody AreaEntity areaEntity){
         if(areaEntity.getId() == null || areaEntity.getId().isEmpty()){
-            result.errorResult("小区分区实体为空!");
-            return result;
+            return Result.errorResult("小区分区实体为空!");
         }
         AreaEntity newArea = areaService.findById(areaEntity.getId());
         if(areaEntity.getName() != null && !areaEntity.getName().isEmpty()){
@@ -81,7 +75,7 @@ public class AreaController {
         try{
             areaService.update(newArea);
         }catch (Exception e){
-            result.errorResult("分区信息更新失败");
+            return Result.errorResult("分区信息更新失败");
         }
 
         JSONObject object = new JSONObject();
@@ -89,8 +83,7 @@ public class AreaController {
         object.put("buildDate", newArea.getBuildDate());
         object.put("residenceId", newArea.getResidenceId());
         object.put("chargeId", newArea.getChargeId());
-        result.successResult("分区信息修改成功!", object);
-        return result;
+        return Result.successResult( object);
     }
 
 }

@@ -1,11 +1,13 @@
 package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
-import com.tongwii.domain.UserContactEntity;
-import com.tongwii.domain.UserEntity;
+import com.tongwii.constant.CommunityConstants;
+import com.tongwii.po.UserContactEntity;
+import com.tongwii.po.UserEntity;
 import com.tongwii.service.IUserContactService;
 import com.tongwii.service.IUserService;
 import com.tongwii.util.PinYinUtil;
+import com.tongwii.util.TokenUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -28,27 +30,23 @@ public class UserContactController {
     @Autowired
     private IUserService userService;
 
-    private TongWIIResult result = new TongWIIResult();
-
     /**
      * 添加联系人
      * @param userContactEntity
      * @return result
      * */
     @RequestMapping(value = "/addUserContacts", method = RequestMethod.POST)
-    public TongWIIResult addUserContacts(@RequestBody UserContactEntity userContactEntity){
+    public Result addUserContacts(@RequestBody UserContactEntity userContactEntity){
         if(userContactEntity == null){
-            result.errorResult("联系人实体为空!");
+            return Result.errorResult("联系人实体为空!");
         }
         UserEntity friend = userService.findById(userContactEntity.getFriendId());
         UserEntity user = userService.findById(userContactEntity.getUserId());
         if(friend == null){
-            result.errorResult("添加的用户不存在");
-            return result;
+            return Result.errorResult("添加的用户不存在");
         }
         if(user == null){
-            result.errorResult("用户信息不存在");
-            return result;
+            return Result.errorResult("用户信息不存在");
         }
         List<UserContactEntity> userContactEntities = userContactService.findByUserId(userContactEntity.getUserId());
         int contact = 0;
@@ -58,12 +56,10 @@ public class UserContactController {
             }
         }
         if(contact > 0){
-            result.errorResult("该联系人信息已存在!");
-            return result;
+            return Result.errorResult("该联系人信息已存在!");
         }
         userContactService.addUserContact(userContactEntity);
-        result.successResult("添加联系人成功!", userContactEntity);
-        return result;
+        return Result.successResult(userContactEntity);
     }
 
     /**
@@ -79,8 +75,7 @@ public class UserContactController {
             String userId = "";
             List<UserContactEntity> userContactList = userContactService.findByUserId(userId);
             if(CollectionUtils.isEmpty(userContactList)){
-                result.errorResult("此用户没有联系人!");
-                return result;
+                return Result.errorResult("此用户没有联系人!");
             }
             Map<String, JSONArray> contactMap = new TreeMap<>();
             for(UserContactEntity userContactEntity : userContactList){
@@ -113,11 +108,9 @@ public class UserContactController {
                     contactMap.get(UserContactEntity.UNKNOWN_NAME).add(object);
                 }
             }
-            result.successResult("联系人列表获取成功!", contactMap);
-            return result;
+            return Result.successResult(contactMap);
         } catch (Exception e) {
-            result.successResult("联系人列表获取失败!", e.getMessage());
-            return result;
+            return Result.successResult("联系人列表获取失败!");
         }
     }
 
@@ -127,18 +120,15 @@ public class UserContactController {
      * @return result
      * */
     @RequestMapping(value="/delectContact/{contactId}", method = RequestMethod.GET)
-    public TongWIIResult delectContact(@PathVariable String contactId){
+    public Result delectContact(@PathVariable String contactId){
         if(contactId == null || contactId.isEmpty()){
-            result.errorResult("联系人信息获取失败!");
-            return result;
+            return Result.errorResult("联系人信息获取失败!");
         }
         try{
             userContactService.delete(contactId);
         }catch (Exception e){
-            result.errorResult("该联系人信息不存在!");
-            return result;
+            return Result.errorResult("该联系人信息不存在!");
         }
-        result.successResult("联系人信息删除成功!");
-        return result;
+        return Result.successResult("联系人信息删除成功!");
     }
 }
