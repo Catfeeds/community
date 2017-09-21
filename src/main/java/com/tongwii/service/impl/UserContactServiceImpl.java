@@ -7,6 +7,7 @@ import com.tongwii.domain.UserContactEntity;
 import com.tongwii.service.IUserContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * Created by admin on 2017/7/18.
  */
 @Service
+@Transactional
 public class UserContactServiceImpl extends BaseServiceImpl<UserContactEntity> implements IUserContactService {
     @Autowired
     private UserContactDao userContactDao;

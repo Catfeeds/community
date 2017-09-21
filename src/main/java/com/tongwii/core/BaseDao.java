@@ -1,7 +1,10 @@
 package com.tongwii.core;
 
 import com.tongwii.service.IPageInfo;
-import org.hibernate.*;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Order;
@@ -10,7 +13,9 @@ import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.Date;
@@ -21,28 +26,28 @@ import java.util.Map.Entry;
 
 /**
  * 持久层基础类
- * 
+ *
  * @param <M>
  * @param <PK>
  */
 @Repository
 public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializable> {
 
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
-	public SessionFactory getSessionFactory() {
-		if (entityManagerFactory.unwrap(SessionFactory.class) == null) {
-			throw new NullPointerException("factory is not a hibernate factory");
-		}
-		return entityManagerFactory.unwrap(SessionFactory.class);
-	}
+    public Session getCurrentSession() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        if (entityManager.unwrap(Session.class) == null) {
+            throw new NullPointerException("factory is not a hibernate factory");
+        }
+        return entityManager.unwrap(Session.class);
+    }
 
-	public Session getCurrentSession() { return getSessionFactory().openSession(); }
-
+    @Transactional
 	public void save(M model) {
 		getCurrentSession().save(model);
-	}
+    }
 
 	public void saveOrUpdate(M model) {
 		getCurrentSession().saveOrUpdate(model);
@@ -75,7 +80,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 
 	/**
 	 * 根据对象查找集合
-	 * 
+	 *
 	 * @param model
 	 * @return
 	 */
@@ -88,11 +93,11 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		List<M> results = criteria.list();
 		return results;
 	}
-	
+
 
 	/**
 	 * 根据对象查找集合-分页
-	 * 
+	 *
 	 * @param model
 	 * @param pageInfo
 	 * @param orders
@@ -124,7 +129,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 
 	/**
 	 * 根据对象查找返回唯一值
-	 * 
+	 *
 	 * @param model
 	 * @return
 	 */
@@ -136,7 +141,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 
 	/**
 	 * 获取所有记录
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -147,10 +152,10 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		}
 		return criteria.list();
 	}
-	
+
 	/**
 	 * 获取所有记录
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -167,7 +172,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 
 	/**
 	 * 获取总记录数
-	 * 
+	 *
 	 * @return
 	 */
 	public int countAll() {
@@ -182,8 +187,8 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 				Projections.rowCount()));
 		return ((Long) criteria.uniqueResult()).intValue();
 	}
-	
-	
+
+
 
 	public Long countByHql(String hql, final Object... paramlist) {
 		Query query = getCurrentSession().createQuery(hql);
@@ -219,7 +224,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		pageInfo.setTotalCount(count);
 		return results;
 	}
-	
+
 	/**
 	 * 分页查询，并返回list和记录总数
 	 * @param queryHql 查询记录的hql
@@ -241,8 +246,8 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		pageInfo.setTotalCount(count);
 		return results;
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	public <T> List<T> findByHQL(final String queryHql,
 			final Class<T> clazz,final Object... paramlist) {
@@ -251,8 +256,8 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		List<T> results = query.list();
 		return results;
 	}
-	
-	
+
+
 	@SuppressWarnings("rawtypes")
 	public List findByHQLNotGeneric(final String queryHql,
 			final Object... paramlist) {
@@ -261,7 +266,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		List results = query.list();
 		return results;
 	}
-	
+
 	/**
 	 * 分页查询，并返回list和记录总数
 	 * @param hql
@@ -283,8 +288,8 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		pageInfo.setTotalCount(count);
 		return results;
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	protected List<Object[]> findBySQL(final String sql,final Object... paramlist){
 		Query query = getCurrentSession().createSQLQuery(sql);
@@ -309,7 +314,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 
 	/**
 	 * 用于分页
-	 * 
+	 *
 	 * @param hql
 	 * @param firstResult
 	 *            分页起始位置
@@ -331,7 +336,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 
 	/**
 	 * 根据hql查询记录数
-	 * 
+	 *
 	 * @param hql
 	 * @param paramlist
 	 * @return
@@ -396,7 +401,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 	}
 
 	/**
-	 * 
+	 *
 	 * for in
 	 */
 	@SuppressWarnings("unchecked")
@@ -496,7 +501,7 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 			}
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public Class<M> getEntityClass() {
 		java.lang.reflect.Type type = getClass().getGenericSuperclass();
@@ -504,12 +509,12 @@ public class BaseDao<M extends java.io.Serializable, PK extends java.io.Serializ
 		return (Class<M>) (parameterizedType.getActualTypeArguments()[0]);
 	}
 
-	
+
 	protected String getNamedQueryString(String queryName) {
 		Query query = this.getCurrentSession().getNamedQuery(queryName);
 		String queryString = query.getQueryString();
 		return queryString;
 	}
-	
+
 
 }

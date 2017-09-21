@@ -1,4 +1,4 @@
-package com.tongwii.config;
+package com.tongwii.constant;
 
 /**
  * Application constants.

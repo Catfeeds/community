@@ -17,6 +17,7 @@ import com.tongwii.service.*;
 import com.tongwii.util.PushTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,7 @@ import java.util.List;
  * Created by admin on 2017/7/13.
  */
 @Service
+@Transactional
 public class PushServiceImpl implements IPushService{
     @Autowired
     private IUserRoomService userRoomService;

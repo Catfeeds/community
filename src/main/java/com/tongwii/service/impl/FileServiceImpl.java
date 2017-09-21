@@ -8,6 +8,7 @@ import com.tongwii.service.IFileService;
 import com.tongwii.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.UUID;
  * @date: 2017/7/12
  */
 @Service
+@Transactional
 public class FileServiceImpl extends BaseServiceImpl<FileEntity> implements IFileService {
     @Autowired
     private FileDao filedao;

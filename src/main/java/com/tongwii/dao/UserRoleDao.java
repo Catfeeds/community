@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRoleDao extends BaseDao<UserRoleEntity, String> {
-	
+
 }

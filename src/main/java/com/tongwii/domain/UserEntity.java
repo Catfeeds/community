@@ -1,7 +1,6 @@
 package com.tongwii.domain;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -46,27 +45,10 @@ public class UserEntity implements Serializable {
     private Collection<UserRoleEntity> userRolesById;
     private Collection<UserRoomEntity> userRoomsById;
 
-    private static BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    /**
-     * Method to create the hash of the password before storing
-     *
-     * @param pass
-     *
-     * @return SHA hash digest of the password
-     */
-    public static synchronized String hashPassword(String pass) {
-        return passwordEncoder.encode(pass);
-    }
-
-    public static synchronized boolean doesPasswordMatch(String rawPass, String encodedPass) {
-        return passwordEncoder.matches(rawPass, encodedPass);
-    }
-
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
-    @Column(name = "id", unique = true, nullable = false, length = 32)
+    @Column(name = "id", unique = true, nullable = false, length = 50)
     public String getId() {
         return id;
     }

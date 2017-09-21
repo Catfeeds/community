@@ -7,6 +7,7 @@ import com.tongwii.domain.FloorEntity;
 import com.tongwii.service.IFloorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -14,6 +15,7 @@ import java.util.*;
  * Created by admin on 2017/7/18.
  */
 @Service
+@Transactional
 public class FloorService extends BaseServiceImpl<FloorEntity> implements IFloorService{
     @Autowired
     private FloorDao floorDao;

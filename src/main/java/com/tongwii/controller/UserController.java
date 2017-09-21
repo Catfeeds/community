@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -38,9 +37,6 @@ public class UserController {
 	// 用户注册接口
 	@PostMapping("/regist")
 	public Result regist(@RequestBody UserEntity user)  {
-		if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
-			return Result.errorResult("用户已存在");
-		}
 		// 在此调用用户注册的服务
         userService.save(user);
         return Result.successResult("注册成功").add("user", user);

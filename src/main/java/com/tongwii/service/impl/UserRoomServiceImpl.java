@@ -8,13 +8,15 @@ import com.tongwii.domain.UserRoomEntity;
 import com.tongwii.service.IUserRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * Created by admin on 2017/7/13.
  */
-@Service(value = "userRoomService")
+@Service
+@Transactional
 public class UserRoomServiceImpl extends BaseServiceImpl<UserRoomEntity> implements IUserRoomService {
     @Autowired
     private UserRoomDao userRoomDao;

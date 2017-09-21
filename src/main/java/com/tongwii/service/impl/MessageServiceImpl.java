@@ -9,6 +9,7 @@ import com.tongwii.service.IMessageService;
 import com.tongwii.service.IPageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,7 +17,8 @@ import java.util.List;
  * Created by admin on 2017/7/13.
  */
 
-@Service(value = "messageService")
+@Service
+@Transactional
 public class MessageServiceImpl extends BaseServiceImpl<MessageEntity> implements IMessageService {
     @Autowired
     private MessageDao messageDao;

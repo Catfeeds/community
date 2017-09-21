@@ -10,6 +10,7 @@ import com.tongwii.service.IFileService;
 import com.tongwii.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -20,7 +21,8 @@ import java.util.Date;
  * Author: Zeral
  * Date: 2017/7/11
  */
-@Service(value = "userService")
+@Service
+@Transactional
 public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUserService {
     @Autowired
     private UserDao userDao;
@@ -39,7 +41,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserEntity> implements IUse
 
     @Override
     public void save(UserEntity userEntity) {
-        userEntity.setPassword(UserEntity.hashPassword(userEntity.getPassword()));
         userEntity.setAddTime(new Date());
         userEntity.setState(UserConstants.USER_ENABLE);
         userDao.save(userEntity);
