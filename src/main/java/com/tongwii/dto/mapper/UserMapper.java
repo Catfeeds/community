@@ -3,8 +3,8 @@ package com.tongwii.dto.mapper;
 import com.tongwii.domain.*;
 import com.tongwii.dto.RoomDTO;
 import com.tongwii.dto.UserDTO;
-import com.tongwii.service.IFloorService;
-import com.tongwii.service.IUserRoomService;
+import com.tongwii.service.FloorService;
+import com.tongwii.service.UserRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
 public class UserMapper {
 
     @Autowired
-    private IUserRoomService userRoomService;
+    private UserRoomService userRoomService;
 
     @Autowired
-    private IFloorService floorService;
+    private FloorService floorService;
 
     public UserDTO userToUserDTO(UserEntity user) {
         UserDTO userDTO = new UserDTO();

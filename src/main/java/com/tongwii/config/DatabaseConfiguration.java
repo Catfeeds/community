@@ -1,5 +1,6 @@
 package com.tongwii.config;
 
+<<<<<<< HEAD
 import com.tongwii.constant.TongWiiConstants;
 import liquibase.integration.spring.SpringLiquibase;
 import org.slf4j.Logger;

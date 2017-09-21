@@ -7,7 +7,7 @@ import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.security.jwt.JWTConfigurer;
 import com.tongwii.security.jwt.TokenProvider;
-import com.tongwii.service.IUserService;
+import com.tongwii.service.UserService;
 import com.tongwii.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 	@Autowired
-	private IUserService userService;
+	private UserService userService;
 	@Autowired
     private TokenProvider tokenProvider;
 	@Autowired
@@ -38,9 +37,6 @@ public class UserController {
 	// 用户注册接口
 	@PostMapping("/regist")
 	public Result regist(@RequestBody UserEntity user)  {
-		if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
-			return Result.errorResult("用户已存在");
-		}
 		// 在此调用用户注册的服务
         userService.save(user);
         return Result.successResult("注册成功").add("user", user);

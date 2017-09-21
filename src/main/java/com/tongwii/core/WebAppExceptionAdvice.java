@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -19,6 +20,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
     private static Logger log = LoggerFactory.getLogger(WebAppExceptionAdvice.class);
 
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<Object> processDisabledException(DisabledException ex) {
+        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_USER_DISABLED), HttpStatus.UNAUTHORIZED);
+    }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> processParameterizedValidationError(RuntimeException ex) {

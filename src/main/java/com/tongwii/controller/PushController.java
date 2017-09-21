@@ -2,9 +2,12 @@ package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.domain.MessageEntity;
-import com.tongwii.service.IPushService;
+import com.tongwii.service.PushService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -15,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class PushController {
 
     @Autowired
-    private IPushService pushService;
+    private PushService pushService;
     private TongWIIResult result = new TongWIIResult();
     // 根据单个房间推送消息
     @RequestMapping(value = "/pushMessageToSingleRoom", method = RequestMethod.POST)

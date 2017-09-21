@@ -18,6 +18,7 @@ public class UserContactEntity implements Serializable {
 
     private String id;
     private String userId;
+
     private String friendId;
     private String des;
     private UserEntity userByUserId;

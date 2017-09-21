@@ -4,6 +4,7 @@ public final class ResultConstants {
 
     public static final String ERR_ACCESS_DENIED = "拒绝访问";
     public static final String ERR_BAD_CREDENTIALS = "用户名或密码错误";
+    public static final String ERR_USER_DISABLED = "用户不可用";
     public static final String ERR_VALIDATION = "验证错误";
     public static final String ERR_METHOD_NOT_SUPPORTED = "不支持的方法";
     public static final String ERR_INTERNAL_SERVER_ERROR = "程序出错了";
