@@ -1,6 +1,5 @@
 package com.tongwii.controller;
 
-import com.tongwii.bean.TongWIIResult;
 import com.tongwii.core.Result;
 import com.tongwii.domain.UserContactEntity;
 import com.tongwii.domain.UserEntity;

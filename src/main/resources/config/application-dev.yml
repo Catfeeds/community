@@ -84,7 +84,7 @@ tongwii:
         allowed-origins: "*"
         allowed-methods: "*"
         allowed-headers: "*"
-        exposed-headers: "Authorization"
+        exposed-headers: "*"
         allow-credentials: true
         max-age: 1800
     security:
