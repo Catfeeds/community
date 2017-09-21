@@ -4,8 +4,8 @@ import com.gexin.fastjson.JSONArray;
 import com.gexin.fastjson.JSONObject;
 import com.tongwii.core.Result;
 import com.tongwii.domain.FloorEntity;
-import com.tongwii.service.IAreaService;
-import com.tongwii.service.IFloorService;
+import com.tongwii.service.AreaService;
+import com.tongwii.service.FloorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +18,9 @@ import java.util.List;
 @RequestMapping("/floor")
 public class FloorController {
     @Autowired
-    private IFloorService floorService;
+    private FloorService floorService;
     @Autowired
-    private IAreaService areaService;
+    private AreaService areaService;
     /**
      * 根据aresId查询floor列表
      * @param areaId

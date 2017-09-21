@@ -1,15 +1,15 @@
 package com.tongwii.controller;
 
-import com.tongwii.bean.PageInfo;
-import com.tongwii.bean.TongWIIResult;
 import com.tongwii.core.Result;
 import com.tongwii.domain.MessageEntity;
 import com.tongwii.domain.UserEntity;
-import com.tongwii.service.IMessageService;
-import com.tongwii.service.IUserService;
+import com.tongwii.service.MessageService;
+import com.tongwii.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -22,9 +22,9 @@ import java.util.List;
 @RequestMapping("/message")
 public class BaseMessageController {
     @Autowired
-    private IMessageService messageService;
+    private MessageService messageService;
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     /**
      *添加消息接口
@@ -75,8 +75,7 @@ public class BaseMessageController {
         if (message.getMessageTypeId() == null || message.getMessageTypeId().isEmpty()){
             return Result.errorResult("消息类型不可为空!");
         }
-        PageInfo pageInfo = new PageInfo();
-        pageInfo.setPage(page);
+        Pageable pageInfo = new PageRequest(page, 5);
         List<MessageEntity> messageEntities = messageService.selectMessageByType(pageInfo, message.getMessageTypeId(), message.getResidenceId());
         if(messageEntities.isEmpty() || messageEntities==null){
             return Result.errorResult("信息查询失败!");

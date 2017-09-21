@@ -1,7 +1,7 @@
 package com.tongwii.security;
 
 import com.tongwii.constant.UserConstants;
-import com.tongwii.dao.UserDao;
+import com.tongwii.dao.IUserDao;
 import com.tongwii.domain.UserEntity;
 import com.tongwii.security.jwt.JwtUser;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class DomainUserDetailsService implements UserDetailsService {
     private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
     @Autowired
-    private UserDao userDao;
+    private IUserDao userDao;
 
     @Override
     @Transactional

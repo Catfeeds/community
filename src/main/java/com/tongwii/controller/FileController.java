@@ -3,7 +3,7 @@ package com.tongwii.controller;
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.domain.FileEntity;
 import com.tongwii.security.SecurityUtils;
-import com.tongwii.service.IFileService;
+import com.tongwii.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/file")
 public class FileController {
     @Autowired
-    private IFileService fileService;
+    private FileService fileService;
     private TongWIIResult result = new TongWIIResult();
     /**
      *  添加图片文件接口

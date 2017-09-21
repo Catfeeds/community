@@ -4,8 +4,8 @@ import com.tongwii.core.Result;
 import com.tongwii.domain.UserContactEntity;
 import com.tongwii.domain.UserEntity;
 import com.tongwii.security.SecurityUtils;
-import com.tongwii.service.IUserContactService;
-import com.tongwii.service.IUserService;
+import com.tongwii.service.UserContactService;
+import com.tongwii.service.UserService;
 import com.tongwii.util.PinYinUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -25,9 +25,9 @@ import java.util.TreeMap;
 @RequestMapping("/userContact")
 public class UserContactController {
     @Autowired
-    private IUserContactService userContactService;
+    private UserContactService userContactService;
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     /**
      * 添加联系人

@@ -4,7 +4,7 @@ import com.gexin.fastjson.JSONArray;
 import com.gexin.fastjson.JSONObject;
 import com.tongwii.core.Result;
 import com.tongwii.domain.ResidenceEntity;
-import com.tongwii.service.IResidenceService;
+import com.tongwii.service.ResidenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/residence")
 public class ResidenceController {
     @Autowired
-    private IResidenceService residenceService;
+    private ResidenceService residenceService;
 
     /**
      * 根据regionCode查询residence信息

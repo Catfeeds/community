@@ -4,8 +4,8 @@ import com.gexin.fastjson.JSONArray;
 import com.gexin.fastjson.JSONObject;
 import com.tongwii.core.Result;
 import com.tongwii.domain.AreaEntity;
-import com.tongwii.service.IAreaService;
-import com.tongwii.service.IResidenceService;
+import com.tongwii.service.AreaService;
+import com.tongwii.service.ResidenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +18,9 @@ import java.util.List;
 @RequestMapping("/area")
 public class AreaController {
     @Autowired
-    private IAreaService areaService;
+    private AreaService areaService;
     @Autowired
-    private IResidenceService residenceService;
+    private ResidenceService residenceService;
     /**
      * 根据residenceId查询area表
      * @param residenceId

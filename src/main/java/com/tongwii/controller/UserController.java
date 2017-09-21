@@ -7,7 +7,7 @@ import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.security.jwt.JWTConfigurer;
 import com.tongwii.security.jwt.TokenProvider;
-import com.tongwii.service.IUserService;
+import com.tongwii.service.UserService;
 import com.tongwii.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 	@Autowired
-	private IUserService userService;
+	private UserService userService;
 	@Autowired
     private TokenProvider tokenProvider;
 	@Autowired

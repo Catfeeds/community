@@ -2,7 +2,7 @@ package com.tongwii.controller;
 
 import com.tongwii.core.Result;
 import com.tongwii.domain.RoomEntity;
-import com.tongwii.service.IRoomService;
+import com.tongwii.service.RoomService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/room")
 public class RoomController {
     @Autowired
-    private IRoomService roomService;
+    private RoomService roomService;
     /**
      * 根据单元楼id查询住房信息
      * @param roomEntity
