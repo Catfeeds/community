@@ -16,7 +16,7 @@ public interface UserConstants {
 	Integer USER_SEX_MALE = 1;
 	Integer USER_SEX_FAMALE = 2;
 
-    int PASSWORD_MIN_LENGTH = 10;
+    int PASSWORD_MIN_LENGTH = 6;
 
     int PASSWORD_MAX_LENGTH = 30;
 }

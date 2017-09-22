@@ -7,6 +7,7 @@ import com.tongwii.domain.UserEntity;
 import com.tongwii.dto.UserDTO;
 import com.tongwii.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,11 +31,15 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserEntity findByAccount(String account) {
         return userDao.findByAccount(account);
     }
 
     public UserDTO save(UserEntity userEntity) {
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userEntity.setAddTime(new Date());
         userEntity.setState(UserConstants.USER_ENABLE);
         userDao.save(userEntity);

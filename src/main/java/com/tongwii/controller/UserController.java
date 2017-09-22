@@ -5,7 +5,6 @@ import com.tongwii.domain.UserEntity;
 import com.tongwii.dto.UserDTO;
 import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
-import com.tongwii.security.jwt.JWTConfigurer;
 import com.tongwii.security.jwt.TokenProvider;
 import com.tongwii.service.UserService;
 import com.tongwii.util.TokenUtil;
@@ -21,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,21 +38,21 @@ public class UserController {
     private UserMapper userMapper;
 
 	// 用户注册接口
-	@PostMapping("/regist")
-	public Result regist(@Valid @RequestBody UserEntity user)  {
+	@PostMapping("/register")
+	public ResponseEntity regist(@Valid @RequestBody UserEntity user)  {
         if(StringUtils.isBlank(user.getAccount()) || StringUtils.isBlank(user.getPassword())){
-            return Result.errorResult("用户名或密码不能为空");
+            return ResponseEntity.badRequest().body("用户名或密码不能为空");
         }
         if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
-            return Result.errorResult("用户已存在");
+            return ResponseEntity.badRequest().body("用户已存在");
         }
         UserDTO userDTO = userService.save(user);
-        return Result.successResult("注册成功").add("user", userDTO);
+        return ResponseEntity.ok(Result.successResult().add("userInfo", userDTO));
 	}
 
 	// 用户登录接口
 	@PostMapping("/login")
-	public Result login(@RequestBody UserEntity user) {
+	public ResponseEntity login(@RequestBody UserEntity user) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getAccount(), user.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
@@ -60,7 +60,10 @@ public class UserController {
         String jwt = tokenProvider.createToken(authentication);
         // 基本用户信息
         UserDTO userDTO = userMapper.userToUserDTO(user);
-        return Result.successResult("登录成功").add(JWTConfigurer.AUTHORIZATION_HEADER,  "Bearer " + jwt).add("userInfo", userDTO);
+        Map map = new HashMap();
+        map.put("userInfo", userDTO);
+        map.put("token", jwt);
+        return ResponseEntity.ok(map);
 	}
 
 	// 上传用户头像

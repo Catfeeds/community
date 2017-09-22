@@ -4,13 +4,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-
-import static com.tongwii.constant.UserConstants.PASSWORD_MAX_LENGTH;
-import static com.tongwii.constant.UserConstants.PASSWORD_MIN_LENGTH;
 
 /**
  * 用户实体
@@ -29,7 +25,6 @@ public class UserEntity implements Serializable {
     private Integer sex;
     private String avatarFileId;
     private String name;
-    @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
     private String idCard;
     private String phone;

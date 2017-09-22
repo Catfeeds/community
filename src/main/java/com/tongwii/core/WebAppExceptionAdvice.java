@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ValidationException;
+
 /**
  * Exception Handler Controller Advice to catch all controller exceptions and respond gracefully to
  * the caller
@@ -22,36 +24,36 @@ public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Object> processNullPointException(NullPointerException ex) {
-        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_NULL_POINT), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ResultConstants.ERR_NULL_POINT, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<Object> processDisabledException(DisabledException ex) {
-        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_USER_DISABLED), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(ResultConstants.ERR_USER_DISABLED, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Object> processParameterizedValidationError(RuntimeException ex) {
-        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_VALIDATION), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<Object> processValidateException(ValidationException ex) {
+        return new ResponseEntity<>(ResultConstants.ERR_VALIDATION, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> processAccessDeniedException(AccessDeniedException e) {
-        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_ACCESS_DENIED), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(ResultConstants.ERR_ACCESS_DENIED, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Object> precessBadCredentialsException(BadCredentialsException e) {
-        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_BAD_CREDENTIALS), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(ResultConstants.ERR_BAD_CREDENTIALS, HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({Exception.class, RuntimeException.class})
     public ResponseEntity<Object> processException(Exception ex) {
         if (log.isDebugEnabled()) {
             log.debug("An unexpected error occurred: {}", ex.getMessage(), ex);
         } else {
             log.error("An unexpected error occurred: {}", ex.getMessage());
         }
-        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ResultConstants.ERR_INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

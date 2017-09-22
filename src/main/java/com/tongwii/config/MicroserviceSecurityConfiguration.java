@@ -93,18 +93,16 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/api/register").permitAll()
-            .antMatchers("/api/activate").permitAll()
-            .antMatchers("/api/authenticate").permitAll()
-            .antMatchers("/api/account/reset_password/init").permitAll()
-            .antMatchers("/api/account/reset_password/finish").permitAll()
-            .antMatchers("/api/profile-info").permitAll()
-            .antMatchers("/api/**").authenticated()
+            // 允许匿名请求接口文档
+            .antMatchers("/user/register").permitAll()
+            .antMatchers("/user/login").permitAll()
+            // 允许任何授权用户访问
+            .antMatchers("/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/swagger-ui.html").permitAll()
             .antMatchers("/v2/api-docs/**").permitAll()
             .antMatchers("/swagger-resources/configuration/ui").permitAll()
-            .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
             .and()
             .apply(securityConfigurerAdapter());
 
