@@ -38,8 +38,7 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
     private final CorsFilter corsFilter;
 
     public MicroserviceSecurityConfiguration(AuthenticationManagerBuilder authenticationManagerBuilder, UserDetailsService userDetailsService,
-                                 TokenProvider tokenProvider,
-                                 CorsFilter corsFilter) {
+                                 TokenProvider tokenProvider, CorsFilter corsFilter) {
 
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userDetailsService = userDetailsService;

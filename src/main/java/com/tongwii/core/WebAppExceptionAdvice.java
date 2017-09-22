@@ -20,6 +20,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
     private static Logger log = LoggerFactory.getLogger(WebAppExceptionAdvice.class);
 
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Object> processNullPointException(NullPointerException ex) {
+        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_NULL_POINT), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<Object> processDisabledException(DisabledException ex) {
         return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_USER_DISABLED), HttpStatus.UNAUTHORIZED);
@@ -27,7 +32,7 @@ public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> processParameterizedValidationError(RuntimeException ex) {
-        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(Result.errorResult(ResultConstants.ERR_VALIDATION), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

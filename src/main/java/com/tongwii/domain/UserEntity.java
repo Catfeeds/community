@@ -3,9 +3,14 @@ package com.tongwii.domain;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+
+import static com.tongwii.constant.UserConstants.PASSWORD_MAX_LENGTH;
+import static com.tongwii.constant.UserConstants.PASSWORD_MIN_LENGTH;
 
 /**
  * 用户实体
@@ -24,6 +29,7 @@ public class UserEntity implements Serializable {
     private Integer sex;
     private String avatarFileId;
     private String name;
+    @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
     private String idCard;
     private String phone;
@@ -38,17 +44,17 @@ public class UserEntity implements Serializable {
     private Collection<MessageCommentEntity> messageCommentsById;
     private Collection<ResidenceEntity> residencesById;
     private Collection<RoomEntity> roomsById;
+    private Collection<UserRoleEntity> userRolesById;
     private FileEntity fileByAvatarFileId;
     private Collection<UserContactEntity> userContactsById;
     private Collection<UserContactEntity> userContactsById_0;
     private Collection<UserGroupEntity> userGroupsById;
-    private Collection<UserRoleEntity> userRolesById;
     private Collection<UserRoomEntity> userRoomsById;
 
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
-    @Column(name = "id", unique = true, nullable = false, length = 50)
+    @Column(name = "id", unique = true, nullable = false, length = 36)
     public String getId() {
         return id;
     }
@@ -58,6 +64,7 @@ public class UserEntity implements Serializable {
     }
 
     @Basic
+    @NotNull
     @Column(name = "account")
     public String getAccount() {
         return account;
@@ -128,6 +135,7 @@ public class UserEntity implements Serializable {
     }
 
     @Basic
+    @NotNull
     @Column(name = "password")
     public String getPassword() {
         return password;

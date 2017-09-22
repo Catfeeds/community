@@ -44,12 +44,12 @@ public class WebConfigurer implements ServletContextInitializer {
 
     @Bean
     public CorsFilter corsFilter() {
+        // 基于路径的Url跨域控制
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = tongWiiProperties.getCors();
         if (config.getAllowedOrigins() != null && !config.getAllowedOrigins().isEmpty()) {
             log.debug("Registering CORS filter");
-            source.registerCorsConfiguration("/api/**", config);
-            source.registerCorsConfiguration("/v2/api-docs", config);
+            source.registerCorsConfiguration("/**", config);
         }
         return new CorsFilter(source);
     }

@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `area`;
 CREATE TABLE `area` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `name` varchar(20) DEFAULT NULL,
   `build_date` date DEFAULT NULL,
   `charge_id` varchar(32) DEFAULT NULL,
@@ -43,7 +43,7 @@ INSERT INTO `area` VALUES ('2', '吴江区', '2017-07-12', '2', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `file`;
 CREATE TABLE `file` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `file_name` varchar(100) DEFAULT NULL,
   `file_path` varchar(100) DEFAULT NULL,
   `file_type` varchar(10) DEFAULT NULL,
@@ -67,7 +67,7 @@ INSERT INTO `file` VALUES ('402880aa5d882091015d8843dccb0000', 'welcome.jpg', '/
 -- ----------------------------
 DROP TABLE IF EXISTS `floor`;
 CREATE TABLE `floor` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `code` varchar(20) DEFAULT NULL COMMENT '楼宇号',
   `name` varchar(10) DEFAULT NULL,
   `parent_code` varchar(20) DEFAULT NULL COMMENT '单元号',
@@ -91,7 +91,7 @@ INSERT INTO `floor` VALUES ('2', '1002', '花园小区1002栋', '1', '1', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `group_role`;
 CREATE TABLE `group_role` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `group_id` varchar(32) DEFAULT NULL,
   `role_id` varchar(32) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE `group_role` (
 -- ----------------------------
 DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `content` longtext,
   `record_date` datetime DEFAULT NULL,
   `operator_id` varchar(32) DEFAULT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE `log` (
 -- ----------------------------
 DROP TABLE IF EXISTS `message`;
 CREATE TABLE `message` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `title` varchar(50) DEFAULT NULL,
   `content` longtext,
   `file_id` varchar(32) DEFAULT NULL,
@@ -227,7 +227,7 @@ INSERT INTO `message` VALUES ('402880aa5d871b66015d873ca98e0001', '通知消息'
 -- ----------------------------
 DROP TABLE IF EXISTS `message_comment`;
 CREATE TABLE `message_comment` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `message_id` varchar(32) DEFAULT NULL,
   `is_like` bit(1) DEFAULT NULL,
   `comment` longtext,
@@ -249,7 +249,7 @@ CREATE TABLE `message_comment` (
 -- ----------------------------
 DROP TABLE IF EXISTS `message_type`;
 CREATE TABLE `message_type` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `name` varchar(32) DEFAULT NULL,
   `code` varchar(32) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
@@ -274,7 +274,7 @@ INSERT INTO `message_type` VALUES ('9', '在线服务消息', 'ONLINE_MESSAGE', 
 -- ----------------------------
 DROP TABLE IF EXISTS `region`;
 CREATE TABLE `region` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `region_code` varchar(10) DEFAULT NULL,
   `name` varchar(20) DEFAULT NULL,
   `parent_code` varchar(10) DEFAULT NULL,
@@ -292,7 +292,7 @@ INSERT INTO `region` VALUES ('2', '110102', null, '110000');
 -- ----------------------------
 DROP TABLE IF EXISTS `residence`;
 CREATE TABLE `residence` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `name` varchar(20) DEFAULT NULL,
   `user_id` varchar(32) DEFAULT NULL,
   `floor_count` int(3) DEFAULT NULL,
@@ -314,7 +314,7 @@ INSERT INTO `residence` VALUES ('1', '鲁能公馆', '1', '200', '1', 'http://19
 -- ----------------------------
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `name` varchar(20) DEFAULT NULL,
   `code` varchar(10) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
@@ -355,7 +355,7 @@ INSERT INTO `room` VALUES ('2', '1001002', '1.0', '大', null, '1', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `subgroup`;
 CREATE TABLE `subgroup` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `name` varchar(10) DEFAULT NULL,
   `parent_id` varchar(32) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
@@ -373,7 +373,7 @@ CREATE TABLE `subgroup` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `account` varchar(20) DEFAULT NULL,
   `nick_name` varchar(20) DEFAULT NULL,
   `birthday` date DEFAULT NULL,
@@ -381,12 +381,12 @@ CREATE TABLE `user` (
   `sex` tinyint(4) DEFAULT NULL,
   `avatar_file_id` varchar(32) DEFAULT NULL,
   `name` varchar(20) DEFAULT NULL,
-  `password` varchar(32) DEFAULT NULL,
+  `password` varchar(60) DEFAULT NULL,
   `id_card` varchar(20) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `client_id` varchar(32) DEFAULT NULL,
-  `add_time` datetime DEFAULT NULL,
-  `state` tinyint(4) DEFAULT NULL,
+  `add_time` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `state` tinyint(4) DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY `FK_USER_2_FILE` (`avatar_file_id`),
   CONSTRAINT `FK_USER_2_FILE` FOREIGN KEY (`avatar_file_id`) REFERENCES `file` (`id`)
@@ -395,17 +395,17 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'Root', '管理员', '2016-06-17', '哈哈哈，我是管理员', '1', null, '张星星', '111111', '1001001', '18432299002', 'bc29012763ecc2928b87996216a476d3', '2017-06-14 15:40:16', '1');
-INSERT INTO `user` VALUES ('2', 'wangym', 'yamo', '2017-07-13', '我是可爱的默默', '0', '402880aa5d882091015d8843dccb0000', '王雅默', '96e79218965eb72c92a549dd5a330112', '1001001', '18409292394', '28af2201c9b78bfcb88def0ad61378da', '2017-06-27 15:41:58', '1');
-INSERT INTO `user` VALUES ('3', 'tangmiaomiao', '苗苗', '2017-07-04', '苗苗是个大笨蛋', '0', null, '唐苗苗', '96e79218965eb72c92a549dd5a330112', '1001001', '13775142344', '79403c212e0204283955aba356b74331', '2017-07-03 15:44:00', '1');
-INSERT INTO `user` VALUES ('402880aa5e5f8814015e60c5bf450000', 'tangmm', null, null, null, null, null, null, '96e79218965eb72c92a549dd5a330112', null, null, null, '2017-09-08 17:15:26', '0');
+INSERT INTO `user` VALUES ('1', 'Root', '管理员', '2016-06-17', '哈哈哈，我是管理员', '1', null, '张星星', '111111', '1001001', '18432299002', 'bc29012763ecc2928b87996216a476d3', null, '1');
+INSERT INTO `user` VALUES ('2', 'wangym', 'yamo', '2017-07-13', '我是可爱的默默', '0', '402880aa5d882091015d8843dccb0000', '王雅默', '96e79218965eb72c92a549dd5a330112', '1001001', '18409292394', '28af2201c9b78bfcb88def0ad61378da', null, '1');
+INSERT INTO `user` VALUES ('3', 'tangmiaomiao', '苗苗', '2017-07-04', '苗苗是个大笨蛋', '0', null, '唐苗苗', '96e79218965eb72c92a549dd5a330112', '1001001', '13775142344', '79403c212e0204283955aba356b74331', null, '1');
+INSERT INTO `user` VALUES ('402880aa5e5f8814015e60c5bf450000', 'tangmm', null, null, null, null, null, null, '96e79218965eb72c92a549dd5a330112', null, null, null, null, '0');
 
 -- ----------------------------
 -- Table structure for user_contact
 -- ----------------------------
 DROP TABLE IF EXISTS `user_contact`;
 CREATE TABLE `user_contact` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `user_id` varchar(32) DEFAULT NULL,
   `friend_id` varchar(32) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
@@ -427,7 +427,7 @@ INSERT INTO `user_contact` VALUES ('402880aa5d5a0060015d5a0230060000', '1', '3',
 -- ----------------------------
 DROP TABLE IF EXISTS `user_group`;
 CREATE TABLE `user_group` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `group_id` varchar(32) DEFAULT NULL,
   `user_id` varchar(32) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
@@ -447,7 +447,7 @@ CREATE TABLE `user_group` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `user_id` varchar(32) DEFAULT NULL,
   `role_id` varchar(32) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
@@ -467,7 +467,7 @@ CREATE TABLE `user_role` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user_room`;
 CREATE TABLE `user_room` (
-  `id` varchar(32) NOT NULL,
+  `id` varchar(36) NOT NULL,
   `user_id` varchar(32) DEFAULT NULL,
   `room_id` varchar(32) DEFAULT NULL,
   `type` tinyint(4) DEFAULT '1' COMMENT '用户和房间的关系',

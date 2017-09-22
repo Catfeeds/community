@@ -9,6 +9,7 @@ import com.tongwii.security.jwt.JWTConfigurer;
 import com.tongwii.security.jwt.TokenProvider;
 import com.tongwii.service.UserService;
 import com.tongwii.util.TokenUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
@@ -36,10 +39,15 @@ public class UserController {
 
 	// 用户注册接口
 	@PostMapping("/regist")
-	public Result regist(@RequestBody UserEntity user)  {
-		// 在此调用用户注册的服务
-        userService.save(user);
-        return Result.successResult("注册成功").add("user", user);
+	public Result regist(@Valid @RequestBody UserEntity user)  {
+        if(StringUtils.isBlank(user.getAccount()) || StringUtils.isBlank(user.getPassword())){
+            return Result.errorResult("用户名或密码不能为空");
+        }
+        if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
+            return Result.errorResult("用户已存在");
+        }
+        UserDTO userDTO = userService.save(user);
+        return Result.successResult("注册成功").add("user", userDTO);
 	}
 
 	// 用户登录接口

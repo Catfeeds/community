@@ -38,7 +38,7 @@ public class MessageEntity implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
-    @Column(name = "id", unique = true, nullable = false, length = 32)
+    @Column(name = "id", unique = true, nullable = false, length = 36)
     public String getId() {
         return id;
     }

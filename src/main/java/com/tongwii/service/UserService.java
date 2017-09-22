@@ -4,6 +4,8 @@ import com.tongwii.constant.UserConstants;
 import com.tongwii.dao.IUserDao;
 import com.tongwii.domain.FileEntity;
 import com.tongwii.domain.UserEntity;
+import com.tongwii.dto.UserDTO;
+import com.tongwii.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +27,18 @@ public class UserService {
     private IUserDao userDao;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private UserMapper userMapper;
 
     public UserEntity findByAccount(String account) {
         return userDao.findByAccount(account);
     }
 
-    public void save(UserEntity userEntity) {
+    public UserDTO save(UserEntity userEntity) {
         userEntity.setAddTime(new Date());
         userEntity.setState(UserConstants.USER_ENABLE);
         userDao.save(userEntity);
+        return userMapper.userToUserDTO(userEntity);
     }
 
     public String updateUserAvatorById(String userId, MultipartFile file) {

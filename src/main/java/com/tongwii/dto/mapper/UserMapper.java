@@ -5,13 +5,11 @@ import com.tongwii.dto.RoomDTO;
 import com.tongwii.dto.UserDTO;
 import com.tongwii.service.FloorService;
 import com.tongwii.service.UserRoomService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,7 +42,9 @@ public class UserMapper {
         userDTO.setName(user.getName());
         userDTO.setSex(user.getSex());
         userDTO.setState(user.getState());
-        userDTO.setRoles(user.getUserRolesById().stream().map(UserRoleEntity::getRoleByRoleId).collect(Collectors.toList()));
+        if(CollectionUtils.isNotEmpty(user.getUserRolesById())) {
+            userDTO.setRoles(user.getUserRolesById().stream().map(UserRoleEntity::getRoleByRoleId).map(RoleEntity::getCode).collect(Collectors.toList()));
+        }
         List<RoomDTO> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
             RoomEntity roomEntity = userRoomEntity.getRoomByRoomId();
             RoomDTO roomDTO = new RoomDTO();

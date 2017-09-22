@@ -1,7 +1,6 @@
 package com.tongwii.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.tongwii.domain.RoleEntity;
 import com.tongwii.util.CustomDateSerializer;
 import lombok.Data;
 
@@ -31,5 +30,5 @@ public class UserDTO {
     private Date addTime;
     private Integer state;
     private List<RoomDTO> rooms;
-    private List<RoleEntity> roles;
+    private List<String> roles;
 }
