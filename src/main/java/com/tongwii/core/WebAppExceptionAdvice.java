@@ -29,7 +29,7 @@ public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<Object> processDisabledException(DisabledException ex) {
-        return new ResponseEntity<>(ResultConstants.ERR_USER_DISABLED, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(ResultConstants.ERR_USER_DISABLED, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(ValidationException.class)

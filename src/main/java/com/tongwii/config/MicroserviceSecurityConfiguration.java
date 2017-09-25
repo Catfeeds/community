@@ -72,8 +72,9 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
         web.ignoring()
             .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/i18n/**")
-            .antMatchers("/swagger-ui/index.html")
-            .antMatchers("/test/**");
+            .antMatchers("/swagger-ui.thml")
+            .antMatchers("/test/**")
+            .antMatchers("/v2/api-docs/**");
     }
 
     @Override
@@ -96,13 +97,10 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             // 允许匿名请求接口文档
             .antMatchers("/user/register").permitAll()
             .antMatchers("/user/login").permitAll()
+            .antMatchers("/user/**").hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
             // 允许任何授权用户访问
-            .antMatchers("/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/swagger-ui.html").permitAll()
-            .antMatchers("/v2/api-docs/**").permitAll()
-            .antMatchers("/swagger-resources/configuration/ui").permitAll()
             .and()
             .apply(securityConfigurerAdapter());
 

@@ -1,27 +1,549 @@
-<?xml version="1.0" encoding="utf-8"?>
-<databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd
-                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-
-    <property name="now" value="now()" dbms="mysql"/>
-    <property name="autoIncrement" value="true"/>
-
-    <!--
-        JHipster core tables.
-        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
-    -->
-    <changeSet id="00000000000001" author="zeral">
-        <sqlFile dbms="mysql"
-                 encoding="utf8"
-                 endDelimiter=";"
-                 path="../../../sql/cloud_community.sql"
-                 relativeToChangelogFile="true"
-                 splitStatements="true"
-                 stripComments="true"/>
-        <comment>初始化数据库</comment>
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                                       http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Zeral (generated)" id="1506311309337-1">
+        <createTable tableName="area">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(20)"/>
+            <column name="build_date" type="date"/>
+            <column name="charge_id" type="VARCHAR(32)"/>
+            <column name="residence_id" type="VARCHAR(32)"/>
+        </createTable>
     </changeSet>
-
+    <changeSet author="Zeral (generated)" id="1506311309337-2">
+        <createTable tableName="file">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_name" type="VARCHAR(100)"/>
+            <column name="file_path" type="VARCHAR(100)"/>
+            <column name="file_type" type="VARCHAR(10)"/>
+            <column name="des" type="VARCHAR(100)"/>
+            <column name="state" type="TINYINT(3)"/>
+            <column name="upload_user_id" type="VARCHAR(32)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-3">
+        <createTable tableName="floor">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" remarks="楼宇号" type="VARCHAR(20)"/>
+            <column name="name" type="VARCHAR(10)"/>
+            <column name="parent_code" remarks="单元号" type="VARCHAR(20)"/>
+            <column name="principal_id" remarks="负责人，业主" type="VARCHAR(32)"/>
+            <column name="area_id" remarks="地区ID" type="VARCHAR(32)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-4">
+        <createTable tableName="group_role">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="VARCHAR(32)"/>
+            <column name="role_id" type="VARCHAR(32)"/>
+            <column name="des" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-5">
+        <createTable tableName="log">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="LONGTEXT"/>
+            <column name="record_date" type="datetime"/>
+            <column name="operator_id" type="VARCHAR(32)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-6">
+        <createTable tableName="message">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(50)"/>
+            <column name="content" type="LONGTEXT"/>
+            <column name="file_id" type="VARCHAR(32)"/>
+            <column name="create_time" type="datetime"/>
+            <column name="create_user_id" type="VARCHAR(32)"/>
+            <column name="message_type_id" type="VARCHAR(32)"/>
+            <column name="process_state" remarks="主要展示投诉类型消息的处理进度" type="TINYINT(3)"/>
+            <column name="repair_start_time" type="datetime"/>
+            <column name="repair_end_time" type="datetime"/>
+            <column name="residence_id" type="VARCHAR(32)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-7">
+        <createTable tableName="message_comment">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message_id" type="VARCHAR(32)"/>
+            <column name="is_like" type="BIT(1)"/>
+            <column name="comment" type="LONGTEXT"/>
+            <column name="comment_date" type="datetime"/>
+            <column name="commentator_id" type="VARCHAR(32)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-8">
+        <createTable tableName="message_type">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(32)"/>
+            <column name="code" type="VARCHAR(32)"/>
+            <column name="des" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-9">
+        <createTable tableName="region">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="region_code" type="VARCHAR(10)"/>
+            <column name="name" type="VARCHAR(20)"/>
+            <column name="parent_code" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-10">
+        <createTable tableName="residence">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(20)"/>
+            <column name="code" type="VARCHAR(100)"/>
+            <column name="user_id" type="VARCHAR(32)"/>
+            <column name="floor_count" type="INT"/>
+            <column name="region_id" type="VARCHAR(32)"/>
+            <column name="server_url" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-11">
+        <createTable tableName="role">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(20)"/>
+            <column name="code" type="VARCHAR(20)"/>
+            <column name="des" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-12">
+        <createTable tableName="room">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="room_code" type="VARCHAR(10)"/>
+            <column name="area" type="FLOAT(4, 1)"/>
+            <column name="hu_xing" type="VARCHAR(1)"/>
+            <column name="client_code" type="VARCHAR(32)"/>
+            <column name="owner_id" type="VARCHAR(32)"/>
+            <column name="unit_id" type="VARCHAR(32)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-13">
+        <createTable tableName="subgroup">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(10)"/>
+            <column name="parent_id" type="VARCHAR(32)"/>
+            <column name="des" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-14">
+        <createTable tableName="user">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account" type="VARCHAR(20)"/>
+            <column name="nick_name" type="VARCHAR(20)"/>
+            <column name="birthday" type="date"/>
+            <column name="signature" type="VARCHAR(120)"/>
+            <column name="sex" type="TINYINT(3)"/>
+            <column name="avatar_file_id" type="VARCHAR(32)"/>
+            <column name="name" type="VARCHAR(20)"/>
+            <column name="password" type="VARCHAR(60)"/>
+            <column name="id_card" type="VARCHAR(20)"/>
+            <column name="phone" type="VARCHAR(20)"/>
+            <column name="client_id" type="VARCHAR(32)"/>
+            <column defaultValueComputed="current_timestamp()" name="add_time" type="TIMESTAMP(19)"/>
+            <column defaultValueNumeric="1" name="state" type="TINYINT(3)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-15">
+        <createTable tableName="user_contact">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(32)"/>
+            <column name="friend_id" type="VARCHAR(32)"/>
+            <column name="des" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-16">
+        <createTable tableName="user_group">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="VARCHAR(32)"/>
+            <column name="user_id" type="VARCHAR(32)"/>
+            <column name="des" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-17">
+        <createTable tableName="user_role">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(32)"/>
+            <column name="role_id" type="VARCHAR(32)"/>
+            <column name="des" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-18">
+        <createTable tableName="user_room">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="VARCHAR(32)"/>
+            <column name="room_id" type="VARCHAR(32)"/>
+            <column defaultValueNumeric="1" name="type" remarks="用户和房间的关系" type="TINYINT(3)"/>
+            <column name="des" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-19">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="area"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-20">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="file"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-21">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="floor"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-22">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="group_role"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-23">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="log"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-24">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="message"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-25">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="message_comment"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-26">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="message_type"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-27">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="region"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-28">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="residence"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-29">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="role"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-30">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="room"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-31">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="subgroup"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-32">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-33">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user_contact"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-34">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user_group"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-35">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user_role"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-36">
+        <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user_room"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-37">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="area"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-38">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="file"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-39">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="floor"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-40">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="group_role"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-41">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="log"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-42">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="message"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-43">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="message_comment"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-44">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="message_type"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-45">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="region"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-46">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="residence"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-47">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="role"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-48">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="room"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-49">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="subgroup"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-50">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-51">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="user_contact"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-52">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="user_group"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-53">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="user_role"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-54">
+        <addUniqueConstraint columnNames="id" constraintName="id" tableName="user_room"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-55">
+        <createIndex indexName="FK_AREA_2_RESIDENCE" tableName="area">
+            <column name="residence_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-56">
+        <createIndex indexName="FK_AREA_2_USER" tableName="area">
+            <column name="charge_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-57">
+        <createIndex indexName="FK_COMMENT_2_USER" tableName="message_comment">
+            <column name="commentator_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-58">
+        <createIndex indexName="FK_FILE_2_USER" tableName="file">
+            <column name="upload_user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-59">
+        <createIndex indexName="FK_FLOOR_2_AREA" tableName="floor">
+            <column name="area_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-60">
+        <createIndex indexName="FK_FLOOR_2_USER" tableName="floor">
+            <column name="principal_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-61">
+        <createIndex indexName="FK_GROUP_RO_2_ROLE" tableName="group_role">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-62">
+        <createIndex indexName="FK_GROUP_RO_2_SUBGROUP" tableName="group_role">
+            <column name="group_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-63">
+        <createIndex indexName="FK_LOG_2_USER" tableName="log">
+            <column name="operator_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-64">
+        <createIndex indexName="FK_MESSAGE_2_COMMENT" tableName="message_comment">
+            <column name="message_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-65">
+        <createIndex indexName="FK_MESSAGE_2_FILE" tableName="message">
+            <column name="file_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-66">
+        <createIndex indexName="FK_MESSAGE_2_RESIDENCE" tableName="message">
+            <column name="residence_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-67">
+        <createIndex indexName="FK_MESSAGE_2_TYPE" tableName="message">
+            <column name="message_type_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-68">
+        <createIndex indexName="FK_MESSAGE_2_USER" tableName="message">
+            <column name="create_user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-69">
+        <createIndex indexName="FK_RESIDENC_2_REGION" tableName="residence">
+            <column name="region_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-70">
+        <createIndex indexName="FK_RESIDENC_2_USER" tableName="residence">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-71">
+        <createIndex indexName="FK_ROOM_2_FLOOR" tableName="room">
+            <column name="unit_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-72">
+        <createIndex indexName="FK_ROOM_2_USER" tableName="room">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-73">
+        <createIndex indexName="FK_SUBGROUP_2_SUBGROUP" tableName="subgroup">
+            <column name="parent_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-74">
+        <createIndex indexName="FK_USER_2_FILE" tableName="user">
+            <column name="avatar_file_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-75">
+        <createIndex indexName="FK_USER_2_USER" tableName="user_contact">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-76">
+        <createIndex indexName="FK_USER_FRIEND_2_USER" tableName="user_contact">
+            <column name="friend_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-77">
+        <createIndex indexName="FK_USER_GRO_2_SUBGROUP" tableName="user_group">
+            <column name="group_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-78">
+        <createIndex indexName="FK_USER_GRO_2_USER" tableName="user_group">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-79">
+        <createIndex indexName="FK_USER_ROLE_2_ROLE" tableName="user_role">
+            <column name="role_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-80">
+        <createIndex indexName="FK_USER_ROLE_2_USER" tableName="user_role">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-81">
+        <createIndex indexName="FK_USER_ROOM_2_ROOM" tableName="user_room">
+            <column name="room_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-82">
+        <createIndex indexName="FK_USER_ROOM_2_USER" tableName="user_room">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-83">
+        <addForeignKeyConstraint baseColumnNames="residence_id" baseTableName="area" constraintName="FK_AREA_2_RESIDENCE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="residence"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-84">
+        <addForeignKeyConstraint baseColumnNames="charge_id" baseTableName="area" constraintName="FK_AREA_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-85">
+        <addForeignKeyConstraint baseColumnNames="commentator_id" baseTableName="message_comment" constraintName="FK_COMMENT_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-86">
+        <addForeignKeyConstraint baseColumnNames="upload_user_id" baseTableName="file" constraintName="FK_FILE_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-87">
+        <addForeignKeyConstraint baseColumnNames="area_id" baseTableName="floor" constraintName="FK_FLOOR_2_AREA" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="area"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-88">
+        <addForeignKeyConstraint baseColumnNames="principal_id" baseTableName="floor" constraintName="FK_FLOOR_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-89">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="group_role" constraintName="FK_GROUP_RO_2_ROLE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-90">
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="group_role" constraintName="FK_GROUP_RO_2_SUBGROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="subgroup"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-91">
+        <addForeignKeyConstraint baseColumnNames="operator_id" baseTableName="log" constraintName="FK_LOG_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-92">
+        <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="message_comment" constraintName="FK_MESSAGE_2_COMMENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="message"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-93">
+        <addForeignKeyConstraint baseColumnNames="file_id" baseTableName="message" constraintName="FK_MESSAGE_2_FILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="file"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-94">
+        <addForeignKeyConstraint baseColumnNames="residence_id" baseTableName="message" constraintName="FK_MESSAGE_2_RESIDENCE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="residence"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-95">
+        <addForeignKeyConstraint baseColumnNames="message_type_id" baseTableName="message" constraintName="FK_MESSAGE_2_TYPE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="message_type"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-96">
+        <addForeignKeyConstraint baseColumnNames="create_user_id" baseTableName="message" constraintName="FK_MESSAGE_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-97">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="residence" constraintName="FK_RESIDENC_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-98">
+        <addForeignKeyConstraint baseColumnNames="unit_id" baseTableName="room" constraintName="FK_ROOM_2_FLOOR" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="floor"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-99">
+        <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="room" constraintName="FK_ROOM_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-100">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="subgroup" constraintName="FK_SUBGROUP_2_SUBGROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="subgroup"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-101">
+        <addForeignKeyConstraint baseColumnNames="avatar_file_id" baseTableName="user" constraintName="FK_USER_2_FILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="file"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-102">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_contact" constraintName="FK_USER_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-103">
+        <addForeignKeyConstraint baseColumnNames="friend_id" baseTableName="user_contact" constraintName="FK_USER_FRIEND_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-104">
+        <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="user_group" constraintName="FK_USER_GRO_2_SUBGROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="subgroup"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-105">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_group" constraintName="FK_USER_GRO_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-106">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_role" constraintName="FK_USER_ROLE_2_ROLE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-107">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_role" constraintName="FK_USER_ROLE_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-108">
+        <addForeignKeyConstraint baseColumnNames="room_id" baseTableName="user_room" constraintName="FK_USER_ROOM_2_ROOM" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="room"/>
+    </changeSet>
+    <changeSet author="Zeral (generated)" id="1506311309337-109">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_room" constraintName="FK_USER_ROOM_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
+    </changeSet>
 </databaseChangeLog>
