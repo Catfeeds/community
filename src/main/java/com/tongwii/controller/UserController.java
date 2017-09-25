@@ -47,7 +47,7 @@ public class UserController {
             return ResponseEntity.badRequest().body("用户已存在");
         }
         UserDTO userDTO = userService.save(user);
-        return ResponseEntity.ok(Result.successResult().add("userInfo", userDTO));
+        return ResponseEntity.ok(userDTO);
 	}
 
 	// 用户登录接口
