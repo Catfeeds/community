@@ -22,4 +22,7 @@ public interface IMessageDao extends JpaRepository<MessageEntity, String> {
     void updateMessageState(String messageId, Integer processState);
 
     List<MessageEntity> findAllByMessageTypeIdAndResidenceId(Pageable pageable, String messageTypeId, String residenceId);
+
+    @Query("SELECT m FROM MessageEntity m WHERE m.messageTypeId IN (3,6,7) and m.residenceId = :residenceId")
+    List<MessageEntity> findAnnounceByResidenceId(Pageable pageable, String residenceId);
 }

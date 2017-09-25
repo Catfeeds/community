@@ -15,6 +15,4 @@ import java.util.List;
 @Repository
 public interface IResidenceDao extends JpaRepository<ResidenceEntity, String> {
     List<ResidenceEntity> findByRegionId(String regionId);
-
-    ResidenceEntity findByCode(String code);
 }

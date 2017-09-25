@@ -20,10 +20,6 @@ public class ResidenceService {
     @Autowired
     private IResidenceDao residenceDao;
 
-    public ResidenceEntity findByCode(String code) {
-        return residenceDao.findByCode(code);
-    }
-
     public List<ResidenceEntity> findResidenceByRegionId(String regionId) {
         return residenceDao.findByRegionId(regionId);
     }

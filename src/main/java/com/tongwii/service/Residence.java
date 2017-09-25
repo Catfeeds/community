@@ -23,10 +23,6 @@ public class Residence {
         return residenceDao.findByRegionId(regionId);
     }
 
-    public ResidenceEntity findByCode(String code) {
-        return residenceDao.findByCode(code);
-    }
-
     public ResidenceEntity findById(String id) {
         return residenceDao.findOne(id);
     }

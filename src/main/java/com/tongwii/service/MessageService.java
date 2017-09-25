@@ -36,4 +36,11 @@ public class MessageService {
     public List<MessageEntity> selectMessageByType(Pageable pageable, String messageTypeId, String residenceId) {
         return messageDao.findAllByMessageTypeIdAndResidenceId(pageable, messageTypeId, residenceId);
     }
+
+    /**
+     * 查询公告类消息
+     * */
+    public List<MessageEntity> selectAnnounceMessage(Pageable pageable,String residenceId) {
+        return messageDao.findAnnounceByResidenceId(pageable, residenceId);
+    }
 }

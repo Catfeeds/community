@@ -64,7 +64,6 @@ public class UserContactController {
     /**
      * 获取联系人列表
      *
-     * @param token the token
      * @return result tong wii result
      */
     @GetMapping()

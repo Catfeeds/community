@@ -97,6 +97,34 @@ public class BaseMessageController {
         return Result.successResult().add("pageInfo", pageInfo).add("messageInfo",messageJsonArray);
     }
 
+    /**
+     * 通过消息类型查询消息
+     *
+     * @return result
+     * */
+    @GetMapping(value = "/selectAnnounceMessage/{residenceId}")
+    public Result selectAnnounceMessage(@RequestHeader("page") Integer page, @RequestParam String residenceId){
+        Pageable pageInfo = new PageRequest(page, 5);
+        List<MessageEntity> messageEntities = messageService.selectAnnounceMessage(pageInfo, residenceId);
+        if(messageEntities.isEmpty() || messageEntities==null){
+            return Result.errorResult("信息查询失败!");
+        }
+        JSONArray messageJsonArray = new JSONArray();
+        JSONObject messageObject = new JSONObject();
+        for (MessageEntity messageEntity : messageEntities){
+            messageObject.put("id", messageEntity.getId());
+            messageObject.put("title",messageEntity.getTitle());
+            messageObject.put("content", messageEntity.getContent());
+            String time = messageEntity.getCreateTime().toString();
+            String createTime = time.substring(0,time.length()-2);
+            messageObject.put("createTime",createTime);
+            // 通过userId查询userName
+            UserEntity userEntity = userService.findById(messageEntity.getCreateUserId());
+            messageObject.put("createUser", userEntity.getAccount());
+            messageJsonArray.add(messageObject);
+        }
+        return Result.successResult().add("pageInfo", pageInfo).add("messageInfo",messageJsonArray);
+    }
 
 
 }

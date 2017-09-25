@@ -21,26 +21,6 @@ public class ResidenceController {
     private ResidenceService residenceService;
 
     /**
-     * 根据regionCode查询residence信息
-     * @param code
-     * @return result
-     * */
-    @GetMapping(value = "/findResidence/{code}")
-    public Result findResidenceByCode(@PathVariable String code){
-        if(code.trim().isEmpty()){
-            return Result.errorResult("许可证信息为空!");
-        }
-
-        ResidenceEntity residenceEntity = residenceService.findByCode(code);
-        if(residenceEntity != null){
-            return Result.successResult(residenceEntity);
-        }else{
-            return Result.errorResult("信息不存在!");
-        }
-
-    }
-
-    /**
      * 根据regionId查询residence信息
      * @param regionId
      * @return result
@@ -59,7 +39,6 @@ public class ResidenceController {
         for(ResidenceEntity residenceEntity : residenceEntities){
             JSONObject object = new JSONObject();
             object.put("residenceName", residenceEntity.getName());
-            object.put("residenceCode", residenceEntity.getCode());
             object.put("residenceUrl",residenceEntity.getServerUrl());
             object.put("residenceId",residenceEntity.getId());
             object.put("floorCount", residenceEntity.getFloorCount());
