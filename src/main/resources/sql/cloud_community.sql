@@ -449,8 +449,8 @@ CREATE TABLE `user_group` (
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
   `id` varchar(36) UNIQUE NOT NULL,
-  `user_id` varchar(32) DEFAULT NULL,
-  `role_id` varchar(32) DEFAULT NULL,
+  `user_id` varchar(36) DEFAULT NULL,
+  `role_id` varchar(36) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_USER_ROLE_2_USER` (`user_id`),

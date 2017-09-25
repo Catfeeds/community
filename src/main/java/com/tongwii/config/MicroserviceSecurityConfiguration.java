@@ -1,6 +1,6 @@
 package com.tongwii.config;
 
-import com.tongwii.security.AuthoritiesConstants;
+import com.tongwii.constant.AuthoritiesConstants;
 import com.tongwii.security.Http401UnauthorizedEntryPoint;
 import com.tongwii.security.jwt.JWTConfigurer;
 import com.tongwii.security.jwt.TokenProvider;

@@ -1,4 +1,4 @@
-package com.tongwii.security;
+package com.tongwii.constant;
 
 /**
  * Constants for Spring Security authorities.

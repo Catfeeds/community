@@ -2,12 +2,11 @@ package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.domain.MessageEntity;
+import com.tongwii.service.Gateway;
 import com.tongwii.service.PushService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -19,9 +18,11 @@ public class PushController {
 
     @Autowired
     private PushService pushService;
+    @Autowired
+    private Gateway gateway;
     private TongWIIResult result = new TongWIIResult();
     // 根据单个房间推送消息
-    @RequestMapping(value = "/pushMessageToSingleRoom", method = RequestMethod.POST)
+    @PostMapping("/pushMessageToSingleRoom")
     public TongWIIResult pushMessageToSingleRoom(String roomCode, @RequestBody MessageEntity messageEntity){
         // 判空
         if(messageEntity.getTitle().isEmpty() || messageEntity.getContent().isEmpty() || messageEntity.getTitle().equals("") || messageEntity.getContent().equals("")){
@@ -34,5 +35,12 @@ public class PushController {
         }
         result = pushService.listMesssgePush(messageEntity,roomCode);
         return result;
+    }
+
+
+    @PostMapping("testPush")
+    public ResponseEntity TestPush(String message) {
+        gateway.sendToMqtt(message);
+        return ResponseEntity.ok(null);
     }
 }

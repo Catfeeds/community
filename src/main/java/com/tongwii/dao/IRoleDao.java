@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface IRoleDao extends JpaRepository<RoleEntity, String> {
+    RoleEntity findByCode(String roleCode);
 }

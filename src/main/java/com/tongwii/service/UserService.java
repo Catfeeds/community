@@ -1,9 +1,12 @@
 package com.tongwii.service;
 
+import com.tongwii.constant.AuthoritiesConstants;
 import com.tongwii.constant.UserConstants;
 import com.tongwii.dao.IUserDao;
 import com.tongwii.domain.FileEntity;
+import com.tongwii.domain.RoleEntity;
 import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.UserRoleEntity;
 import com.tongwii.dto.UserDto;
 import com.tongwii.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,10 @@ public class UserService {
     private FileService fileService;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -43,6 +50,11 @@ public class UserService {
         userEntity.setAddTime(new Date());
         userEntity.setState(UserConstants.USER_ENABLE);
         userDao.save(userEntity);
+        RoleEntity roleEntity = roleService.findRoleByCode(AuthoritiesConstants.USER);
+        UserRoleEntity userRoleEntity = new UserRoleEntity();
+        userRoleEntity.setRoleId(roleEntity.getId());
+        userRoleEntity.setUserId(userEntity.getId());
+        userRoleService.save(userRoleEntity);
         return userMapper.userToUserDTO(userEntity);
     }
 
