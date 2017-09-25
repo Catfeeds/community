@@ -3,6 +3,7 @@ package com.tongwii.service;
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.dao.IMessageDao;
 import com.tongwii.domain.MessageEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +41,7 @@ public class MessageService {
     /**
      * 查询公告类消息
      * */
-    public List<MessageEntity> selectAnnounceMessage(Pageable pageable,String residenceId) {
+    public Page<MessageEntity> selectAnnounceMessage(Pageable pageable, String residenceId) {
         return messageDao.findAnnounceByResidenceId(pageable, residenceId);
     }
 }

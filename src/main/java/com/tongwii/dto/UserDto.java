@@ -14,7 +14,7 @@ import java.util.List;
  * @date: 2017/7/13
  */
 @Data
-public class UserDTO {
+public class UserDto {
     private String id;
     private String account;
     private String nickName;
@@ -29,6 +29,6 @@ public class UserDTO {
     private String clientId;
     private Date addTime;
     private Integer state;
-    private List<RoomDTO> rooms;
+    private List<RoomDto> rooms;
     private List<String> roles;
 }

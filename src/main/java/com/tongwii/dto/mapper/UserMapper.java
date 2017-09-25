@@ -1,8 +1,8 @@
 package com.tongwii.dto.mapper;
 
 import com.tongwii.domain.*;
-import com.tongwii.dto.RoomDTO;
-import com.tongwii.dto.UserDTO;
+import com.tongwii.dto.RoomDto;
+import com.tongwii.dto.UserDto;
 import com.tongwii.service.FloorService;
 import com.tongwii.service.UserRoomService;
 import org.apache.commons.collections.CollectionUtils;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Mapper for the entity User and its DTO called UserDTO.
+ * Mapper for the entity User and its DTO called UserDto.
  *
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
@@ -27,8 +27,8 @@ public class UserMapper {
     @Autowired
     private FloorService floorService;
 
-    public UserDTO userToUserDTO(UserEntity user) {
-        UserDTO userDTO = new UserDTO();
+    public UserDto userToUserDTO(UserEntity user) {
+        UserDto userDTO = new UserDto();
         userDTO.setId(user.getId());
         userDTO.setAccount(user.getAccount());
         userDTO.setNickName(user.getNickName());
@@ -45,9 +45,9 @@ public class UserMapper {
         if(CollectionUtils.isNotEmpty(user.getUserRolesById())) {
             userDTO.setRoles(user.getUserRolesById().stream().map(UserRoleEntity::getRoleByRoleId).map(RoleEntity::getCode).collect(Collectors.toList()));
         }
-        List<RoomDTO> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
+        List<RoomDto> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
             RoomEntity roomEntity = userRoomEntity.getRoomByRoomId();
-            RoomDTO roomDTO = new RoomDTO();
+            RoomDto roomDTO = new RoomDto();
             Map<String, FloorEntity> floorMap = floorService.findFloorById(roomEntity.getUnitId());
             roomDTO.setRoomId(roomEntity.getId());
             roomDTO.setRoomCode(roomEntity.getRoomCode());
@@ -60,14 +60,14 @@ public class UserMapper {
         return userDTO;
     }
 
-    public List<UserDTO> usersToUserDTOs(List<UserEntity> users) {
+    public List<UserDto> usersToUserDTOs(List<UserEntity> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
             .collect(Collectors.toList());
     }
 
-    public UserEntity userDTOToUser(UserDTO userDTO) {
+    public UserEntity userDTOToUser(UserDto userDTO) {
         if (userDTO == null) {
             return null;
         } else {
@@ -88,7 +88,7 @@ public class UserMapper {
         }
     }
 
-    public List<UserEntity> userDTOsToUsers(List<UserDTO> userDTOs) {
+    public List<UserEntity> userDTOsToUsers(List<UserDto> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)

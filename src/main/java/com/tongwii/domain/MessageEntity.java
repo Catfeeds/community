@@ -5,8 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * 消息实体
@@ -23,13 +23,13 @@ public class MessageEntity implements Serializable {
     private String content;
     private String fileId;
     private String residenceId;
-    private Timestamp createTime;
+    private Date createTime;
     private String createUserId;
     private String messageTypeId;
     private Integer processState;
     private ResidenceEntity residenceByResidenceId;
-    private Timestamp repairStartTime;
-    private Timestamp repairEndTime;
+    private Date repairStartTime;
+    private Date repairEndTime;
     private FileEntity fileByFileId;
     private UserEntity userByCreateUserId;
     private MessageTypeEntity messageTypeByMessageTypeId;
@@ -79,11 +79,11 @@ public class MessageEntity implements Serializable {
 
     @Basic
     @Column(name = "create_time")
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -119,21 +119,21 @@ public class MessageEntity implements Serializable {
 
     @Basic
     @Column(name = "repair_start_time")
-    public Timestamp getRepairStartTime() {
+    public Date getRepairStartTime() {
         return repairStartTime;
     }
 
-    public void setRepairStartTime(Timestamp repairStartTime) {
+    public void setRepairStartTime(Date repairStartTime) {
         this.repairStartTime = repairStartTime;
     }
 
     @Basic
     @Column(name = "repair_end_time")
-    public Timestamp getRepairEndTime() {
+    public Date getRepairEndTime() {
         return repairEndTime;
     }
 
-    public void setRepairEndTime(Timestamp repairEndTime) {
+    public void setRepairEndTime(Date repairEndTime) {
         this.repairEndTime = repairEndTime;
     }
 

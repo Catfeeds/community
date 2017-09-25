@@ -25,7 +25,7 @@ public class ResidenceController {
      * @param regionId
      * @return result
      * */
-    @RequestMapping(value = "/find/{regionId}", method = RequestMethod.GET)
+    @GetMapping("/find/{regionId}")
     public Result findResidenceByRegionId(@PathVariable String regionId){
         if(regionId == null || regionId.isEmpty()){
             return Result.errorResult("区域信息为空!");
@@ -52,7 +52,7 @@ public class ResidenceController {
      * @param residenceEntity
      * @return result
      * */
-    @RequestMapping(value = "/updateResidenceInfo", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
+    @PostMapping("/updateResidenceInfo")
     public Result updateResidenceInfo(@RequestBody ResidenceEntity residenceEntity){
         if(residenceEntity.getId() == null || residenceEntity.getId().isEmpty()){
             return Result.errorResult("社区实体信息不存在!");

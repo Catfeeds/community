@@ -11,6 +11,8 @@ public final class Constants {
     public static final String SYSTEM_ACCOUNT = "system";
     public static final String ANONYMOUS_USER = "anonymoususer";
 
+    public static final Integer DEFAULT_PAGE_SIZE = 5;
+
     private Constants() {
     }
 }

@@ -1,10 +1,12 @@
 package com.tongwii.dao;
 
 import com.tongwii.domain.MessageEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,5 +26,5 @@ public interface IMessageDao extends JpaRepository<MessageEntity, String> {
     List<MessageEntity> findAllByMessageTypeIdAndResidenceId(Pageable pageable, String messageTypeId, String residenceId);
 
     @Query("SELECT m FROM MessageEntity m WHERE m.messageTypeId IN (3,6,7) and m.residenceId = :residenceId")
-    List<MessageEntity> findAnnounceByResidenceId(Pageable pageable, String residenceId);
+    Page<MessageEntity> findAnnounceByResidenceId(Pageable pageable, @Param("residenceId") String residenceId);
 }

@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 2017 -07-27
  */
 @Data
-public class RoomDTO {
+public class RoomDto {
     /**
      * 房间id
      */

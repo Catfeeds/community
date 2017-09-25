@@ -3,17 +3,26 @@ package com.tongwii.controller;
 import com.tongwii.core.Result;
 import com.tongwii.domain.MessageEntity;
 import com.tongwii.domain.UserEntity;
+import com.tongwii.dto.MessageDto;
+import com.tongwii.dto.mapper.MessageMapper;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static com.tongwii.constant.Constants.DEFAULT_PAGE_SIZE;
+
 
 /**
  * Created by admin on 2017/7/14.
@@ -25,6 +34,8 @@ public class BaseMessageController {
     private MessageService messageService;
     @Autowired
     private UserService userService;
+    @Autowired
+    MessageMapper messageMapper;
 
     /**
      *添加消息接口
@@ -32,7 +43,7 @@ public class BaseMessageController {
      * @param messageEntity
      * @return result
      **/
-    @RequestMapping(value = "/insertMessage", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
+    @PostMapping("/insertMessage")
     public Result insertMessage(@RequestBody MessageEntity messageEntity){
         if(messageEntity.getTitle().isEmpty() && messageEntity.getContent().isEmpty()){
             return Result.errorResult("消息体不可为空!");
@@ -52,7 +63,7 @@ public class BaseMessageController {
      *@param messageEntity
      *@return result
      * */
-    @RequestMapping(value = "/updateProcessOfMessage", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
+    @RequestMapping("/updateProcessOfMessage")
     public Result updateProcessOfMessage(@RequestBody MessageEntity messageEntity){
         // 此消息实体包含id与Process的信息，通过id找到该条消息的数据记录，并将Process的状态更改成传来的值
         // 判空
@@ -70,7 +81,7 @@ public class BaseMessageController {
      * @param message
      * @return result
      * */
-    @RequestMapping(value = "/selectMessageByType", method = RequestMethod.POST, produces={"application/json;charset=UTF-8"})
+    @RequestMapping("/selectMessageByType")
     public Result selectMessageByType(@RequestHeader("page") Integer page, @RequestBody MessageEntity message){
         if (message.getMessageTypeId() == null || message.getMessageTypeId().isEmpty()){
             return Result.errorResult("消息类型不可为空!");
@@ -102,29 +113,14 @@ public class BaseMessageController {
      *
      * @return result
      * */
-    @GetMapping(value = "/selectAnnounceMessage/{residenceId}")
-    public Result selectAnnounceMessage(@RequestHeader("page") Integer page, @RequestParam String residenceId){
-        Pageable pageInfo = new PageRequest(page, 5);
-        List<MessageEntity> messageEntities = messageService.selectAnnounceMessage(pageInfo, residenceId);
-        if(messageEntities.isEmpty() || messageEntities==null){
-            return Result.errorResult("信息查询失败!");
-        }
-        JSONArray messageJsonArray = new JSONArray();
-        JSONObject messageObject = new JSONObject();
-        for (MessageEntity messageEntity : messageEntities){
-            messageObject.put("id", messageEntity.getId());
-            messageObject.put("title",messageEntity.getTitle());
-            messageObject.put("content", messageEntity.getContent());
-            String time = messageEntity.getCreateTime().toString();
-            String createTime = time.substring(0,time.length()-2);
-            messageObject.put("createTime",createTime);
-            // 通过userId查询userName
-            UserEntity userEntity = userService.findById(messageEntity.getCreateUserId());
-            messageObject.put("createUser", userEntity.getAccount());
-            messageJsonArray.add(messageObject);
-        }
-        return Result.successResult().add("pageInfo", pageInfo).add("messageInfo",messageJsonArray);
+    @GetMapping("/selectAnnounceMessage/{residenceId}")
+    public ResponseEntity selectAnnounceMessage(@RequestHeader("page") Integer page, @PathVariable(value = "residenceId") String residenceId){
+        Pageable pageInfo = new PageRequest(page, DEFAULT_PAGE_SIZE);
+        Page<MessageEntity> messageEntityPage = messageService.selectAnnounceMessage(pageInfo, residenceId);
+        List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
+        Map map = new HashMap<>();
+        map.put("totalPages", messageEntityPage.getTotalPages());
+        map.put("data", messageDtos);
+        return ResponseEntity.ok(map);
     }
-
-
 }

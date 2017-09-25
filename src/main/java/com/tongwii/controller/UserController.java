@@ -2,7 +2,7 @@ package com.tongwii.controller;
 
 import com.tongwii.core.Result;
 import com.tongwii.domain.UserEntity;
-import com.tongwii.dto.UserDTO;
+import com.tongwii.dto.UserDto;
 import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.security.jwt.TokenProvider;
@@ -46,7 +46,7 @@ public class UserController {
         if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
             return ResponseEntity.badRequest().body("用户已存在");
         }
-        UserDTO userDTO = userService.save(user);
+        UserDto userDTO = userService.save(user);
         return ResponseEntity.ok(userDTO);
 	}
 
@@ -59,7 +59,7 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
         // 基本用户信息
-        UserDTO userDTO = userMapper.userToUserDTO(user);
+        UserDto userDTO = userMapper.userToUserDTO(user);
         Map map = new HashMap();
         map.put("userInfo", userDTO);
         map.put("token", jwt);
