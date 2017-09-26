@@ -8,13 +8,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -59,9 +59,10 @@ public class TokenProvider {
         } else {
             validity = new Date(now + this.tokenValidityInMilliseconds);
         }
-
+        JwtUser user = (JwtUser) authentication.getPrincipal();
         return Jwts.builder()
             .setSubject(authentication.getName())
+            .setId(user.getId())
             .claim(AUTHORITIES_KEY, authorities)
             .signWith(SignatureAlgorithm.HS512, secretKey)
             .setExpiration(validity)
@@ -83,7 +84,7 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        JwtUser principal = new JwtUser(claims.getId(), claims.getSubject(), "", (List<GrantedAuthority>) authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

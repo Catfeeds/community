@@ -49,12 +49,16 @@ public class JwtUser implements UserDetails {
         return true;
     }
 
-    public JwtUser(String id, String username, String password, boolean enabled, List<GrantedAuthority> roles) {
+    public JwtUser(String id, String username, String password, List<GrantedAuthority> roles, boolean enabled) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
+    }
+
+    public JwtUser(String id, String username, String password, List<GrantedAuthority> roles) {
+        this(id, username, password, roles, true);
     }
 
     @Override

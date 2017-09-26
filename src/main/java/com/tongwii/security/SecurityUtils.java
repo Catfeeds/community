@@ -1,5 +1,6 @@
 package com.tongwii.security;
 
+import com.tongwii.constant.AuthoritiesConstants;
 import com.tongwii.security.jwt.JwtUser;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;

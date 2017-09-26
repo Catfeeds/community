@@ -69,7 +69,7 @@ public class UserContactController {
     @GetMapping()
     public Result getContactsByUserId(){
         try {
-            String userId = SecurityUtils.getCurrentUserId();
+            String userId = SecurityUtils.getCurrentUserLogin();
             List<UserContactEntity> userContactList = userContactService.findByUserId(userId);
             if(CollectionUtils.isEmpty(userContactList)){
                 return Result.errorResult("此用户没有联系人!");

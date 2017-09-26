@@ -7,7 +7,6 @@ import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.security.jwt.TokenProvider;
 import com.tongwii.service.UserService;
-import com.tongwii.util.TokenUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -80,31 +79,31 @@ public class UserController {
 	}
 
 	// 修改用户昵称
-	@PostMapping("/updateNickName")
-	public Result updateNickName(@RequestParam("nickName") String nickName) {
+	@PutMapping("/updateNickName")
+	public Result updateNickName(@RequestBody UserEntity user) {
         String userId = SecurityUtils.getCurrentUserId();
         UserEntity userEntity = userService.findById(userId);
-        userEntity.setNickName(nickName);
+        userEntity.setNickName(user.getNickName());
         userService.update(userEntity);
         return Result.successResult(userEntity);
     }
 
 	// 修改个性签名
-	@PostMapping("/updateSignature")
-	public Result updateSignature(@RequestBody Map map) {
-        String userId = TokenUtil.getUserIdFromToken(map.get("token").toString());
+	@PutMapping("/updateSignature")
+	public Result updateSignature(@RequestBody UserEntity user) {
+        String userId = SecurityUtils.getCurrentUserId();
         UserEntity userEntity = userService.findById(userId);
-        userEntity.setSignature(map.get("signature").toString());
+        userEntity.setSignature(user.getSignature());
         userService.update(userEntity);
         return Result.successResult(userEntity);
 	}
 
     // 修改用户电话
-    @PostMapping("/updatePhone")
-    public Result updatePhone(@RequestParam("phone") String phone) {
+    @PutMapping("/updatePhone")
+    public Result updatePhone(@RequestBody UserEntity user) {
         String userId = SecurityUtils.getCurrentUserId();
         UserEntity userEntity = userService.findById(userId);
-        userEntity.setPhone(phone);
+        userEntity.setPhone(user.getPhone());
         userService.update(userEntity);
         return Result.successResult(userEntity);
     }

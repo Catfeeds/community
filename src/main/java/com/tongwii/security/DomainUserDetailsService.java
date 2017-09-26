@@ -44,7 +44,7 @@ public class DomainUserDetailsService implements UserDetailsService {
             List<GrantedAuthority> grantedAuthorities = userEntity.getUserRolesById().stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getRoleByRoleId().getCode()))
                     .collect(Collectors.toList());
-            return new JwtUser(userEntity.getId(), userEntity.getAccount(), userEntity.getPassword(), userEntity.getState().equals(UserConstants.USER_ENABLE), grantedAuthorities);
+            return new JwtUser(userEntity.getId(), userEntity.getAccount(), userEntity.getPassword(), grantedAuthorities, userEntity.getState().equals(UserConstants.USER_ENABLE));
         }
     }
 }
