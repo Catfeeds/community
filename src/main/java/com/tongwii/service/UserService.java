@@ -69,6 +69,7 @@ public class UserService {
     }
 
     public void update(UserEntity userEntity) {
+        userDao.save(userEntity);
     }
 
     public List<UserEntity> findAll() {

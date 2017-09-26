@@ -27,6 +27,7 @@ public class UserDto {
     private String idCard;
     private String phone;
     private String clientId;
+    @JsonSerialize(using = CustomDateSerializer.class)
     private Date addTime;
     private Integer state;
     private List<RoomDto> rooms;
