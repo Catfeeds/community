@@ -1,5 +1,6 @@
 package com.tongwii.domain;
 
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.Date;
  * Date: 2017/7/11
  */
 @Entity
+@EqualsAndHashCode
 @Table(name = "user", schema = "cloud_community", catalog = "")
 public class UserEntity implements Serializable {
     private String id;
@@ -188,50 +190,6 @@ public class UserEntity implements Serializable {
 
     public void setState(Integer state) {
         this.state = state;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserEntity that = (UserEntity) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (account != null ? !account.equals(that.account) : that.account != null) return false;
-        if (nickName != null ? !nickName.equals(that.nickName) : that.nickName != null) return false;
-        if (birthday != null ? !birthday.equals(that.birthday) : that.birthday != null) return false;
-        if (signature != null ? !signature.equals(that.signature) : that.signature != null) return false;
-        if (sex != null ? !sex.equals(that.sex) : that.sex != null) return false;
-        if (avatarFileId != null ? !avatarFileId.equals(that.avatarFileId) : that.avatarFileId != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-        if (idCard != null ? !idCard.equals(that.idCard) : that.idCard != null) return false;
-        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
-        if (clientId != null ? !clientId.equals(that.clientId) : that.clientId != null) return false;
-        if (addTime != null ? !addTime.equals(that.addTime) : that.addTime != null) return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (account != null ? account.hashCode() : 0);
-        result = 31 * result + (nickName != null ? nickName.hashCode() : 0);
-        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        result = 31 * result + (signature != null ? signature.hashCode() : 0);
-        result = 31 * result + (sex != null ? sex.hashCode() : 0);
-        result = 31 * result + (avatarFileId != null ? avatarFileId.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (idCard != null ? idCard.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (clientId != null ? clientId.hashCode() : 0);
-        result = 31 * result + (addTime != null ? addTime.hashCode() : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
-        return result;
     }
 
     @OneToMany(mappedBy = "userByChargeId")

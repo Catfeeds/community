@@ -1,5 +1,6 @@
 package com.tongwii.domain;
 
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,10 +14,12 @@ import java.util.Collection;
  * @date: 2017/7/13
  */
 @Entity
+@EqualsAndHashCode
 @Table(name = "residence", schema = "cloud_community", catalog = "")
 public class ResidenceEntity implements Serializable {
     private String id;
     private String name;
+    private String code;
     private String userId;
     private Integer floorCount;
     private String regionId;
@@ -47,6 +50,16 @@ public class ResidenceEntity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Basic
+    @Column(name = "code")
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Basic
@@ -87,34 +100,6 @@ public class ResidenceEntity implements Serializable {
 
     public void setServerUrl(String serverUrl) {
         this.serverUrl = serverUrl;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ResidenceEntity that = (ResidenceEntity) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (floorCount != null ? !floorCount.equals(that.floorCount) : that.floorCount != null) return false;
-        if (regionId != null ? !regionId.equals(that.regionId) : that.regionId != null) return false;
-        if (serverUrl != null ? !serverUrl.equals(that.serverUrl) : that.serverUrl != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (floorCount != null ? floorCount.hashCode() : 0);
-        result = 31 * result + (regionId != null ? regionId.hashCode() : 0);
-        result = 31 * result + (serverUrl != null ? serverUrl.hashCode() : 0);
-        return result;
     }
 
     @OneToMany(mappedBy = "residenceByResidenceId")

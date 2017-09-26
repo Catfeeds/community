@@ -1,5 +1,6 @@
 package com.tongwii.domain;
 
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Collection;
  * @date: 2017/7/13
  */
 @Entity
+@EqualsAndHashCode
 @Table(name = "room", schema = "cloud_community", catalog = "")
 public class RoomEntity implements Serializable {
     private String id;
@@ -22,11 +24,8 @@ public class RoomEntity implements Serializable {
     private String clientCode;
     private String ownerId;
     private String unitId;
-//    @Ignore
     private UserEntity userByOwnerId;
-//    @Ignore
     private FloorEntity floorByUnitId;
-//    @Ignore
     private Collection<UserRoomEntity> userRoomsById;
 
     @Id

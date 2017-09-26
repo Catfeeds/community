@@ -429,8 +429,8 @@ INSERT INTO `user_contact` VALUES ('402880aa5d5a0060015d5a0230060000', '1', '3',
 DROP TABLE IF EXISTS `user_group`;
 CREATE TABLE `user_group` (
   `id` varchar(36) UNIQUE NOT NULL,
-  `group_id` varchar(32) DEFAULT NULL,
-  `user_id` varchar(32) DEFAULT NULL,
+  `group_id` varchar(36) DEFAULT NULL,
+  `user_id` varchar(36) DEFAULT NULL,
   `des` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_USER_GRO_2_USER` (`user_id`),

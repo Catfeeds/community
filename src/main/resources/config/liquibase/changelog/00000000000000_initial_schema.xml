@@ -5,7 +5,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
                                        http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="Zeral (generated)" id="1506311309337-1">
+    <changeSet author="Zeral (generated)" id="1506388681067-1">
         <createTable tableName="area">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -16,7 +16,7 @@
             <column name="residence_id" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-2">
+    <changeSet author="Zeral (generated)" id="1506388681067-2">
         <createTable tableName="file">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -29,7 +29,7 @@
             <column name="upload_user_id" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-3">
+    <changeSet author="Zeral (generated)" id="1506388681067-3">
         <createTable tableName="floor">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -41,7 +41,7 @@
             <column name="area_id" remarks="地区ID" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-4">
+    <changeSet author="Zeral (generated)" id="1506388681067-4">
         <createTable tableName="group_role">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -51,7 +51,7 @@
             <column name="des" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-5">
+    <changeSet author="Zeral (generated)" id="1506388681067-5">
         <createTable tableName="log">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -61,7 +61,7 @@
             <column name="operator_id" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-6">
+    <changeSet author="Zeral (generated)" id="1506388681067-6">
         <createTable tableName="message">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -78,7 +78,7 @@
             <column name="residence_id" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-7">
+    <changeSet author="Zeral (generated)" id="1506388681067-7">
         <createTable tableName="message_comment">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -90,7 +90,7 @@
             <column name="commentator_id" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-8">
+    <changeSet author="Zeral (generated)" id="1506388681067-8">
         <createTable tableName="message_type">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -100,7 +100,7 @@
             <column name="des" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-9">
+    <changeSet author="Zeral (generated)" id="1506388681067-9">
         <createTable tableName="region">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -110,7 +110,7 @@
             <column name="parent_code" type="VARCHAR(10)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-10">
+    <changeSet author="Zeral (generated)" id="1506388681067-10">
         <createTable tableName="residence">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -123,7 +123,7 @@
             <column name="server_url" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-11">
+    <changeSet author="Zeral (generated)" id="1506388681067-11">
         <createTable tableName="role">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -133,7 +133,7 @@
             <column name="des" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-12">
+    <changeSet author="Zeral (generated)" id="1506388681067-12">
         <createTable tableName="room">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -146,7 +146,7 @@
             <column name="unit_id" type="VARCHAR(32)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-13">
+    <changeSet author="Zeral (generated)" id="1506388681067-13">
         <createTable tableName="subgroup">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -156,7 +156,7 @@
             <column name="des" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-14">
+    <changeSet author="Zeral (generated)" id="1506388681067-14">
         <createTable tableName="user">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -176,7 +176,7 @@
             <column defaultValueNumeric="1" name="state" type="TINYINT(3)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-15">
+    <changeSet author="Zeral (generated)" id="1506388681067-15">
         <createTable tableName="user_contact">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -186,7 +186,7 @@
             <column name="des" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-16">
+    <changeSet author="Zeral (generated)" id="1506388681067-16">
         <createTable tableName="user_group">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -196,17 +196,17 @@
             <column name="des" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-17">
+    <changeSet author="Zeral (generated)" id="1506388681067-17">
         <createTable tableName="user_role">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="VARCHAR(32)"/>
-            <column name="role_id" type="VARCHAR(32)"/>
+            <column defaultValue="" name="user_id" type="VARCHAR(36)"/>
+            <column defaultValue="" name="role_id" type="VARCHAR(36)"/>
             <column name="des" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-18">
+    <changeSet author="Zeral (generated)" id="1506388681067-18">
         <createTable tableName="user_room">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -217,333 +217,333 @@
             <column name="des" type="VARCHAR(100)"/>
         </createTable>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-19">
+    <changeSet author="Zeral (generated)" id="1506388681067-19">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="area"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-20">
+    <changeSet author="Zeral (generated)" id="1506388681067-20">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="file"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-21">
+    <changeSet author="Zeral (generated)" id="1506388681067-21">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="floor"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-22">
+    <changeSet author="Zeral (generated)" id="1506388681067-22">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="group_role"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-23">
+    <changeSet author="Zeral (generated)" id="1506388681067-23">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="log"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-24">
+    <changeSet author="Zeral (generated)" id="1506388681067-24">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="message"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-25">
+    <changeSet author="Zeral (generated)" id="1506388681067-25">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="message_comment"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-26">
+    <changeSet author="Zeral (generated)" id="1506388681067-26">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="message_type"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-27">
+    <changeSet author="Zeral (generated)" id="1506388681067-27">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="region"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-28">
+    <changeSet author="Zeral (generated)" id="1506388681067-28">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="residence"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-29">
+    <changeSet author="Zeral (generated)" id="1506388681067-29">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="role"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-30">
+    <changeSet author="Zeral (generated)" id="1506388681067-30">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="room"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-31">
+    <changeSet author="Zeral (generated)" id="1506388681067-31">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="subgroup"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-32">
+    <changeSet author="Zeral (generated)" id="1506388681067-32">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-33">
+    <changeSet author="Zeral (generated)" id="1506388681067-33">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user_contact"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-34">
+    <changeSet author="Zeral (generated)" id="1506388681067-34">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user_group"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-35">
+    <changeSet author="Zeral (generated)" id="1506388681067-35">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user_role"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-36">
+    <changeSet author="Zeral (generated)" id="1506388681067-36">
         <addPrimaryKey columnNames="id" constraintName="PRIMARY" tableName="user_room"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-37">
+    <changeSet author="Zeral (generated)" id="1506388681067-37">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="area"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-38">
+    <changeSet author="Zeral (generated)" id="1506388681067-38">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="file"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-39">
+    <changeSet author="Zeral (generated)" id="1506388681067-39">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="floor"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-40">
+    <changeSet author="Zeral (generated)" id="1506388681067-40">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="group_role"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-41">
+    <changeSet author="Zeral (generated)" id="1506388681067-41">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="log"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-42">
+    <changeSet author="Zeral (generated)" id="1506388681067-42">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="message"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-43">
+    <changeSet author="Zeral (generated)" id="1506388681067-43">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="message_comment"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-44">
+    <changeSet author="Zeral (generated)" id="1506388681067-44">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="message_type"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-45">
+    <changeSet author="Zeral (generated)" id="1506388681067-45">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="region"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-46">
+    <changeSet author="Zeral (generated)" id="1506388681067-46">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="residence"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-47">
+    <changeSet author="Zeral (generated)" id="1506388681067-47">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="role"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-48">
+    <changeSet author="Zeral (generated)" id="1506388681067-48">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="room"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-49">
+    <changeSet author="Zeral (generated)" id="1506388681067-49">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="subgroup"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-50">
+    <changeSet author="Zeral (generated)" id="1506388681067-50">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-51">
+    <changeSet author="Zeral (generated)" id="1506388681067-51">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="user_contact"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-52">
+    <changeSet author="Zeral (generated)" id="1506388681067-52">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="user_group"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-53">
+    <changeSet author="Zeral (generated)" id="1506388681067-53">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="user_role"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-54">
+    <changeSet author="Zeral (generated)" id="1506388681067-54">
         <addUniqueConstraint columnNames="id" constraintName="id" tableName="user_room"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-55">
+    <changeSet author="Zeral (generated)" id="1506388681067-55">
         <createIndex indexName="FK_AREA_2_RESIDENCE" tableName="area">
             <column name="residence_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-56">
+    <changeSet author="Zeral (generated)" id="1506388681067-56">
         <createIndex indexName="FK_AREA_2_USER" tableName="area">
             <column name="charge_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-57">
+    <changeSet author="Zeral (generated)" id="1506388681067-57">
         <createIndex indexName="FK_COMMENT_2_USER" tableName="message_comment">
             <column name="commentator_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-58">
+    <changeSet author="Zeral (generated)" id="1506388681067-58">
         <createIndex indexName="FK_FILE_2_USER" tableName="file">
             <column name="upload_user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-59">
+    <changeSet author="Zeral (generated)" id="1506388681067-59">
         <createIndex indexName="FK_FLOOR_2_AREA" tableName="floor">
             <column name="area_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-60">
+    <changeSet author="Zeral (generated)" id="1506388681067-60">
         <createIndex indexName="FK_FLOOR_2_USER" tableName="floor">
             <column name="principal_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-61">
+    <changeSet author="Zeral (generated)" id="1506388681067-61">
         <createIndex indexName="FK_GROUP_RO_2_ROLE" tableName="group_role">
             <column name="role_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-62">
+    <changeSet author="Zeral (generated)" id="1506388681067-62">
         <createIndex indexName="FK_GROUP_RO_2_SUBGROUP" tableName="group_role">
             <column name="group_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-63">
+    <changeSet author="Zeral (generated)" id="1506388681067-63">
         <createIndex indexName="FK_LOG_2_USER" tableName="log">
             <column name="operator_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-64">
+    <changeSet author="Zeral (generated)" id="1506388681067-64">
         <createIndex indexName="FK_MESSAGE_2_COMMENT" tableName="message_comment">
             <column name="message_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-65">
+    <changeSet author="Zeral (generated)" id="1506388681067-65">
         <createIndex indexName="FK_MESSAGE_2_FILE" tableName="message">
             <column name="file_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-66">
+    <changeSet author="Zeral (generated)" id="1506388681067-66">
         <createIndex indexName="FK_MESSAGE_2_RESIDENCE" tableName="message">
             <column name="residence_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-67">
+    <changeSet author="Zeral (generated)" id="1506388681067-67">
         <createIndex indexName="FK_MESSAGE_2_TYPE" tableName="message">
             <column name="message_type_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-68">
+    <changeSet author="Zeral (generated)" id="1506388681067-68">
         <createIndex indexName="FK_MESSAGE_2_USER" tableName="message">
             <column name="create_user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-69">
+    <changeSet author="Zeral (generated)" id="1506388681067-69">
         <createIndex indexName="FK_RESIDENC_2_REGION" tableName="residence">
             <column name="region_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-70">
+    <changeSet author="Zeral (generated)" id="1506388681067-70">
         <createIndex indexName="FK_RESIDENC_2_USER" tableName="residence">
             <column name="user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-71">
+    <changeSet author="Zeral (generated)" id="1506388681067-71">
         <createIndex indexName="FK_ROOM_2_FLOOR" tableName="room">
             <column name="unit_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-72">
+    <changeSet author="Zeral (generated)" id="1506388681067-72">
         <createIndex indexName="FK_ROOM_2_USER" tableName="room">
             <column name="owner_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-73">
+    <changeSet author="Zeral (generated)" id="1506388681067-73">
         <createIndex indexName="FK_SUBGROUP_2_SUBGROUP" tableName="subgroup">
             <column name="parent_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-74">
+    <changeSet author="Zeral (generated)" id="1506388681067-74">
         <createIndex indexName="FK_USER_2_FILE" tableName="user">
             <column name="avatar_file_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-75">
+    <changeSet author="Zeral (generated)" id="1506388681067-75">
         <createIndex indexName="FK_USER_2_USER" tableName="user_contact">
             <column name="user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-76">
+    <changeSet author="Zeral (generated)" id="1506388681067-76">
         <createIndex indexName="FK_USER_FRIEND_2_USER" tableName="user_contact">
             <column name="friend_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-77">
+    <changeSet author="Zeral (generated)" id="1506388681067-77">
         <createIndex indexName="FK_USER_GRO_2_SUBGROUP" tableName="user_group">
             <column name="group_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-78">
+    <changeSet author="Zeral (generated)" id="1506388681067-78">
         <createIndex indexName="FK_USER_GRO_2_USER" tableName="user_group">
             <column name="user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-79">
+    <changeSet author="Zeral (generated)" id="1506388681067-79">
         <createIndex indexName="FK_USER_ROLE_2_ROLE" tableName="user_role">
             <column name="role_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-80">
+    <changeSet author="Zeral (generated)" id="1506388681067-80">
         <createIndex indexName="FK_USER_ROLE_2_USER" tableName="user_role">
             <column name="user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-81">
+    <changeSet author="Zeral (generated)" id="1506388681067-81">
         <createIndex indexName="FK_USER_ROOM_2_ROOM" tableName="user_room">
             <column name="room_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-82">
+    <changeSet author="Zeral (generated)" id="1506388681067-82">
         <createIndex indexName="FK_USER_ROOM_2_USER" tableName="user_room">
             <column name="user_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-83">
+    <changeSet author="Zeral (generated)" id="1506388681067-83">
         <addForeignKeyConstraint baseColumnNames="residence_id" baseTableName="area" constraintName="FK_AREA_2_RESIDENCE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="residence"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-84">
+    <changeSet author="Zeral (generated)" id="1506388681067-84">
         <addForeignKeyConstraint baseColumnNames="charge_id" baseTableName="area" constraintName="FK_AREA_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-85">
+    <changeSet author="Zeral (generated)" id="1506388681067-85">
         <addForeignKeyConstraint baseColumnNames="commentator_id" baseTableName="message_comment" constraintName="FK_COMMENT_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-86">
+    <changeSet author="Zeral (generated)" id="1506388681067-86">
         <addForeignKeyConstraint baseColumnNames="upload_user_id" baseTableName="file" constraintName="FK_FILE_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-87">
+    <changeSet author="Zeral (generated)" id="1506388681067-87">
         <addForeignKeyConstraint baseColumnNames="area_id" baseTableName="floor" constraintName="FK_FLOOR_2_AREA" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="area"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-88">
+    <changeSet author="Zeral (generated)" id="1506388681067-88">
         <addForeignKeyConstraint baseColumnNames="principal_id" baseTableName="floor" constraintName="FK_FLOOR_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-89">
+    <changeSet author="Zeral (generated)" id="1506388681067-89">
         <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="group_role" constraintName="FK_GROUP_RO_2_ROLE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-90">
+    <changeSet author="Zeral (generated)" id="1506388681067-90">
         <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="group_role" constraintName="FK_GROUP_RO_2_SUBGROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="subgroup"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-91">
+    <changeSet author="Zeral (generated)" id="1506388681067-91">
         <addForeignKeyConstraint baseColumnNames="operator_id" baseTableName="log" constraintName="FK_LOG_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-92">
+    <changeSet author="Zeral (generated)" id="1506388681067-92">
         <addForeignKeyConstraint baseColumnNames="message_id" baseTableName="message_comment" constraintName="FK_MESSAGE_2_COMMENT" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="message"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-93">
+    <changeSet author="Zeral (generated)" id="1506388681067-93">
         <addForeignKeyConstraint baseColumnNames="file_id" baseTableName="message" constraintName="FK_MESSAGE_2_FILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="file"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-94">
+    <changeSet author="Zeral (generated)" id="1506388681067-94">
         <addForeignKeyConstraint baseColumnNames="residence_id" baseTableName="message" constraintName="FK_MESSAGE_2_RESIDENCE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="residence"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-95">
+    <changeSet author="Zeral (generated)" id="1506388681067-95">
         <addForeignKeyConstraint baseColumnNames="message_type_id" baseTableName="message" constraintName="FK_MESSAGE_2_TYPE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="message_type"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-96">
+    <changeSet author="Zeral (generated)" id="1506388681067-96">
         <addForeignKeyConstraint baseColumnNames="create_user_id" baseTableName="message" constraintName="FK_MESSAGE_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-97">
+    <changeSet author="Zeral (generated)" id="1506388681067-97">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="residence" constraintName="FK_RESIDENC_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-98">
+    <changeSet author="Zeral (generated)" id="1506388681067-98">
         <addForeignKeyConstraint baseColumnNames="unit_id" baseTableName="room" constraintName="FK_ROOM_2_FLOOR" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="floor"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-99">
+    <changeSet author="Zeral (generated)" id="1506388681067-99">
         <addForeignKeyConstraint baseColumnNames="owner_id" baseTableName="room" constraintName="FK_ROOM_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-100">
+    <changeSet author="Zeral (generated)" id="1506388681067-100">
         <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="subgroup" constraintName="FK_SUBGROUP_2_SUBGROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="subgroup"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-101">
+    <changeSet author="Zeral (generated)" id="1506388681067-101">
         <addForeignKeyConstraint baseColumnNames="avatar_file_id" baseTableName="user" constraintName="FK_USER_2_FILE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="file"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-102">
+    <changeSet author="Zeral (generated)" id="1506388681067-102">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_contact" constraintName="FK_USER_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-103">
+    <changeSet author="Zeral (generated)" id="1506388681067-103">
         <addForeignKeyConstraint baseColumnNames="friend_id" baseTableName="user_contact" constraintName="FK_USER_FRIEND_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-104">
+    <changeSet author="Zeral (generated)" id="1506388681067-104">
         <addForeignKeyConstraint baseColumnNames="group_id" baseTableName="user_group" constraintName="FK_USER_GRO_2_SUBGROUP" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="subgroup"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-105">
+    <changeSet author="Zeral (generated)" id="1506388681067-105">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_group" constraintName="FK_USER_GRO_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-106">
+    <changeSet author="Zeral (generated)" id="1506388681067-106">
         <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_role" constraintName="FK_USER_ROLE_2_ROLE" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="role"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-107">
+    <changeSet author="Zeral (generated)" id="1506388681067-107">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_role" constraintName="FK_USER_ROLE_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-108">
+    <changeSet author="Zeral (generated)" id="1506388681067-108">
         <addForeignKeyConstraint baseColumnNames="room_id" baseTableName="user_room" constraintName="FK_USER_ROOM_2_ROOM" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="room"/>
     </changeSet>
-    <changeSet author="Zeral (generated)" id="1506311309337-109">
+    <changeSet author="Zeral (generated)" id="1506388681067-109">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_room" constraintName="FK_USER_ROOM_2_USER" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="user"/>
     </changeSet>
 </databaseChangeLog>

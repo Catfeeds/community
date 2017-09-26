@@ -1,5 +1,6 @@
 package com.tongwii.domain;
 
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @date: 2017/7/13
  */
 @Entity
+@EqualsAndHashCode
 @Table(name = "area", schema = "cloud_community", catalog = "")
 public class AreaEntity implements Serializable {
     private String id;
@@ -76,32 +78,6 @@ public class AreaEntity implements Serializable {
 
     public void setResidenceId(String residenceId) {
         this.residenceId = residenceId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AreaEntity that = (AreaEntity) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (buildDate != null ? !buildDate.equals(that.buildDate) : that.buildDate != null) return false;
-        if (residenceId != null ? !residenceId.equals(that.residenceId) : that.residenceId != null) return false;
-        if (chargeId != null ? !chargeId.equals(that.chargeId) : that.chargeId != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (buildDate != null ? buildDate.hashCode() : 0);
-        result = 31 * result + (chargeId != null ? chargeId.hashCode() : 0);
-        result = 31 * result + (residenceId != null ? residenceId.hashCode() : 0);
-        return result;
     }
 
     @ManyToOne

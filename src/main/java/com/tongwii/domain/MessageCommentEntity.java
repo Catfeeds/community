@@ -1,5 +1,6 @@
 package com.tongwii.domain;
 
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.sql.Timestamp;
  * @date: 2017/7/13
  */
 @Entity
+@EqualsAndHashCode
 @Table(name = "message_comment", schema = "cloud_community", catalog = "")
 public class MessageCommentEntity implements Serializable {
     private String id;
@@ -84,35 +86,6 @@ public class MessageCommentEntity implements Serializable {
 
     public void setCommentatorId(String commentatorId) {
         this.commentatorId = commentatorId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MessageCommentEntity that = (MessageCommentEntity) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (messageId != null ? !messageId.equals(that.messageId) : that.messageId != null) return false;
-        if (isLike != null ? !isLike.equals(that.isLike) : that.isLike != null) return false;
-        if (comment != null ? !comment.equals(that.comment) : that.comment != null) return false;
-        if (commentDate != null ? !commentDate.equals(that.commentDate) : that.commentDate != null) return false;
-        if (commentatorId != null ? !commentatorId.equals(that.commentatorId) : that.commentatorId != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (messageId != null ? messageId.hashCode() : 0);
-        result = 31 * result + (isLike != null ? isLike.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (commentDate != null ? commentDate.hashCode() : 0);
-        result = 31 * result + (commentatorId != null ? commentatorId.hashCode() : 0);
-        return result;
     }
 
     @ManyToOne
