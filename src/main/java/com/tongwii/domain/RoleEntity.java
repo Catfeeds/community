@@ -1,5 +1,6 @@
 package com.tongwii.domain;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,73 +15,25 @@ import java.util.Collection;
  * @date: 2017/7/13
  */
 @Entity
-@EqualsAndHashCode
+@Data
 @Table(name = "role", schema = "cloud_community", catalog = "")
 public class RoleEntity implements Serializable {
-    private String id;
-    private String name;
-    private String code;
-    private String des;
-    private Collection<GroupRoleEntity> groupRolesById;
-    private Collection<UserRoleEntity> userRolesById;
-
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
     @Column(name = "id", unique = true, nullable = false, length = 36)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    private String id;
     @Basic
     @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    private String name;
     @Basic
     @Column(name = "code")
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
+    private String code;
     @Basic
     @Column(name = "des")
-    public String getDes() {
-        return des;
-    }
-
-    public void setDes(String desc) {
-        this.des = desc;
-    }
-
+    private String des;
     @OneToMany(mappedBy = "roleByRoleId")
-    public Collection<GroupRoleEntity> getGroupRolesById() {
-        return groupRolesById;
-    }
-
-    public void setGroupRolesById(Collection<GroupRoleEntity> groupRolesById) {
-        this.groupRolesById = groupRolesById;
-    }
-
+    private Collection<GroupRoleEntity> groupRolesById;
     @OneToMany(mappedBy = "roleByRoleId")
-    public Collection<UserRoleEntity> getUserRolesById() {
-        return userRolesById;
-    }
-
-    public void setUserRolesById(Collection<UserRoleEntity> userRolesById) {
-        this.userRolesById = userRolesById;
-    }
+    private Collection<UserRoleEntity> userRolesById;
 }

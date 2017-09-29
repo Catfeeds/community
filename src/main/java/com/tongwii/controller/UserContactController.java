@@ -11,6 +11,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,31 +35,25 @@ public class UserContactController {
      * @param userContactEntity
      * @return result
      * */
-    @RequestMapping(value = "/addUserContacts", method = RequestMethod.POST)
-    public Result addUserContacts(@RequestBody UserContactEntity userContactEntity){
-        if(userContactEntity == null){
-            return Result.errorResult("联系人实体为空!");
-        }
-        UserEntity friend = userService.findById(userContactEntity.getFriendId());
-        UserEntity user = userService.findById(userContactEntity.getUserId());
-        if(friend == null){
-            return Result.errorResult("添加的用户不存在");
-        }
-        if(user == null){
-            return Result.errorResult("用户信息不存在");
-        }
-        List<UserContactEntity> userContactEntities = userContactService.findByUserId(userContactEntity.getUserId());
+    @PostMapping(value = "/addUserContacts")
+    public ResponseEntity addUserContacts(@RequestBody UserContactEntity userContactEntity){
+        String userId = SecurityUtils.getCurrentUserId();
+        UserEntity friend = userService.findByAccount(userContactEntity.getFriendId());
+
+        List<UserContactEntity> userContactEntities = userContactService.findByUserId(userId);
         int contact = 0;
         for(UserContactEntity userContactEntity1 : userContactEntities){
-            if(userContactEntity1.getFriendId().equals(userContactEntity.getFriendId())){
+            if(userContactEntity1.getFriendId().equals(friend.getId())){
                 contact++;
             }
         }
         if(contact > 0){
-            return Result.errorResult("该联系人信息已存在!");
+            return ResponseEntity.badRequest().body("该联系人信息已存在!");
         }
+        userContactEntity.setUserId(userId);
+//        userContactEntity.setFriendId(friend.getId());
         userContactService.addUserContact(userContactEntity);
-        return Result.successResult(userContactEntity);
+        return ResponseEntity.ok(userContactEntity);
     }
 
     /**
@@ -67,26 +62,25 @@ public class UserContactController {
      * @return result tong wii result
      */
     @GetMapping()
-    public Result getContactsByUserId(){
+    public ResponseEntity getContactsByUserId(){
         try {
-            String userId = SecurityUtils.getCurrentUserLogin();
+            String userId = SecurityUtils.getCurrentUserId();
             List<UserContactEntity> userContactList = userContactService.findByUserId(userId);
             if(CollectionUtils.isEmpty(userContactList)){
-                return Result.errorResult("此用户没有联系人!");
+                return ResponseEntity.badRequest().body("此用户没有联系人!");
             }
             Map<String, JSONArray> contactMap = new TreeMap<>();
             for(UserContactEntity userContactEntity : userContactList){
                 UserEntity friend = userContactEntity.getUserByFriendId();
-                String pinYin = friend.getName();
-                if(pinYin.isEmpty()) {
+                String pinYin = userContactEntity.getDes();
+                if(StringUtils.isEmpty(pinYin)) {
                     pinYin = friend.getNickName();
                 }
                 String sortString = PinYinUtil.converterToFirstChar(pinYin);
                 JSONObject object = new JSONObject();
-                object.put("contactName", friend.getName());
                 object.put("contactAccount", friend.getAccount());
-                object.put("contactNick", friend.getNickName());
                 object.put("contactDesc", userContactEntity.getDes());
+                object.put("contactClientId", friend.getClientId());
                 object.put("contactPhone", friend.getPhone());
                 if(StringUtils.isNotEmpty(friend.getAvatarFileId())) {
                     object.put("contactPhoto", friend.getFileByAvatarFileId().getFilePath());
@@ -105,9 +99,9 @@ public class UserContactController {
                     contactMap.get(UserContactEntity.UNKNOWN_NAME).add(object);
                 }
             }
-            return Result.successResult(contactMap);
+            return ResponseEntity.ok(contactMap);
         } catch (Exception e) {
-            return Result.successResult("联系人列表获取失败!");
+            return ResponseEntity.badRequest().body("联系人列表获取失败!");
         }
     }
 

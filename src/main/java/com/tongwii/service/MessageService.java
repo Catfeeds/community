@@ -34,14 +34,15 @@ public class MessageService {
         messageDao.updateMessageState(messageId, processState);
     }
 
-    public List<MessageEntity> selectMessageByType(Pageable pageable, String messageTypeId, String residenceId) {
-        return messageDao.findAllByMessageTypeIdAndResidenceId(pageable, messageTypeId, residenceId);
+
+    public List<MessageEntity> findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeId, String residenceId) {
+        return messageDao.findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(pageable, messageTypeId, residenceId);
     }
 
     /**
      * 查询公告类消息
      * */
-    public Page<MessageEntity> selectAnnounceMessage(Pageable pageable, String residenceId) {
-        return messageDao.findAnnounceByResidenceId(pageable, residenceId);
+    public Page<MessageEntity> findByResidenceIdOrderByCreateTimeDesc(Pageable pageable, String residenceId) {
+        return messageDao.findByResidenceIdOrderByCreateTimeDesc(pageable, residenceId);
     }
 }

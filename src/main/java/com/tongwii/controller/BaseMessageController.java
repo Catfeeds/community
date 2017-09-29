@@ -87,7 +87,7 @@ public class BaseMessageController {
             return Result.errorResult("消息类型不可为空!");
         }
         Pageable pageInfo = new PageRequest(page, 5);
-        List<MessageEntity> messageEntities = messageService.selectMessageByType(pageInfo, message.getMessageTypeId(), message.getResidenceId());
+        List<MessageEntity> messageEntities = messageService.findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(pageInfo, message.getMessageTypeId(), message.getResidenceId());
         if(messageEntities.isEmpty() || messageEntities==null){
             return Result.errorResult("信息查询失败!");
         }
@@ -97,6 +97,7 @@ public class BaseMessageController {
             messageObject.put("id", messageEntity.getId());
             messageObject.put("title",messageEntity.getTitle());
             messageObject.put("content", messageEntity.getContent());
+            messageObject.put("type", messageEntity.getMessageTypeId());
             String time = messageEntity.getCreateTime().toString();
             String createTime = time.substring(0,time.length()-2);
             messageObject.put("createTime",createTime);
@@ -116,7 +117,7 @@ public class BaseMessageController {
     @GetMapping("/selectAnnounceMessage/{residenceId}")
     public ResponseEntity selectAnnounceMessage(@RequestHeader("page") Integer page, @PathVariable(value = "residenceId") String residenceId){
         Pageable pageInfo = new PageRequest(page, DEFAULT_PAGE_SIZE);
-        Page<MessageEntity> messageEntityPage = messageService.selectAnnounceMessage(pageInfo, residenceId);
+        Page<MessageEntity> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeDesc(pageInfo, residenceId);
         List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
         Map map = new HashMap<>();
         map.put("totalPages", messageEntityPage.getTotalPages());

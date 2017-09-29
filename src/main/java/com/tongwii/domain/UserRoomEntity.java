@@ -1,6 +1,8 @@
 package com.tongwii.domain;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,87 +15,31 @@ import java.io.Serializable;
  * @date: 2017/7/13
  */
 @Entity
-@EqualsAndHashCode
+@Getter
+@Setter
 @Table(name = "user_room", schema = "cloud_community", catalog = "")
 public class UserRoomEntity implements Serializable {
-    private String id;
-    private String userId;
-    private String roomId;
-    private Byte type;
-    private String des;
-    private UserEntity userByUserId;
-    private RoomEntity roomByRoomId;
-
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
     @Column(name = "id", unique = true, nullable = false, length = 36)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    private String id;
     @Basic
     @Column(name = "user_id")
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
+    private String userId;
     @Basic
     @Column(name = "room_id")
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
-
-
+    private String roomId;
     @Basic
     @Column(name = "type")
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
-    }
-
+    private Byte type;
     @Basic
     @Column(name = "des")
-    public String getDes() {
-        return des;
-    }
-
-    public void setDes(String dec) {
-        this.des = dec;
-    }
-
+    private String des;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    public UserEntity getUserByUserId() {
-        return userByUserId;
-    }
-
-    public void setUserByUserId(UserEntity userByUserId) {
-        this.userByUserId = userByUserId;
-    }
-
+    private UserEntity userByUserId;
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "id", insertable = false, updatable = false)
-    public RoomEntity getRoomByRoomId() {
-        return roomByRoomId;
-    }
-
-    public void setRoomByRoomId(RoomEntity roomByRoomId) {
-        this.roomByRoomId = roomByRoomId;
-    }
+    private RoomEntity roomByRoomId;
 }

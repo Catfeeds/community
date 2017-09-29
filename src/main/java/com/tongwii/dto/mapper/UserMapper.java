@@ -48,12 +48,12 @@ public class UserMapper {
         List<RoomDto> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
             RoomEntity roomEntity = userRoomEntity.getRoomByRoomId();
             RoomDto roomDTO = new RoomDto();
-            Map<String, FloorEntity> floorMap = floorService.findFloorById(roomEntity.getUnitId());
+            Map<String, FloorEntity> floorMap = floorService.findFloorById(roomEntity.getFloorId());
             roomDTO.setRoomId(roomEntity.getId());
             roomDTO.setRoomCode(roomEntity.getRoomCode());
             roomDTO.setChargeName(roomEntity.getUserByOwnerId().getName());
             roomDTO.setChargePhone(roomEntity.getUserByOwnerId().getPhone());
-            roomDTO.setRoomFloor(floorMap.get(FloorEntity.UNIT).getName() + floorMap.get(FloorEntity.UNIT).getParentCode() + "单元" + roomEntity.getRoomCode());
+            roomDTO.setRoomFloor(floorMap.get(FloorEntity.UNIT).getCode() + floorMap.get(FloorEntity.UNIT).getUnitCode() + "单元" + roomEntity.getRoomCode());
             return roomDTO;
         }).collect(Collectors.toList());
         userDTO.setRooms(roomDTOS);

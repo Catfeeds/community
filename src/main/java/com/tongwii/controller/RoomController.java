@@ -1,16 +1,19 @@
 package com.tongwii.controller;
 
 import com.tongwii.core.Result;
+import com.tongwii.domain.FloorEntity;
 import com.tongwii.domain.RoomEntity;
+import com.tongwii.domain.UserEntity;
+import com.tongwii.service.FloorService;
 import com.tongwii.service.RoomService;
+import com.tongwii.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,35 +26,63 @@ public class RoomController {
     @Autowired
     private RoomService roomService;
     /**
-     * 根据单元楼id查询住房信息
-     * @param roomEntity
+     * 根据楼宇查询住房信息
+     * @param floorId
      * @return result
      * */
-    @RequestMapping(value = "/selectRoomByUnit", method = RequestMethod.POST)
-    public Result selectRoomByUnit(@RequestBody RoomEntity roomEntity){
-        if(roomEntity.getUnitId() == null || roomEntity.getUnitId().isEmpty()){
-            return Result.errorResult("单元编号为空!");
+    @GetMapping(value = "/selectRoomByFloor/{floorId}")
+    public ResponseEntity selectRoomByFloor(@PathVariable String floorId){
+        if(StringUtils.isEmpty(floorId)){
+            return ResponseEntity.badRequest().body("楼宇未选择!");
         }
-        double area = roomEntity.getArea()/1.0;
-        int areaId = (int)area;
-        List<RoomEntity> roomEntities = roomService.findRoomForChose(roomEntity.getUnitId(), Integer.toString(areaId));
+        List<RoomEntity> roomEntities = roomService.findByFloorId(floorId);
         JSONArray jsonArray = new JSONArray();
         if(!CollectionUtils.isEmpty(roomEntities)) {
             for (RoomEntity room : roomEntities) {
                 JSONObject object = new JSONObject();
-                object.put("roomCode", room.getRoomCode());
+                object.put("roomCode", room.getRoomCode()+"室");
+                object.put("roomStyle", room.getHuXing());
                 object.put("roomId", room.getId());
+                UserEntity userEntity = room.getUserByOwnerId();
+                String ownnerName = userEntity.getName();
+                String ownnerPhone = userEntity.getPhone();
+                FloorEntity floorEntity = room.getFloorByFloorId();
+                String address = floorEntity.getResidenceEntity().getAddress()+floorEntity.getCode()+"栋"+room.getUnitCode()+"单元"+room.getRoomCode()+"室";
+                System.out.println(address);
+                object.put("ownnerName", ownnerName);
+                object.put("ownnerPhone", ownnerPhone);
+                object.put("addres", address);
                 jsonArray.add(object);
             }
         }
-        return Result.successResult(jsonArray);
+        return ResponseEntity.ok(jsonArray);
     }
 
     /**
+     * 添加room信息
+     * @author Yamo
+     * @param roomEntity
+     */
+    @PostMapping("/addSingleRoom")
+    public ResponseEntity addSingleRoom(@RequestBody RoomEntity roomEntity){
+        List<RoomEntity> roomEntities = roomService.findByFloorId(roomEntity.getFloorId());
+        boolean exist = true;
+        for(RoomEntity room: roomEntities){
+            if(room.getRoomCode().equals(roomEntity.getRoomCode())){
+                exist = false;
+            }
+        }
+        if(exist){
+            roomService.save(roomEntity);
+            return ResponseEntity.ok("添加成功!");
+        }
+        return ResponseEntity.badRequest().body("该住房已存在!");
+    }
+   /* *//**
      * 修改room表信息
      * @param roomEntity
      * @return result
-     * */
+     * *//*
     @RequestMapping(value = "/updateRoomInfo", method = RequestMethod.POST )
     public Result updateRoomInfo(@RequestBody RoomEntity roomEntity){
         if(roomEntity.getId() == null || roomEntity.getId().isEmpty()){
@@ -85,6 +116,6 @@ public class RoomController {
         object.put("OwnerId", newRoom.getOwnerId());
         object.put("UnitId", newRoom.getUnitId());
         return Result.successResult(object);
-    }
+    }*/
 
 }

@@ -57,6 +57,7 @@ public class UserController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createToken(authentication);
         // 基本用户信息
+        user = userService.findByAccount(user.getAccount());
         UserDto userDTO = userMapper.userToUserDTO(user);
         Map map = new HashMap();
         map.put("userInfo", userDTO);
@@ -108,10 +109,34 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-	@GetMapping(value = "/test")
-	public ResponseEntity<Object> test() {
-		List<UserEntity> userEntities = userService.findAll();
-		return ResponseEntity.ok(userMapper.usersToUserDTOs(userEntities));
-	}
+    // 修改用户真实姓名
+    @PutMapping("/updateRealName")
+    public ResponseEntity updateRealName(@RequestBody UserEntity user) {
+        String userId = SecurityUtils.getCurrentUserId();
+        UserEntity userEntity = userService.findById(userId);
+        userEntity.setName(user.getName());
+        UserDto userDto = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDto);
+    }
+
+    // 修改用户出生日期
+    @PutMapping("/updateBirth")
+    public ResponseEntity updateBirth(@RequestBody UserEntity user) {
+        String userId = SecurityUtils.getCurrentUserId();
+        UserEntity userEntity = userService.findById(userId);
+        userEntity.setBirthday(user.getBirthday());
+        UserDto userDto = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDto);
+    }
+
+    // 修改用户性别
+    @PutMapping("/updateGender")
+    public ResponseEntity updateGender(@RequestBody UserEntity user) {
+        String userId = SecurityUtils.getCurrentUserId();
+        UserEntity userEntity = userService.findById(userId);
+        userEntity.setSex(user.getSex());
+        UserDto userDto = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDto);
+    }
 }
 

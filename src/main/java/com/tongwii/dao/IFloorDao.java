@@ -14,5 +14,6 @@ import java.util.List;
  */
 @Repository
 public interface IFloorDao extends JpaRepository<FloorEntity, String> {
-    List<FloorEntity> findByAreaId(String areaId);
+    List<FloorEntity> findByResidenceId(String residenceId);
+    List<FloorEntity> findByCodeAndResidenceId(String code, String risidenceId);
 }

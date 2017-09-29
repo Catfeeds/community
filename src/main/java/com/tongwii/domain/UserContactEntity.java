@@ -1,6 +1,9 @@
 package com.tongwii.domain;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,78 +16,33 @@ import java.io.Serializable;
  * @date: 2017/7/13
  */
 @Entity
-@EqualsAndHashCode
+@Getter
+@Setter
 @Table(name = "user_contact", schema = "cloud_community", catalog = "")
 public class UserContactEntity implements Serializable {
-    public static final String UNKNOWN_NAME = "*";
-
-    private String id;
-    private String userId;
-
-    private String friendId;
-    private String des;
-    private UserEntity userByUserId;
-    private UserEntity userByFriendId;
+    public static final String UNKNOWN_NAME = "A_Z";
 
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
     @Column(name = "id", unique = true, nullable = false, length = 36)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    private String id;
     @Basic
     @Column(name = "user_id")
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
+    private String userId;
     @Basic
     @Column(name = "friend_id")
-    public String getFriendId() {
-        return friendId;
-    }
-
-    public void setFriendId(String friendId) {
-        this.friendId = friendId;
-    }
-
+    private String friendId;
     @Basic
     @Column(name = "des")
-    public String getDes() {
-        return des;
-    }
-
-    public void setDes(String dec) {
-        this.des = dec;
-    }
-
+    private String des;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    public UserEntity getUserByUserId() {
-        return userByUserId;
-    }
-
-    public void setUserByUserId(UserEntity userByUserId) {
-        this.userByUserId = userByUserId;
-    }
-
+    private UserEntity userByUserId;
     @ManyToOne
     @JoinColumn(name = "friend_id", referencedColumnName = "id", insertable = false, updatable = false)
-    public UserEntity getUserByFriendId() {
-        return userByFriendId;
-    }
-
-    public void setUserByFriendId(UserEntity userByFriendId) {
-        this.userByFriendId = userByFriendId;
-    }
+    private UserEntity userByFriendId;
+/*    @Basic
+    @Column
+    private String friendAccount;*/
 }

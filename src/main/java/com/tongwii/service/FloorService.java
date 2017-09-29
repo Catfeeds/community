@@ -22,8 +22,8 @@ public class FloorService {
         this.floorDao = floorDao;
     }
 
-    public List<FloorEntity> findFloorByAreaId(String areaId) {
-        return floorDao.findByAreaId(areaId);
+    public List<FloorEntity> findFloorByResidenceId(String residenceId) {
+        return floorDao.findByResidenceId(residenceId);
     }
 
     public void update(FloorEntity model) {
@@ -41,5 +41,13 @@ public class FloorService {
 
     public FloorEntity findById(String id) {
         return floorDao.findOne(id);
+    }
+
+    public FloorEntity save(FloorEntity floorEntity){
+        return floorDao.save(floorEntity);
+    }
+
+    public List<FloorEntity> findByCodeAndResidenceId(String risidenceId, String floorCode){
+        return floorDao.findByCodeAndResidenceId(floorCode, risidenceId);
     }
 }

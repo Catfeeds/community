@@ -24,8 +24,8 @@ public class RoomService {
         return roomEntity;
     }
 
-    public List<RoomEntity> findRoomForChose(String unitId, String areaId) {
-        return roomDao.findByUnitIdAndArea(unitId, areaId);
+    public List<RoomEntity> findByFloorId(String floorId) {
+        return roomDao.findByFloorId(floorId);
     }
 
     public RoomEntity findById(String id) {
@@ -35,4 +35,6 @@ public class RoomService {
     public void update(RoomEntity newRoom) {
         roomDao.save(newRoom);
     }
+
+    public void save(RoomEntity roomEntity) { roomDao.save(roomEntity); }
 }

@@ -20,8 +20,8 @@ public class ResidenceService {
     @Autowired
     private IResidenceDao residenceDao;
 
-    public List<ResidenceEntity> findResidenceByRegionId(String regionId) {
-        return residenceDao.findByRegionId(regionId);
+    public List<ResidenceEntity> findResidenceByRegionCode(String regionId) {
+        return residenceDao.findByRegionCode(regionId);
     }
 
     public ResidenceEntity findById(String id) {
@@ -29,6 +29,10 @@ public class ResidenceService {
     }
 
     public void update(ResidenceEntity newResidence) {
-         residenceDao.save(newResidence);
+        residenceDao.save(newResidence);
+    }
+
+    public ResidenceEntity save(ResidenceEntity residenceEntity) {
+        return residenceDao.save(residenceEntity);
     }
 }

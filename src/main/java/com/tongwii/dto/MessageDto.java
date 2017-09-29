@@ -21,4 +21,5 @@ public class MessageDto {
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
     private String createUser;
+    private String messageTypeId;
 }

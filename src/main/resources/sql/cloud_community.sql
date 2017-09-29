@@ -299,6 +299,8 @@ CREATE TABLE `residence` (
   `floor_count` int(3) DEFAULT NULL,
   `region_id` varchar(32) DEFAULT NULL,
   `server_url` varchar(100) DEFAULT NULL,
+  `explain` VARCHAR(255) DEFAULT NULL,
+  `address` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_RESIDENC_2_REGION` (`region_id`),
   KEY `FK_RESIDENC_2_USER` (`user_id`),

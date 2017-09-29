@@ -16,5 +16,5 @@ import java.util.List;
 public interface IRoomDao extends JpaRepository<RoomEntity, String> {
     RoomEntity findByRoomCode(String roomCode);
 
-    List<RoomEntity> findByUnitIdAndArea(String unitId, String areaId);
+    List<RoomEntity> findByFloorId(String floorId);
 }

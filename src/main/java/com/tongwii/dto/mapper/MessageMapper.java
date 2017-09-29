@@ -28,6 +28,7 @@ public class MessageMapper {
         messageDto.setContent(message.getContent());
         messageDto.setCreateTime(message.getCreateTime());
         messageDto.setCreateUser(message.getUserByCreateUserId().getAccount());
+        messageDto.setMessageTypeId(message.getMessageTypeId());
         return messageDto;
     }
 
