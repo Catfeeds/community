@@ -33,6 +33,18 @@ public class FloorController {
     @PostMapping("/addSingleFloor")
     public ResponseEntity addSingleFloor(@RequestBody FloorEntity floorEntity){
         // TODO 此处需要做楼宇名称的唯一性设置
+        List<FloorEntity> floorEntities = floorService.findFloorByResidenceId(floorEntity.getResidenceId());
+        boolean floorExist = false;
+        if(!CollectionUtils.isEmpty(floorEntities)){
+            for(FloorEntity floorEntity1: floorEntities){
+                if(floorEntity1.getCode().equals(floorEntity.getCode())){
+                    floorExist = true;
+                }
+            }
+        }
+        if(floorExist){
+            return ResponseEntity.badRequest().body("楼宇已存在!");
+        }
         try {
             floorService.save(floorEntity);
             return ResponseEntity.ok("添加成功!");
