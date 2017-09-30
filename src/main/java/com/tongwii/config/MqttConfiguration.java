@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.core.MessageProducer;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
@@ -23,12 +24,19 @@ import org.springframework.messaging.MessageHandler;
 @Configuration
 @IntegrationComponentScan
 public class MqttConfiguration {
-
     private final ApplicationProperties applicationProperties;
 
     public MqttConfiguration(ApplicationProperties applicationProperties) {
         this.applicationProperties = applicationProperties;
     }
+
+    @Bean
+    public MqttPahoClientFactory mqttClientFactory() {
+        DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
+        factory.setServerURIs("tcp://localhost:1883");
+        return factory;
+    }
+
 
     /**
      * MessageChannel method creates a new mqttInputChannel
@@ -42,7 +50,6 @@ public class MqttConfiguration {
         return new DirectChannel();
     }
 
-
     /**
      * MessageProducer generates a clientID for the subscriber by using a randomUUID
      * for creating a connection to a broker. Creates a new
@@ -55,8 +62,7 @@ public class MqttConfiguration {
     @Bean
     public MessageProducer inbound() {
         MqttPahoMessageDrivenChannelAdapter adapter =
-            new MqttPahoMessageDrivenChannelAdapter("tcp://106.14.227.231:1883", "JavaSample",
-                "MQTT Examples");
+            new MqttPahoMessageDrivenChannelAdapter("JavaSample", mqttClientFactory(), "MQTT Examples");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
@@ -76,12 +82,6 @@ public class MqttConfiguration {
         return message -> System.out.println("---------------->" + message.getPayload());
     }
 
-    @Bean
-    public MqttPahoClientFactory mqttClientFactory() {
-        DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
-        factory.setServerURIs("tcp://106.14.227.231:1883");
-        return factory;
-    }
 
     @Bean
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
@@ -89,8 +89,12 @@ public class MqttConfiguration {
         MqttPahoMessageHandler messageHandler =
             new MqttPahoMessageHandler("testClient", mqttClientFactory());
         messageHandler.setAsync(true);
-        messageHandler.setDefaultTopic("testTopic");
+        messageHandler.setDefaultTopic("MQTT Examples");
         return messageHandler;
     }
 
+    @Bean
+    public MessageChannel mqttOutboundChannel() {
+        return new PublishSubscribeChannel();
+    }
 }

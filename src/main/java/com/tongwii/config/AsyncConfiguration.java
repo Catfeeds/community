@@ -35,7 +35,7 @@ public class AsyncConfiguration implements AsyncConfigurer {
         executor.setCorePoolSize(tongWiiProperties.getAsync().getCorePoolSize());
         executor.setMaxPoolSize(tongWiiProperties.getAsync().getMaxPoolSize());
         executor.setQueueCapacity(tongWiiProperties.getAsync().getQueueCapacity());
-        executor.setThreadNamePrefix("demo-Executor-");
+        executor.setThreadNamePrefix("tongwii-Executor-");
         return new ExceptionHandlingAsyncTaskExecutor(executor);
     }
 

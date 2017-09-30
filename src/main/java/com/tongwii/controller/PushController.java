@@ -2,7 +2,7 @@ package com.tongwii.controller;
 
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.domain.MessageEntity;
-import com.tongwii.service.Gateway;
+import com.tongwii.service.PushGateway;
 import com.tongwii.service.PushService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class PushController {
     @Autowired
     private PushService pushService;
     @Autowired
-    private Gateway gateway;
+    private PushGateway gateway;
     private TongWIIResult result = new TongWIIResult();
     // 根据单个房间推送消息
     @PostMapping("/pushMessageToSingleRoom")
