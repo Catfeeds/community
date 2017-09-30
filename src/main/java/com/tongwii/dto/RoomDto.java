@@ -19,10 +19,6 @@ public class RoomDto {
      */
     private String roomCode;
     /**
-     * 房间单元信息
-     */
-    private String roomFloor;
-    /**
      * 社区id
      */
     private String residenceId;
@@ -31,13 +27,17 @@ public class RoomDto {
      */
     private String residenceName;
     /**
-     * 分区id
+     * 单元编号
      */
-    private String areaId;
+    private String unitCode;
     /**
-     * 分区名称
+     * 楼宇房间
      */
-    private String areaName;
+    private String roomFloor;
+    /**
+     * 楼宇Id
+     */
+    private String floorId;
     /**
      * 业主姓名
      */

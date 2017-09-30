@@ -1,12 +1,9 @@
 package com.tongwii.controller;
 
-import com.tongwii.core.Result;
 import com.tongwii.domain.FloorEntity;
 import com.tongwii.domain.RoomEntity;
 import com.tongwii.domain.UserEntity;
-import com.tongwii.service.FloorService;
 import com.tongwii.service.RoomService;
-import com.tongwii.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +40,16 @@ public class RoomController {
                 object.put("roomCode", room.getRoomCode()+"室");
                 object.put("roomStyle", room.getHuXing());
                 object.put("roomId", room.getId());
+                object.put("unitCode", room.getRoomCode()+"室"+room.getUnitCode()+"单元");
                 UserEntity userEntity = room.getUserByOwnerId();
                 String ownnerName = userEntity.getName();
                 String ownnerPhone = userEntity.getPhone();
                 FloorEntity floorEntity = room.getFloorByFloorId();
                 String address = floorEntity.getResidenceEntity().getAddress()+floorEntity.getCode()+"栋"+room.getUnitCode()+"单元"+room.getRoomCode()+"室";
                 System.out.println(address);
-                object.put("ownnerName", ownnerName);
-                object.put("ownnerPhone", ownnerPhone);
-                object.put("addres", address);
+                object.put("ownerName", ownnerName);
+                object.put("ownerPhone", ownnerPhone);
+                object.put("address", address);
                 jsonArray.add(object);
             }
         }

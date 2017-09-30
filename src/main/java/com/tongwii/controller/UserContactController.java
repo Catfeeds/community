@@ -38,12 +38,11 @@ public class UserContactController {
     @PostMapping(value = "/addUserContacts")
     public ResponseEntity addUserContacts(@RequestBody UserContactEntity userContactEntity){
         String userId = SecurityUtils.getCurrentUserId();
-        UserEntity friend = userService.findByAccount(userContactEntity.getFriendId());
 
         List<UserContactEntity> userContactEntities = userContactService.findByUserId(userId);
         int contact = 0;
         for(UserContactEntity userContactEntity1 : userContactEntities){
-            if(userContactEntity1.getFriendId().equals(friend.getId())){
+            if(userContactEntity1.getFriendId().equals(userContactEntity.getFriendId())){
                 contact++;
             }
         }

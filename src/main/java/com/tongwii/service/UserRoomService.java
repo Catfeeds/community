@@ -20,7 +20,7 @@ public class UserRoomService {
         this.userRoomDao = userRoomDao;
     }
 
-    public List<UserEntity> findUsersByRoomId(String roomId) {
+    public List<UserRoomEntity> findUsersByRoomId(String roomId) {
         return userRoomDao.findByRoomId(roomId);
     }
 

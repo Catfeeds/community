@@ -13,6 +13,7 @@ import com.tongwii.constant.PushConstants;
 import com.tongwii.constant.UserConstants;
 import com.tongwii.domain.MessageEntity;
 import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.UserRoomEntity;
 import com.tongwii.util.PushTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,15 +65,15 @@ public class PushService {
         // 通过roomCode获取roomId
         String roomId = roomService.findRoomByCode(roomCode).getId();
         // 通过roomid获取用户实体
-        List<UserEntity> userEntities = userRoomService.findUsersByRoomId(roomId);
+        List<UserRoomEntity> userEntities = userRoomService.findUsersByRoomId(roomId);
         if(userEntities == null){
             result.setStatus(UserConstants.USER_DISABLE);
             result.setInfo("获取用户列表信息失败!");
             result.setData(userEntities);
             return result;
         }else{
-            for (UserEntity users : userEntities){
-                clientIdList.add(users.getClientId());
+            for (UserRoomEntity users : userEntities){
+                clientIdList.add(users.getUserByUserId().getClientId());
             }
         }
         for(int index=0; index < clientIdList.size(); index++){

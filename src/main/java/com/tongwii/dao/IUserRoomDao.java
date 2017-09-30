@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Repository
 public interface IUserRoomDao extends JpaRepository<UserRoomEntity, String> {
-    List<UserEntity> findByRoomId(String roomId);
+    List<UserRoomEntity> findByRoomId(String roomId);
 
     List<UserRoomEntity> findByUserId(String userId);
 }
