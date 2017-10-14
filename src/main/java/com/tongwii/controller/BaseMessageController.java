@@ -5,6 +5,7 @@ import com.tongwii.domain.MessageEntity;
 import com.tongwii.domain.UserEntity;
 import com.tongwii.dto.MessageDto;
 import com.tongwii.dto.mapper.MessageMapper;
+import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.UserService;
 import net.sf.json.JSONArray;
@@ -44,16 +45,18 @@ public class BaseMessageController {
      * @return result
      **/
     @PostMapping("/insertMessage")
-    public Result insertMessage(@RequestBody MessageEntity messageEntity){
+    public ResponseEntity insertMessage(@RequestBody MessageEntity messageEntity){
         if(messageEntity.getTitle().isEmpty() && messageEntity.getContent().isEmpty()){
-            return Result.errorResult("消息体不可为空!");
+            return ResponseEntity.badRequest().body("消息体不可为空!");
         }
+        String userId = SecurityUtils.getCurrentUserId();
+        messageEntity.setCreateUserId(userId);
         try {
             messageEntity.setCreateTime( new Timestamp(System.currentTimeMillis()));
             messageService.save(messageEntity);
-            return Result.successResult(messageEntity);
+            return ResponseEntity.ok(messageEntity);
         }catch (Exception e){
-            return Result.failResult("消息添加失败!");
+            return ResponseEntity.badRequest().body("消息添加失败!");
         }
 
     }
@@ -63,16 +66,31 @@ public class BaseMessageController {
      *@param messageEntity
      *@return result
      * */
-    @RequestMapping("/updateProcessOfMessage")
-    public Result updateProcessOfMessage(@RequestBody MessageEntity messageEntity){
+    @PutMapping("/updateProcessOfMessage")
+    public ResponseEntity updateProcessOfMessage(@RequestBody MessageEntity messageEntity){
         // 此消息实体包含id与Process的信息，通过id找到该条消息的数据记录，并将Process的状态更改成传来的值
         // 判空
         if(messageEntity.getId().isEmpty() || messageEntity.getProcessState().toString().isEmpty()){
-            return Result.errorResult("消息记录不存在!");
+            return ResponseEntity.badRequest().body("消息记录不存在!");
         }
         // 此处更改消息进度状态
         messageService.updateMessageProcess(messageEntity.getId(),messageEntity.getProcessState()&0xff);
-        return Result.successResult("修改状态成功!");
+        return ResponseEntity.ok("修改状态成功!");
+    }
+    /**
+     * 删除历史消息
+     *
+     *@param messageId
+     * */
+    @RequestMapping("/deleteMessage/{messageId}")
+    public ResponseEntity deleteMessage(@PathVariable String messageId){
+        // 此消息实体包含id,通过id找到该条消息的数据记录，并将Process的状态更改成-1状态
+        try{
+            messageService.updateMessageProcess(messageId, -1);
+            return ResponseEntity.ok("消息删除成功!");
+        }catch (Exception e){
+            return ResponseEntity.ok("消息删除失败!");
+        }
     }
 
     /**
@@ -110,7 +128,7 @@ public class BaseMessageController {
     }
 
     /**
-     * 通过消息类型查询消息
+     * 查询公告类消息
      *
      * @return result
      * */

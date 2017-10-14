@@ -78,6 +78,7 @@ public class UserContactController {
                 String sortString = PinYinUtil.converterToFirstChar(pinYin);
                 JSONObject object = new JSONObject();
                 object.put("contactAccount", friend.getAccount());
+                object.put("contactName", friend.getName());
                 object.put("contactDesc", userContactEntity.getDes());
                 object.put("contactClientId", friend.getClientId());
                 object.put("contactPhone", friend.getPhone());
@@ -109,16 +110,13 @@ public class UserContactController {
      * @param contactId
      * @return result
      * */
-    @RequestMapping(value="/delectContact/{contactId}", method = RequestMethod.GET)
-    public Result delectContact(@PathVariable String contactId){
-        if(contactId == null || contactId.isEmpty()){
-            return Result.errorResult("联系人信息获取失败!");
-        }
+    @PutMapping(value="/delectContact/{contactId}")
+    public ResponseEntity delectContact(@PathVariable String contactId){
         try{
             userContactService.delete(contactId);
         }catch (Exception e){
-            return Result.errorResult("该联系人信息不存在!");
+            return ResponseEntity.badRequest().body("该联系人信息不存在!");
         }
-        return Result.successResult("联系人信息删除成功!");
+        return ResponseEntity.ok("联系人信息删除成功!");
     }
 }
