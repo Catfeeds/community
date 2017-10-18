@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
-import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.core.MessageProducer;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
@@ -14,6 +13,8 @@ import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
+
+import java.util.UUID;
 
 /**
  * ${DESCRIPTION}
@@ -24,16 +25,16 @@ import org.springframework.messaging.MessageHandler;
 @Configuration
 @IntegrationComponentScan
 public class MqttConfiguration {
-    private final ApplicationProperties applicationProperties;
+    private final TongWiiProperties tongWiiProperties;
 
-    public MqttConfiguration(ApplicationProperties applicationProperties) {
-        this.applicationProperties = applicationProperties;
+    public MqttConfiguration(TongWiiProperties tongWiiProperties) {
+        this.tongWiiProperties = tongWiiProperties;
     }
 
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
-        factory.setServerURIs("tcp://localhost:1883");
+        factory.setServerURIs(tongWiiProperties.getMqtt().getServerURIs());
         return factory;
     }
 
@@ -62,10 +63,10 @@ public class MqttConfiguration {
     @Bean
     public MessageProducer inbound() {
         MqttPahoMessageDrivenChannelAdapter adapter =
-            new MqttPahoMessageDrivenChannelAdapter("JavaSample", mqttClientFactory(), "MQTT Examples");
+            new MqttPahoMessageDrivenChannelAdapter(UUID.randomUUID().toString(), mqttClientFactory(), tongWiiProperties.getMqtt().getTopics());
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
-        adapter.setQos(1);
+        adapter.setQos(tongWiiProperties.getMqtt().getQos());
         adapter.setOutputChannel(mqttInputChannel());
         return adapter;
     }
@@ -87,14 +88,15 @@ public class MqttConfiguration {
     @ServiceActivator(inputChannel = "mqttOutboundChannel")
     public MessageHandler mqttOutbound() {
         MqttPahoMessageHandler messageHandler =
-            new MqttPahoMessageHandler("testClient", mqttClientFactory());
+            new MqttPahoMessageHandler(UUID.randomUUID().toString(), mqttClientFactory());
         messageHandler.setAsync(true);
-        messageHandler.setDefaultTopic("MQTT Examples");
+        messageHandler.setDefaultQos(tongWiiProperties.getMqtt().getDefaultQos());
+        messageHandler.setDefaultTopic(tongWiiProperties.getMqtt().getDefaultTopic());
         return messageHandler;
     }
 
     @Bean
     public MessageChannel mqttOutboundChannel() {
-        return new PublishSubscribeChannel();
+        return new DirectChannel();
     }
 }

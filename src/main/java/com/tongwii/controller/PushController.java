@@ -20,6 +20,7 @@ public class PushController {
     private PushService pushService;
     @Autowired
     private PushGateway gateway;
+
     private TongWIIResult result = new TongWIIResult();
     // 根据单个房间推送消息
     @PostMapping("/pushMessageToSingleRoom")
@@ -38,7 +39,7 @@ public class PushController {
     }
 
 
-    @PostMapping("testPush")
+    @PostMapping("push")
     public ResponseEntity TestPush(String message) {
         gateway.sendToMqtt(message);
         return ResponseEntity.ok(null);

@@ -19,6 +19,8 @@
 
 package com.tongwii.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -58,6 +60,8 @@ public class TongWiiProperties {
     private final Ribbon ribbon = new Ribbon();
 
     private final Registry registry = new Registry();
+
+    private final Mqtt mqtt = new Mqtt();
 
     public Async getAsync() {
         return async;
@@ -105,6 +109,10 @@ public class TongWiiProperties {
 
     public Ribbon getRibbon() {
         return ribbon;
+    }
+
+    public Mqtt getMqtt() {
+        return mqtt;
     }
 
     public static class Async {
@@ -946,5 +954,20 @@ public class TongWiiProperties {
         public void setPassword(String password) {
             this.password = password;
         }
+    }
+
+    @Getter
+    @Setter
+    public static class Mqtt {
+
+        private String[] topics;
+
+        private String[] serverURIs;
+
+        private int[] qos;
+
+        private int defaultQos;
+
+        private String defaultTopic;
     }
 }
