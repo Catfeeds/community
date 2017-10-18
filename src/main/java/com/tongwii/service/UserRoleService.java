@@ -5,6 +5,8 @@ import com.tongwii.domain.UserRoleEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * ${DESCRIPTION}
  *
@@ -22,5 +24,14 @@ public class UserRoleService {
 
     public void save(UserRoleEntity userRoleEntity) {
         userRoleDao.save(userRoleEntity);
+    }
+
+    // 获取用户角色关系列表
+    public List<UserRoleEntity> findByUserId(String userId){
+        return userRoleDao.findByUserId(userId);
+    }
+
+    public void delete(UserRoleEntity userRoleEntity){
+        userRoleDao.delete(userRoleEntity);
     }
 }

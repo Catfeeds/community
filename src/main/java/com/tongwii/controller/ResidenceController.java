@@ -46,16 +46,15 @@ public class ResidenceController {
 
         List<ResidenceEntity> residenceEntities = residenceService.findResidenceByRegionCode(regionCode);
         if(CollectionUtils.isEmpty(residenceEntities)){
-            return ResponseEntity.badRequest().body("社区实体不存在!");
+            return ResponseEntity.badRequest().body("抱歉,该区域暂无小区加入本系统!");
         }
         JSONArray jsonArray = new JSONArray();
         for(ResidenceEntity residenceEntity : residenceEntities){
             JSONObject object = new JSONObject();
             object.put("residenceName", residenceEntity.getName());
-            object.put("address",residenceEntity.getAddress());
+            object.put("address",residenceEntity.getAddress() + residenceEntity.getName());
             object.put("residenceId",residenceEntity.getId());
             object.put("floorCount", residenceEntity.getFloorCount());
-            object.put("address", residenceEntity.getAddress());
             jsonArray.add(object);
         }
         return ResponseEntity.ok(jsonArray);

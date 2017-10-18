@@ -82,12 +82,13 @@ public class BaseMessageController {
      *
      *@param messageId
      * */
-    @RequestMapping("/deleteMessage/{messageId}")
+    @PutMapping("/deleteMessage/{messageId}")
     public ResponseEntity deleteMessage(@PathVariable String messageId){
         // 此消息实体包含id,通过id找到该条消息的数据记录，并将Process的状态更改成-1状态
         try{
             messageService.updateMessageProcess(messageId, -1);
             return ResponseEntity.ok("消息删除成功!");
+
         }catch (Exception e){
             return ResponseEntity.ok("消息删除失败!");
         }
@@ -136,6 +137,22 @@ public class BaseMessageController {
     public ResponseEntity selectAnnounceMessage(@RequestHeader("page") Integer page, @PathVariable(value = "residenceId") String residenceId){
         Pageable pageInfo = new PageRequest(page, DEFAULT_PAGE_SIZE);
         Page<MessageEntity> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeDesc(pageInfo, residenceId);
+        List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
+        Map map = new HashMap<>();
+        map.put("totalPages", messageEntityPage.getTotalPages());
+        map.put("data", messageDtos);
+        return ResponseEntity.ok(map);
+    }
+
+    /**
+     * 查询历史公告类消息
+     *
+     * @return result
+     * */
+    @GetMapping("/selectHistroyAnnounceMessage/{residenceId}")
+    public ResponseEntity selectHistroyAnnounceMessage(@RequestHeader("page") Integer page, @PathVariable(value = "residenceId") String residenceId){
+        Pageable pageInfo = new PageRequest(page, DEFAULT_PAGE_SIZE);
+        Page<MessageEntity> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeAsc(pageInfo, residenceId);
         List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
         Map map = new HashMap<>();
         map.put("totalPages", messageEntityPage.getTotalPages());

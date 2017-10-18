@@ -32,8 +32,8 @@ public class RoleEntity implements Serializable {
     @Basic
     @Column(name = "des")
     private String des;
-    @OneToMany(mappedBy = "roleByRoleId")
+/*    @OneToMany(mappedBy = "roleByRoleId")
     private Collection<GroupRoleEntity> groupRolesById;
     @OneToMany(mappedBy = "roleByRoleId")
-    private Collection<UserRoleEntity> userRolesById;
+    private Collection<UserRoleEntity> userRolesById;*/
 }

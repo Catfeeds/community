@@ -26,13 +26,13 @@ public class UserRoomEntity implements Serializable {
     private String id;
     @Basic
     @Column(name = "user_id")
-    private String userId;
+    private String userId; // 住户id
     @Basic
     @Column(name = "room_id")
     private String roomId;
     @Basic
     @Column(name = "type")
-    private Byte type;
+    private Integer type; // 住户类型（户主，租户，家庭成员）
     @Basic
     @Column(name = "des")
     private String des;

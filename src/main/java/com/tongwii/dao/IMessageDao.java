@@ -21,12 +21,17 @@ import java.util.List;
 public interface IMessageDao extends JpaRepository<MessageEntity, String> {
     @Modifying
     @Query("UPDATE MessageEntity m SET m.processState = :processState WHERE m.id = :messageId")
-    void updateMessageState(String messageId, Integer processState);
+    void updateMessageStateByMessageId(String messageId, Integer processState);
 
     List<MessageEntity> findAllByMessageTypeIdAndResidenceId(Pageable pageable, String messageTypeId, String residenceId);
 
-    @Query("SELECT m FROM MessageEntity m WHERE m.messageTypeId IN (3,6,7) and m.residenceId = :residenceId order by m.createTime desc")
+    @Query("SELECT m FROM MessageEntity m WHERE m.messageTypeId IN (3,6,7) and m.residenceId = :residenceId and m.processState !=-1 order by m.createTime desc")
     Page<MessageEntity> findByResidenceIdOrderByCreateTimeDesc(Pageable pageable, @Param("residenceId") String residenceId);
 
+    @Query("SELECT m FROM MessageEntity m WHERE m.messageTypeId IN (3,4,6,7) and m.residenceId = :residenceId and m.processState !=-1 order by m.createTime asc")
+    Page<MessageEntity> findByResidenceIdOrderByCreateTimeAsc(Pageable pageable, @Param("residenceId") String residenceId);
+
     List<MessageEntity> findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeId, String residenceId);
+
+    MessageEntity findById(String messageId);
 }

@@ -31,7 +31,9 @@ public class MessageService {
     }
 
     public void updateMessageProcess(String messageId, Integer processState) {
-        messageDao.updateMessageState(messageId, processState);
+        MessageEntity messageEntity = messageDao.findById(messageId);
+        messageEntity.setProcessState(processState);
+//        messageDao.updateMessageStateByMessageId(messageId, processState);
     }
 
 
@@ -45,4 +47,12 @@ public class MessageService {
     public Page<MessageEntity> findByResidenceIdOrderByCreateTimeDesc(Pageable pageable, String residenceId) {
         return messageDao.findByResidenceIdOrderByCreateTimeDesc(pageable, residenceId);
     }
+
+    /**
+     * 查询历史公告类消息
+     * */
+    public Page<MessageEntity> findByResidenceIdOrderByCreateTimeAsc(Pageable pageable, String residenceId) {
+        return messageDao.findByResidenceIdOrderByCreateTimeAsc(pageable, residenceId);
+    }
+
 }

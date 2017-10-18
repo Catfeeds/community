@@ -1,9 +1,12 @@
 package com.tongwii.controller;
 
+import com.tongwii.constant.Constants;
 import com.tongwii.domain.FloorEntity;
 import com.tongwii.domain.RoomEntity;
 import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.UserRoomEntity;
 import com.tongwii.service.RoomService;
+import com.tongwii.service.UserRoomService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class RoomController {
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private UserRoomService userRoomService;
     /**
      * 根据楼宇查询住房信息
      * @param floorId
@@ -72,15 +77,22 @@ public class RoomController {
         }
         if(exist){
             roomService.save(roomEntity);
+            UserRoomEntity userRoomEntity = new UserRoomEntity();
+            userRoomEntity.setUserId(roomEntity.getOwnerId());
+            userRoomEntity.setType(Constants.HUZHU);
+            userRoomEntity.setDes("户主");
+            userRoomEntity.setRoomId(roomEntity.getId());
+            userRoomService.saveSingle(userRoomEntity);
             return ResponseEntity.ok("添加成功!");
         }
         return ResponseEntity.badRequest().body("该住房已存在!");
     }
-   /* *//**
+    /**
      * 修改room表信息
      * @param roomEntity
      * @return result
-     * *//*
+     * */
+    /*
     @RequestMapping(value = "/updateRoomInfo", method = RequestMethod.POST )
     public Result updateRoomInfo(@RequestBody RoomEntity roomEntity){
         if(roomEntity.getId() == null || roomEntity.getId().isEmpty()){

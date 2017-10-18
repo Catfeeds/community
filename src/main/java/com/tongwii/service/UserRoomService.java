@@ -27,4 +27,8 @@ public class UserRoomService {
     public List<UserRoomEntity> findRoomByUserId(String userId) {
         return userRoomDao.findByUserId(userId);
     }
+
+    public void saveSingle(UserRoomEntity userRoomEntity){
+        userRoomDao.save(userRoomEntity);
+    }
 }
