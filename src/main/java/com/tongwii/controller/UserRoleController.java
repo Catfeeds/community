@@ -71,14 +71,14 @@ public class UserRoleController {
             userRoleService.save(userRoleEntity);
             return ResponseEntity.ok("角色添加成功!");
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("用户角色信息有误!");
+            return ResponseEntity.badRequest().body("用户不存在!");
         }
     }
 
     /**
      * 删除用户角色
      */
-    @DeleteMapping("/deleteUserRole")
+    @PutMapping("/deleteUserRole")
     public ResponseEntity deleteUserRole(@RequestBody UserRoleEntity userRoleEntity){
         // 首先得获取传来的用户的所有角色信息
         // 然后看看这些角色中是否包括传来的角色信息，如果包括，则可删除，否则不可删除
@@ -86,6 +86,7 @@ public class UserRoleController {
         try{
             for(UserRoleEntity u: userRoleEntities){
                 if(u.getRoleId().equals(userRoleEntity.getRoleId())){
+                    userRoleEntity.setId(u.getId());
                     userRoleService.delete(userRoleEntity);
                     return ResponseEntity.ok("角色删除成功!");
                 }
@@ -93,7 +94,7 @@ public class UserRoleController {
             // 倘若用户没有传来的角色，就报错误信息
             return ResponseEntity.badRequest().body("该用户无法删除此角色!");
         }catch (Exception e){
-            return ResponseEntity.badRequest().body("用户角色信息有误!");
+            return ResponseEntity.badRequest().body("用户不存在!");
         }
     }
 

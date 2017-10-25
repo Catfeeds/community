@@ -1,8 +1,9 @@
 package com.tongwii.domain;
 
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -14,97 +15,39 @@ import java.sql.Timestamp;
  * @date: 2017/7/13
  */
 @Entity
-@EqualsAndHashCode
+@Getter
+@Setter
 @Table(name = "message_comment", schema = "cloud_community", catalog = "")
 public class MessageCommentEntity implements Serializable {
-    private String id;
-    private String messageId;
-    private Boolean isLike;
-    private String comment;
-    private Timestamp commentDate;
-    private String commentatorId;
-    private MessageEntity messageByMessageId;
-    private UserEntity userByCommentatorId;
-
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
     @Column(name = "id", unique = true, nullable = false, length = 36)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    private String id;
     @Basic
     @Column(name = "message_id")
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
-
+    private String messageId;
     @Basic
     @Column(name = "is_like")
-    public Boolean getLike() {
-        return isLike;
-    }
-
-    public void setLike(Boolean like) {
-        isLike = like;
-    }
-
+    private Boolean isLike;
     @Basic
     @Column(name = "comment")
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
+    private String comment;
     @Basic
     @Column(name = "comment_date")
-    public Timestamp getCommentDate() {
-        return commentDate;
-    }
-
-    public void setCommentDate(Timestamp commentDate) {
-        this.commentDate = commentDate;
-    }
-
+    private Timestamp commentDate;
     @Basic
     @Column(name = "commentator_id")
-    public String getCommentatorId() {
-        return commentatorId;
-    }
-
-    public void setCommentatorId(String commentatorId) {
-        this.commentatorId = commentatorId;
-    }
-
+    private String commentatorId;
+    @Basic
+    @Column(name = "type")
+    private Integer type;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "message_id", referencedColumnName = "id", insertable = false, updatable = false)
-    public MessageEntity getMessageByMessageId() {
-        return messageByMessageId;
-    }
-
-    public void setMessageByMessageId(MessageEntity messageByMessageId) {
-        this.messageByMessageId = messageByMessageId;
-    }
+    private MessageEntity messageByMessageId;
 
     @ManyToOne
     @JoinColumn(name = "commentator_id", referencedColumnName = "id", insertable = false, updatable = false)
-    public UserEntity getUserByCommentatorId() {
-        return userByCommentatorId;
-    }
-
-    public void setUserByCommentatorId(UserEntity userByCommentatorId) {
-        this.userByCommentatorId = userByCommentatorId;
-    }
+    private UserEntity userByCommentatorId;
 }

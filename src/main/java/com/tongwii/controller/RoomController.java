@@ -7,6 +7,7 @@ import com.tongwii.domain.UserEntity;
 import com.tongwii.domain.UserRoomEntity;
 import com.tongwii.service.RoomService;
 import com.tongwii.service.UserRoomService;
+import com.tongwii.service.UserService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class RoomController {
     private RoomService roomService;
     @Autowired
     private UserRoomService userRoomService;
+    @Autowired
+    private UserService userService;
     /**
      * 根据楼宇查询住房信息
      * @param floorId
@@ -68,6 +71,11 @@ public class RoomController {
      */
     @PostMapping("/addSingleRoom")
     public ResponseEntity addSingleRoom(@RequestBody RoomEntity roomEntity){
+        // 首先获取户主的account，看是否存在这个用户
+        UserEntity userEntity = userService.findByAccount(roomEntity.getOwnerId());
+        if(userEntity == null){
+            return ResponseEntity.badRequest().body("该户主未在系统注册!");
+        }
         List<RoomEntity> roomEntities = roomService.findByFloorId(roomEntity.getFloorId());
         boolean exist = true;
         for(RoomEntity room: roomEntities){
@@ -76,9 +84,10 @@ public class RoomController {
             }
         }
         if(exist){
+            roomEntity.setOwnerId(userEntity.getId());
             roomService.save(roomEntity);
             UserRoomEntity userRoomEntity = new UserRoomEntity();
-            userRoomEntity.setUserId(roomEntity.getOwnerId());
+            userRoomEntity.setUserId(userEntity.getId());
             userRoomEntity.setType(Constants.HUZHU);
             userRoomEntity.setDes("户主");
             userRoomEntity.setRoomId(roomEntity.getId());

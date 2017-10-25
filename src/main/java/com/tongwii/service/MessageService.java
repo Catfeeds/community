@@ -20,8 +20,6 @@ import java.util.List;
 public class MessageService {
     private final IMessageDao messageDao;
 
-    private TongWIIResult result = new TongWIIResult();
-
     public MessageService(IMessageDao messageDao) {
         this.messageDao = messageDao;
     }
@@ -33,11 +31,10 @@ public class MessageService {
     public void updateMessageProcess(String messageId, Integer processState) {
         MessageEntity messageEntity = messageDao.findById(messageId);
         messageEntity.setProcessState(processState);
-//        messageDao.updateMessageStateByMessageId(messageId, processState);
     }
 
 
-    public List<MessageEntity> findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeId, String residenceId) {
+    public Page<MessageEntity> findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeId, String residenceId) {
         return messageDao.findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(pageable, messageTypeId, residenceId);
     }
 
@@ -53,6 +50,10 @@ public class MessageService {
      * */
     public Page<MessageEntity> findByResidenceIdOrderByCreateTimeAsc(Pageable pageable, String residenceId) {
         return messageDao.findByResidenceIdOrderByCreateTimeAsc(pageable, residenceId);
+    }
+
+    public MessageEntity findByMessageId(String messageId){
+        return messageDao.findById(messageId);
     }
 
 }

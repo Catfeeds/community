@@ -19,4 +19,8 @@ public interface MessageConstants {
     Integer UNPROCESS = 0;//未处理
     Integer PROCESSED = 1;//已处理
 
+    /**定义动态消息的操作类型*/
+    Integer ISLIKE = 1; // 点赞
+    Integer COMMENT = 0; // 评论
+
 }

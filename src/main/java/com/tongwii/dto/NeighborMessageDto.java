@@ -7,16 +7,13 @@ import lombok.Data;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 
 /**
- * ${DESCRIPTION}
- *
- * @author Zeral
- * @date 2017-09-25
+ * Created by admin on 2017/10/24.
  */
 @Data
-public class MessageDto {
-
+public class NeighborMessageDto {
     private String id;
     private String title;
     private String content;
@@ -24,4 +21,7 @@ public class MessageDto {
     private Date createTime;
     private String createUser;
     private String messageTypeId;
+    private Integer likeNum;
+    private Integer commentNum;
+    private Collection<MessageCommentEntity> messageCommentEntities;
 }

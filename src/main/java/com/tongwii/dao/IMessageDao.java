@@ -31,7 +31,7 @@ public interface IMessageDao extends JpaRepository<MessageEntity, String> {
     @Query("SELECT m FROM MessageEntity m WHERE m.messageTypeId IN (3,4,6,7) and m.residenceId = :residenceId and m.processState !=-1 order by m.createTime asc")
     Page<MessageEntity> findByResidenceIdOrderByCreateTimeAsc(Pageable pageable, @Param("residenceId") String residenceId);
 
-    List<MessageEntity> findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeId, String residenceId);
+    Page<MessageEntity> findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeId, String residenceId);
 
     MessageEntity findById(String messageId);
 }

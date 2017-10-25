@@ -4,6 +4,8 @@ import com.tongwii.domain.MessageCommentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * ${DESCRIPTION}
  *
@@ -12,4 +14,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface IMessageCommentDao extends JpaRepository<MessageCommentEntity, String> {
+
+    // 根据messageId查询消息评论记录
+    List<MessageCommentEntity> findByMessageIdAndType(String messageId, Integer type);
+
+    // 根据messageId与commentatorId查询消息点赞评论记录
+    List<MessageCommentEntity> findByMessageIdAndCommentatorIdAndType(String messageId, String commentatorId, Integer type);
 }

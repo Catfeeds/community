@@ -37,6 +37,15 @@ public class ResidenceController {
     }
 
     /**
+     * 根据residenceId获取社区信息
+     * @param residenceId
+     */
+    @GetMapping("/getResidenceInfo/{residenceId}")
+    public ResponseEntity getResidenceInfo(@PathVariable String residenceId){
+        ResidenceEntity residenceEntity = residenceService.findById(residenceId);
+        return ResponseEntity.ok(residenceEntity);
+    }
+    /**
      * 根据regionId查询residence信息
      * @param regionCode
      * @return result

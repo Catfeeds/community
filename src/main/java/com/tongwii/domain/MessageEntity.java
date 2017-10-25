@@ -54,6 +54,7 @@ public class MessageEntity implements Serializable {
     @Basic
     @Column(name = "repair_end_time")
     private Date repairEndTime;
+
     @ManyToOne
     @JoinColumn(name = "file_id", referencedColumnName = "id", insertable = false, updatable = false)
     private FileEntity fileByFileId;
@@ -66,6 +67,6 @@ public class MessageEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "residence_id", referencedColumnName = "id", insertable = false, updatable = false)
     private ResidenceEntity residenceByResidenceId;
-    @OneToMany(mappedBy = "messageByMessageId")
+    @OneToMany(mappedBy = "messageByMessageId", fetch = FetchType.EAGER)
     private Collection<MessageCommentEntity> messageCommentsById;
 }

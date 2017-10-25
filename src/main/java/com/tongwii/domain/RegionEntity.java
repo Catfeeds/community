@@ -20,7 +20,7 @@ public class RegionEntity implements Serializable {
     private String regionCode;
     private String name;
     private String parentCode;
-
+    private Integer level;
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
@@ -41,6 +41,16 @@ public class RegionEntity implements Serializable {
 
     public void setRegionCode(String regionCode) {
         this.regionCode = regionCode;
+    }
+
+    @Basic
+    @Column(name = "level")
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
     @Basic
