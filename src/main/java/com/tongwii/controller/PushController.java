@@ -1,5 +1,7 @@
 package com.tongwii.controller;
 
+import com.google.gson.Gson;
+import com.tongwii.bean.Message;
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.constant.MessageConstants;
 import com.tongwii.domain.MessageEntity;
@@ -7,10 +9,13 @@ import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.PushGateway;
 import com.tongwii.service.PushService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
 
@@ -47,23 +52,52 @@ public class PushController {
     }
 
     /**
-     * 推送消息接口
-     * @param messageEntity
+     * 全推
+     * @param message
      * @return
      */
-    @PostMapping("/pushMessage")
-    public ResponseEntity TestPush(@RequestBody MessageEntity messageEntity) {
+    @PostMapping("/pushAll")
+    public ResponseEntity pushAll(@RequestBody Message message) {
         String userId = SecurityUtils.getCurrentUserId();
-         if(StringUtils.isEmpty(messageEntity.getContent())){
-             return ResponseEntity.badRequest().body("消息内容不能为空!");
-         }else{
-             messageEntity.setCreateUserId(userId);
-             messageEntity.setProcessState(MessageConstants.PROCESSED);
-             messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
-             messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
-             messageService.save(messageEntity);
-             gateway.sendToMqtt(messageEntity.getContent());
-             return ResponseEntity.ok("消息推送成功!");
-         }
+        if (StringUtils.isEmpty(message.getMessage())) {
+            return ResponseEntity.badRequest().body("消息内容不能为空!");
+        } else {
+            MessageEntity messageEntity = new MessageEntity();
+            messageEntity.setTitle(message.getTitle());
+            messageEntity.setContent(message.getMessage());
+            messageEntity.setCreateUserId(userId);
+            messageEntity.setProcessState(MessageConstants.PROCESSED);
+            messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
+            messageService.save(messageEntity);
+            messageService.save(messageEntity);
+            gateway.pushAll(message.getMessage());
+            return ResponseEntity.ok("消息推送成功!");
+        }
+    }
+
+    /**
+     * 个推
+     * @param message
+     * @return
+     */
+    @PostMapping("/push")
+    public ResponseEntity push(@RequestBody Message message) {
+        String userId = SecurityUtils.getCurrentUserId();
+        if (StringUtils.isEmpty(message.getMessage())) {
+            return ResponseEntity.badRequest().body("消息内容不能为空!");
+        } else {
+            MessageEntity messageEntity = new MessageEntity();
+            messageEntity.setTitle(message.getTitle());
+            messageEntity.setContent(message.getMessage());
+            messageEntity.setCreateUserId(userId);
+            messageEntity.setProcessState(MessageConstants.PROCESSED);
+            messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
+            messageService.save(messageEntity);
+            Gson gson = new Gson();
+            gateway.push(gson.toJson(message));
+            return ResponseEntity.ok("消息推送成功！");
+        }
     }
 }

@@ -99,6 +99,5 @@ tongwii:
         serverURIs: tcp://106.14.227.231:1883
         topics: MQTT Examples
         qos: 2
-        defaultTopic: MQTT Examples
         defaultQos: 2
 

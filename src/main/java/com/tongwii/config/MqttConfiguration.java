@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.channel.PublishSubscribeChannel;
 import org.springframework.integration.core.MessageProducer;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
@@ -85,18 +86,36 @@ public class MqttConfiguration {
 
 
     @Bean
-    @ServiceActivator(inputChannel = "mqttOutboundChannel")
-    public MessageHandler mqttOutbound() {
+    @ServiceActivator(inputChannel = "pushToSelectUsers")
+    public MessageHandler mqttOutboundToSelectUsers() {
         MqttPahoMessageHandler messageHandler =
             new MqttPahoMessageHandler(UUID.randomUUID().toString(), mqttClientFactory());
         messageHandler.setAsync(true);
+        messageHandler.setConverter(new DefaultPahoMessageConverter());
         messageHandler.setDefaultQos(tongWiiProperties.getMqtt().getDefaultQos());
-        messageHandler.setDefaultTopic(tongWiiProperties.getMqtt().getDefaultTopic());
+        messageHandler.setDefaultTopic("selectUsers");
         return messageHandler;
     }
 
     @Bean
-    public MessageChannel mqttOutboundChannel() {
-        return new DirectChannel();
+    @ServiceActivator(inputChannel = "pushToAll")
+    public MessageHandler mqttOutboundToAll() {
+        MqttPahoMessageHandler messageHandler =
+            new MqttPahoMessageHandler(UUID.randomUUID().toString(), mqttClientFactory());
+        messageHandler.setAsync(true);
+        messageHandler.setConverter(new DefaultPahoMessageConverter());
+        messageHandler.setDefaultQos(tongWiiProperties.getMqtt().getDefaultQos());
+        messageHandler.setDefaultTopic("All");
+        return messageHandler;
+    }
+
+    @Bean
+    public MessageChannel pushToSelectUsers() {
+        return new PublishSubscribeChannel();
+    }
+
+    @Bean
+    public MessageChannel pushToAll() {
+        return new PublishSubscribeChannel();
     }
 }

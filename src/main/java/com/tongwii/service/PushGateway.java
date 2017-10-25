@@ -9,9 +9,12 @@ import org.springframework.integration.annotation.MessagingGateway;
  * @author Zeral
  * @date 2017-09-25
  */
-@MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
+@MessagingGateway(defaultRequestChannel = "pushToAll")
 public interface PushGateway {
 
-    @Gateway
-    void sendToMqtt(String data);
+    @Gateway(requestChannel = "pushToAll")
+    void pushAll(String message);
+
+    @Gateway(requestChannel = "pushToSelectUsers")
+    void push(String message);
 }

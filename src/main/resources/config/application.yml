@@ -51,7 +51,11 @@ server:
     session:
         cookie:
             http-only: true
-
+#    ssl:
+#        key-store: classpath:keystore.jks
+#        key-store-password: kurento
+#        keyStoreType: JKS
+#        keyAlias: kurento-selfsigned
 info:
     project:
         version: 0.0.1
@@ -84,4 +88,6 @@ tongwii:
         contact-email: zeralzhang@gmail.com
         license:
         license-url:
+kms:
+    url: ws://192.168.0.27:8888/kurento
 
