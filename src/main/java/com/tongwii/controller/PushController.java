@@ -1,6 +1,5 @@
 package com.tongwii.controller;
 
-import com.google.gson.Gson;
 import com.tongwii.bean.Message;
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.constant.MessageConstants;
@@ -9,6 +8,7 @@ import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.PushGateway;
 import com.tongwii.service.PushService;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -71,8 +71,7 @@ public class PushController {
             messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
             messageService.save(messageEntity);
             messageService.save(messageEntity);
-            Gson gson = new Gson();
-            gateway.pushAll(gson.toJson(message));
+            gateway.pushAll(JSONObject.fromObject(message).toString());
             return ResponseEntity.ok("消息推送成功!");
         }
     }
@@ -96,8 +95,7 @@ public class PushController {
             messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
             messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
             messageService.save(messageEntity);
-            Gson gson = new Gson();
-            gateway.push(gson.toJson(message));
+            gateway.push(JSONObject.fromObject(message).toString());
             return ResponseEntity.ok("消息推送成功！");
         }
     }

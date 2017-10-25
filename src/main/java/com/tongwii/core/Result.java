@@ -1,6 +1,6 @@
 package com.tongwii.core;
 
-import com.gexin.fastjson.JSON;
+import net.sf.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -185,7 +185,7 @@ public final class Result {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return JSONObject.fromObject(this).toString();
     }
 
     public enum ResultCode {

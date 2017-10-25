@@ -1,9 +1,9 @@
 package com.tongwii.controller;
 
-import com.gexin.fastjson.JSONObject;
 import com.tongwii.domain.RoleEntity;
 import com.tongwii.service.RoleService;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

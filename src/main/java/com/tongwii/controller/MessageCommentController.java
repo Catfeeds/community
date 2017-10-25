@@ -1,13 +1,12 @@
 package com.tongwii.controller;
 
-import com.gexin.fastjson.JSONArray;
-import com.gexin.fastjson.JSONObject;
 import com.tongwii.constant.MessageConstants;
 import com.tongwii.domain.MessageCommentEntity;
-import com.tongwii.domain.MessageEntity;
 import com.tongwii.dto.NeighborMessageDto;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;

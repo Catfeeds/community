@@ -57,29 +57,7 @@
             <id>getui-nexus</id>
             <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
         </repository>
-        <repository>
-            <id>kurento-snapshots</id>
-            <url>http://maven.kurento.org/archiva/repository/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>kurento-snapshots</id>
-            <url>http://maven.kurento.org/archiva/repository/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
 
@@ -133,11 +111,6 @@
                     <artifactId>android-json</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -249,12 +222,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
-        <!--commons-lang2.6-->
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
@@ -300,12 +267,6 @@
             <version>${jjwt.version}</version>
         </dependency>
 
-        <!-- security -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-data</artifactId>
-        </dependency>
-
         <!-- getuipeizhi -->
         <dependency>
             <groupId>com.gexin.platform</groupId>
@@ -319,13 +280,6 @@
             <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
             <version>2.5.0</version>
-        </dependency>
-
-        <!-- 视频客户端 -->
-        <dependency>
-            <groupId>org.kurento</groupId>
-            <artifactId>kurento-client</artifactId>
-            <version>6.6.2</version>
         </dependency>
 
         <!-- lombok -->

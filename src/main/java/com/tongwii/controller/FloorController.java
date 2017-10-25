@@ -1,11 +1,11 @@
 package com.tongwii.controller;
 
-import com.gexin.fastjson.JSONArray;
-import com.gexin.fastjson.JSONObject;
 import com.tongwii.core.Result;
 import com.tongwii.domain.FloorEntity;
 import com.tongwii.service.FloorService;
 import com.tongwii.service.ResidenceService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
