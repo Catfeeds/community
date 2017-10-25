@@ -71,7 +71,8 @@ public class PushController {
             messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
             messageService.save(messageEntity);
             messageService.save(messageEntity);
-            gateway.pushAll(message.getMessage());
+            Gson gson = new Gson();
+            gateway.pushAll(gson.toJson(message));
             return ResponseEntity.ok("消息推送成功!");
         }
     }
