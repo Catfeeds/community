@@ -25,7 +25,7 @@ spring:
     jackson:
         serialization.indent_output: true
     datasource:
-        url: jdbc:mysql://localhost:3306/cloud_community?useUnicode=true&characterEncoding=utf8&useSSL=false
+        url: jdbc:mysql://192.168.0.190:3306/cloud_community?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
         password: root
         druid:
@@ -47,9 +47,6 @@ spring:
         cache-seconds: 1
     thymeleaf:
         cache: false
-
-liquibase:
-    contexts: dev
 
 # ===================================================================
 # To enable SSL, generate a certificate using:

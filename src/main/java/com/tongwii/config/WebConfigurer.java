@@ -1,6 +1,5 @@
 package com.tongwii.config;
 
-import com.tongwii.constant.TongWiiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletContextInitializer;

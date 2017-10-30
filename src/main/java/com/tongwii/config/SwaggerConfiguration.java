@@ -25,6 +25,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
@@ -74,14 +76,15 @@ public class SwaggerConfiguration {
             new ArrayList<>());
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+            .host(tongWiiProperties.getSwagger().getHost())
+            .protocols(new HashSet<>(Arrays.asList(tongWiiProperties.getSwagger().getProtocols())))
             .apiInfo(apiInfo)
             .forCodeGeneration(true)
             .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
             .genericModelSubstitutes(ResponseEntity.class)
             .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();
+            .paths(regex(tongWiiProperties.getSwagger().getDefaultIncludePattern()))
+            .build();
         watch.stop();
         log.debug("Started Swagger in {} ms", watch.getTotalTimeMillis());
         return docket;
@@ -97,12 +100,18 @@ public class SwaggerConfiguration {
      */
     @Bean
     public Docket swaggerSpringfoxManagementDocket(@Value("${spring.application.name}") String appName,
-        @Value("${management.context-path}") String managementContextPath,
-        @Value("${info.project.version}") String appVersion) {
+                                                   @Value("${management.context-path}") String managementContextPath,
+                                                   @Value("${info.project.version}") String appVersion) {
+
+        String host = tongWiiProperties.getSwagger().getHost();
+        String[] protocols = tongWiiProperties.getSwagger().getProtocols();
+
         return new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(new ApiInfo(appName + " management API", "Management endpoints documentation",
                 appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<VendorExtension>()))
             .groupName("management")
+            .host(host)
+            .protocols(new HashSet<>(Arrays.asList(protocols)))
             .forCodeGeneration(true)
             .directModelSubstitute(java.nio.ByteBuffer.class, String.class)
             .genericModelSubstitutes(ResponseEntity.class)
@@ -114,6 +123,7 @@ public class SwaggerConfiguration {
     @Bean
     PageableParameterBuilderPlugin pageableParameterBuilderPlugin(TypeNameExtractor nameExtractor,
                                                                   TypeResolver resolver) {
+
         return new PageableParameterBuilderPlugin(nameExtractor, resolver);
     }
 }
