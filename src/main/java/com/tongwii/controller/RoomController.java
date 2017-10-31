@@ -8,15 +8,16 @@ import com.tongwii.domain.UserRoomEntity;
 import com.tongwii.service.RoomService;
 import com.tongwii.service.UserRoomService;
 import com.tongwii.service.UserService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by admin on 2017/7/17.
@@ -41,10 +42,10 @@ public class RoomController {
             return ResponseEntity.badRequest().body("楼宇未选择!");
         }
         List<RoomEntity> roomEntities = roomService.findByFloorId(floorId);
-        JSONArray jsonArray = new JSONArray();
+        List<Map> jsonArray = new ArrayList<>();
         if(!CollectionUtils.isEmpty(roomEntities)) {
             for (RoomEntity room : roomEntities) {
-                JSONObject object = new JSONObject();
+                Map<String, Object> object = new HashMap<>();
                 object.put("roomCode", room.getRoomCode()+"室");
                 object.put("roomStyle", room.getHuXing());
                 object.put("roomId", room.getId());
@@ -103,9 +104,9 @@ public class RoomController {
      * */
     /*
     @RequestMapping(value = "/updateRoomInfo", method = RequestMethod.POST )
-    public Result updateRoomInfo(@RequestBody RoomEntity roomEntity){
+    public ResponseEntity updateRoomInfo(@RequestBody RoomEntity roomEntity){
         if(roomEntity.getId() == null || roomEntity.getId().isEmpty()){
-            return Result.errorResult("住房实体不存在!");
+            return ResponseEntity.badRequest().body("住房实体不存在!");
         }
         RoomEntity newRoom = roomService.findById(roomEntity.getId());
         if(roomEntity.getRoomCode()!=null && !roomEntity.getRoomCode().isEmpty()){
@@ -126,7 +127,7 @@ public class RoomController {
         try{
             roomService.update(newRoom);
         }catch (Exception e){
-            return Result.errorResult("修改的信息关联的数据信息不存在!");
+            return ResponseEntity.badRequest().body("修改的信息关联的数据信息不存在!");
         }
         JSONObject object = new JSONObject();
         object.put("RoomCode", newRoom.getRoomCode());
@@ -134,7 +135,7 @@ public class RoomController {
         object.put("HuXing", newRoom.getHuXing());
         object.put("OwnerId", newRoom.getOwnerId());
         object.put("UnitId", newRoom.getUnitId());
-        return Result.successResult(object);
+        return ResponseEntity.ok(object);
     }*/
 
 }

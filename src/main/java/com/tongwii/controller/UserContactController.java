@@ -1,23 +1,17 @@
 package com.tongwii.controller;
 
-import com.tongwii.core.Result;
 import com.tongwii.domain.UserContactEntity;
 import com.tongwii.domain.UserEntity;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.UserContactService;
-import com.tongwii.service.UserService;
 import com.tongwii.util.PinYinUtil;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by admin on 2017/7/18.
@@ -27,8 +21,6 @@ import java.util.TreeMap;
 public class UserContactController {
     @Autowired
     private UserContactService userContactService;
-    @Autowired
-    private UserService userService;
 
     /**
      * 添加联系人
@@ -68,7 +60,7 @@ public class UserContactController {
             if(CollectionUtils.isEmpty(userContactList)){
                 return ResponseEntity.badRequest().body("此用户没有联系人!");
             }
-            Map<String, JSONArray> contactMap = new TreeMap<>();
+            Map<String, List> contactMap = new TreeMap<>();
             for(UserContactEntity userContactEntity : userContactList){
                 UserEntity friend = userContactEntity.getUserByFriendId();
                 String pinYin = userContactEntity.getDes();
@@ -76,7 +68,7 @@ public class UserContactController {
                     pinYin = friend.getNickName();
                 }
                 String sortString = PinYinUtil.converterToFirstChar(pinYin);
-                JSONObject object = new JSONObject();
+                Map<String, Object> object = new HashMap<>();
                 object.put("contactAccount", friend.getAccount());
                 object.put("contactName", friend.getName());
                 object.put("contactDesc", userContactEntity.getDes());
@@ -88,13 +80,13 @@ public class UserContactController {
                 object.put("contactId", userContactEntity.getId());
                 if (sortString.matches("[A-Z]")) {
                     if (!contactMap.containsKey(sortString)) {
-                        contactMap.put(sortString, new JSONArray());
+                        contactMap.put(sortString, new ArrayList());
                     }
                     contactMap.get(sortString).add(object);
                 } else {
                     if(!contactMap.containsKey(UserContactEntity.UNKNOWN_NAME)) {
                         // 存放不是A-Z字母的联系人名称
-                        contactMap.put(UserContactEntity.UNKNOWN_NAME, new JSONArray());
+                        contactMap.put(UserContactEntity.UNKNOWN_NAME, new ArrayList());
                     }
                     contactMap.get(UserContactEntity.UNKNOWN_NAME).add(object);
                 }

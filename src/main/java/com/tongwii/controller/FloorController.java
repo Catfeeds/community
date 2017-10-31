@@ -1,18 +1,18 @@
 package com.tongwii.controller;
 
-import com.tongwii.core.Result;
 import com.tongwii.domain.FloorEntity;
 import com.tongwii.service.FloorService;
 import com.tongwii.service.ResidenceService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by admin on 2017/7/18.
@@ -73,15 +73,15 @@ public class FloorController {
      * @return result
      * */
     @GetMapping(value = "/floor/{residenceId}")
-    public Result findFloorByResidenceId(@PathVariable String residenceId){
+    public ResponseEntity findFloorByResidenceId(@PathVariable String residenceId){
         List<FloorEntity> floorEntities = floorService.findFloorByResidenceId(residenceId);
         String address = residenceService.findById(residenceId).getAddress();
         if(floorEntities == null){
-            return Result.errorResult("此社区没有楼宇实体!");
+            return ResponseEntity.badRequest().body("此社区没有楼宇实体!");
         }
-        JSONArray jsonArray = new JSONArray();
+        List<Map> jsonArray = new ArrayList<>();
         for(FloorEntity floorEntity : floorEntities){
-            JSONObject object = new JSONObject();
+            Map<String, Object> object = new HashMap<>();
             object.put("floorName",floorEntity.getCode());
             object.put("floorPiles", floorEntity.getFloorPiles());
             object.put("isElev", floorEntity.getElev());
@@ -89,7 +89,7 @@ public class FloorController {
             object.put("address", address+floorEntity.getCode()+"栋");
             jsonArray.add(object);
         }
-        return Result.successResult(jsonArray);
+        return ResponseEntity.ok(jsonArray);
     }
 
     /**
@@ -98,9 +98,9 @@ public class FloorController {
      * @return result
      * */
     @PutMapping(value = "/updateFloorInfo")
-    public Result updateFloorInfo(@RequestBody FloorEntity floorEntity){
+    public ResponseEntity updateFloorInfo(@RequestBody FloorEntity floorEntity){
         if(StringUtils.isEmpty(floorEntity.getId())){
-            return Result.errorResult("楼宇实体不存在!");
+            return ResponseEntity.badRequest().body("楼宇实体不存在!");
         }
         FloorEntity newFloor= floorService.findById(floorEntity.getId());
         if(!StringUtils.isEmpty(floorEntity.getCode())){
@@ -115,13 +115,13 @@ public class FloorController {
         try{
             floorService.update(newFloor);
         }catch (Exception e){
-            return Result.errorResult("楼宇信息修改失败!");
+            return ResponseEntity.badRequest().body("楼宇信息修改失败!");
         }
-        JSONObject object = new JSONObject();
+        Map<String, Object> object = new HashMap<>();
         object.put("floorName", newFloor.getCode());
         object.put("principalId", newFloor.getPrincipalId());
         object.put("residenceId", newFloor.getResidenceId());
-        return Result.successResult(object);
+        return ResponseEntity.ok(object);
     }
 
 }

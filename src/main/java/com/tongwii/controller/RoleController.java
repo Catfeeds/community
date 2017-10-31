@@ -2,15 +2,16 @@ package com.tongwii.controller;
 
 import com.tongwii.domain.RoleEntity;
 import com.tongwii.service.RoleService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by admin on 2017/10/17.
@@ -27,9 +28,9 @@ public class RoleController {
     @GetMapping("/getRoleInfo")
     public ResponseEntity getRoleInfo(){
         List<RoleEntity> roleEntities = roleService.findAll();
-        JSONArray roleArray = new JSONArray();
+        List<Map> roleArray = new ArrayList();
         for(RoleEntity r: roleEntities){
-            JSONObject role = new JSONObject();
+            Map<String, Object> role = new HashMap<>();
             role.put("roleName", r.getName());
             role.put("roleCode", r.getCode());
             role.put("roleId", r.getId());

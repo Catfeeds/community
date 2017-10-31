@@ -5,15 +5,16 @@ import com.tongwii.domain.MessageCommentEntity;
 import com.tongwii.dto.NeighborMessageDto;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by admin on 2017/10/24.
@@ -102,9 +103,9 @@ public class MessageCommentController {
     public ResponseEntity getCommentList(@PathVariable String messageId){
         List<MessageCommentEntity> messageCommentEntities = messageCommentService.findByMessageIdAndType(messageId, MessageConstants.COMMENT);
         // 封装返回到前台的数据
-        JSONArray commentList = new JSONArray();
+        List<Map> commentList = new ArrayList<>();
         for(MessageCommentEntity messageCommentEntity: messageCommentEntities){
-            JSONObject commentObject = new JSONObject();
+            Map<String, Object> commentObject = new HashMap<>();
             commentObject.put("account", messageCommentEntity.getUserByCommentatorId().getAccount());
             commentObject.put("comment", messageCommentEntity.getComment());
             commentObject.put("commentDate", messageCommentEntity.getCommentDate());

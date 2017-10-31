@@ -1,8 +1,5 @@
 package com.tongwii.bean;
 
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.util.CycleDetectionStrategy;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
@@ -62,24 +59,6 @@ public class TongWIIResult implements Serializable {
 		this.data = object;
 	}
 
-	/**
-	 * 发送成功消息，带数据，提供字段排除字段功能
-	 *
-	 * @param info
-	 * @param object
-	 * @param excludes 需要排除的字段
-	 */
-	public void successResult(String info, Object object, final String[] excludes) {
-		successResult(info);
-		final JsonConfig jsonConfig = new JsonConfig();
-		if (excludes != null) {
-			jsonConfig.setExcludes(excludes);
-		}
-		jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);
-		final JSONObject jsonObject = JSONObject.fromObject(object, jsonConfig);
-
-		this.data = jsonObject;
-	}
 
 	/**
 	 * 发送处理失败消息

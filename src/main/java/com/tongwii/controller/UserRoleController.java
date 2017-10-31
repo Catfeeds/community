@@ -6,13 +6,14 @@ import com.tongwii.domain.UserRoleEntity;
 import com.tongwii.service.RoleService;
 import com.tongwii.service.UserRoleService;
 import com.tongwii.service.UserService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by admin on 2017/10/17.
@@ -37,10 +38,10 @@ public class UserRoleController {
         // 接着通过获取的userId查询user_role表，获取用户的所有角色信息
         List<UserRoleEntity> userRoleEntities = userRoleService.findByUserId(userEntity.getId());
         try{
-            JSONArray roleArray = new JSONArray();
+            List<Map> roleArray = new ArrayList<>();
             for(UserRoleEntity u: userRoleEntities){
                 RoleEntity roleEntity = roleService.findById(u.getRoleId());
-                JSONObject role = new JSONObject();
+                Map<String, Object> role = new HashMap<>();
                 role.put("roleName", roleEntity.getName());
                 role.put("roleCode", roleEntity.getCode());
                 role.put("roleDesc", roleEntity.getDes());

@@ -1,5 +1,7 @@
 package com.tongwii.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tongwii.bean.Message;
 import com.tongwii.bean.TongWIIResult;
 import com.tongwii.constant.MessageConstants;
@@ -8,7 +10,6 @@ import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.PushGateway;
 import com.tongwii.service.PushService;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +58,7 @@ public class PushController {
      * @return
      */
     @PostMapping("/pushAll")
-    public ResponseEntity pushAll(@RequestBody Message message) {
+    public ResponseEntity pushAll(@RequestBody Message message) throws JsonProcessingException {
         String userId = SecurityUtils.getCurrentUserId();
         if (StringUtils.isEmpty(message.getMessage())) {
             return ResponseEntity.badRequest().body("消息内容不能为空!");
@@ -71,7 +72,8 @@ public class PushController {
             messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
             messageService.save(messageEntity);
             messageService.save(messageEntity);
-            gateway.pushAll(JSONObject.fromObject(message).toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            gateway.pushAll(objectMapper.writeValueAsString(messageEntity));
             return ResponseEntity.ok("消息推送成功!");
         }
     }
@@ -82,7 +84,7 @@ public class PushController {
      * @return
      */
     @PostMapping("/push")
-    public ResponseEntity push(@RequestBody Message message) {
+    public ResponseEntity push(@RequestBody Message message) throws JsonProcessingException {
         String userId = SecurityUtils.getCurrentUserId();
         if (StringUtils.isEmpty(message.getMessage())) {
             return ResponseEntity.badRequest().body("消息内容不能为空!");
@@ -95,7 +97,8 @@ public class PushController {
             messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
             messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
             messageService.save(messageEntity);
-            gateway.push(JSONObject.fromObject(message).toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            gateway.pushAll(objectMapper.writeValueAsString(messageEntity));
             return ResponseEntity.ok("消息推送成功！");
         }
     }

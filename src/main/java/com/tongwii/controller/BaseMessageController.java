@@ -1,7 +1,6 @@
 package com.tongwii.controller;
 
 import com.tongwii.constant.MessageConstants;
-import com.tongwii.core.Result;
 import com.tongwii.domain.MessageCommentEntity;
 import com.tongwii.domain.MessageEntity;
 import com.tongwii.domain.UserEntity;
@@ -13,8 +12,6 @@ import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.UserService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -115,18 +112,18 @@ public class BaseMessageController {
      * @return result
      */
     @RequestMapping("/selectMessageByType")
-    public Result selectMessageByType(@RequestHeader("page") Integer page, @RequestBody MessageEntity message) {
+    public ResponseEntity selectMessageByType(@RequestHeader("page") Integer page, @RequestBody MessageEntity message) {
         if (message.getMessageTypeId() == null || message.getMessageTypeId().isEmpty()) {
-            return Result.errorResult("消息类型不可为空!");
+            return ResponseEntity.badRequest().body("消息类型不可为空!");
         }
         Pageable pageInfo = new PageRequest(page, 5);
         Page<MessageEntity> messageEntityPage = messageService.findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(pageInfo, message.getMessageTypeId(), message.getResidenceId());
         List<MessageEntity> messageEntities = messageEntityPage.getContent();
-        if (messageEntities.isEmpty() || messageEntities == null) {
-            return Result.errorResult("信息查询失败!");
+        if (CollectionUtils.isEmpty(messageEntities)) {
+            return ResponseEntity.badRequest().body("信息查询失败!");
         }
-        JSONArray messageJsonArray = new JSONArray();
-        JSONObject messageObject = new JSONObject();
+        List<Map> messageJsonArray = new ArrayList<>();
+        Map<String, Object> messageObject = new HashMap<>();
         for (MessageEntity messageEntity : messageEntities) {
             messageObject.put("id", messageEntity.getId());
             messageObject.put("title", messageEntity.getTitle());
@@ -140,7 +137,10 @@ public class BaseMessageController {
             messageObject.put("createUser", userEntity.getAccount());
             messageJsonArray.add(messageObject);
         }
-        return Result.successResult().add("totalPages", messageEntityPage.getTotalPages()).add("messageInfo", messageJsonArray);
+        Map<String, Object> data = new HashMap<>();
+        data.put("totalPages", messageEntityPage.getTotalPages());
+        data.put("messageInfo", messageJsonArray);
+        return ResponseEntity.ok(data);
     }
 
     /**

@@ -14,16 +14,13 @@ import com.tongwii.domain.MessageEntity;
 import com.tongwii.domain.UserEntity;
 import com.tongwii.domain.UserRoomEntity;
 import com.tongwii.util.PushTemplate;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by admin on 2017/7/13.
@@ -85,7 +82,7 @@ public class PushService {
 
         }
         // 封装了透传消息的具体透传内容
-        JSONObject transmissionContent = new JSONObject();
+        Map<String, Object> transmissionContent = new HashMap<>();
         transmissionContent.put("title",pushInfo.getTitle());
         transmissionContent.put("text",pushInfo.getContent());
 //        将推送者名称返回给前台

@@ -165,24 +165,6 @@
             <artifactId>jackson-module-afterburner</artifactId>
         </dependency>
 
-        <!-- json -->
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>${sfjson.version}</version>
-            <classifier>jdk15</classifier>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commons-lang</artifactId>
-                    <groupId>commons-lang</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- api接口文档 -->
         <dependency>
             <groupId>io.springfox</groupId>
