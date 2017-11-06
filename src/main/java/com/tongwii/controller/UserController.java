@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -59,7 +58,7 @@ public class UserController {
         // 基本用户信息
         user = userService.findByAccount(user.getAccount());
         UserDto userDTO = userMapper.userToUserDTO(user);
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>();
         map.put("userInfo", userDTO);
         map.put("token", jwt);
         return ResponseEntity.ok(map);

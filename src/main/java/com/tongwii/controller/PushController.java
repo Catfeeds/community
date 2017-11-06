@@ -13,6 +13,7 @@ import com.tongwii.service.PushService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,13 @@ import java.sql.Timestamp;
 
 
 /**
- * Created by admin on 2017/7/13.
+ * 推送消息Controller
+ *
+ * 社区管理员和超级管理员拥有推送权限
  */
 @RestController
-@RequestMapping("/message")
+@RequestMapping("/push")
+@PreAuthorize("hasAnyAuthority(T(com.tongwii.constant.AuthoritiesConstants).ADMIN, T(com.tongwii.constant.AuthoritiesConstants).COMMUNITY_ADMIN)")
 public class PushController {
 
     @Autowired
@@ -71,9 +75,8 @@ public class PushController {
             messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
             messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
             messageService.save(messageEntity);
-            messageService.save(messageEntity);
             ObjectMapper objectMapper = new ObjectMapper();
-            gateway.pushAll(objectMapper.writeValueAsString(messageEntity));
+            gateway.pushAll(objectMapper.writeValueAsString(message));
             return ResponseEntity.ok("消息推送成功!");
         }
     }
@@ -98,7 +101,7 @@ public class PushController {
             messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE.toString());
             messageService.save(messageEntity);
             ObjectMapper objectMapper = new ObjectMapper();
-            gateway.pushAll(objectMapper.writeValueAsString(messageEntity));
+            gateway.pushAll(objectMapper.writeValueAsString(message));
             return ResponseEntity.ok("消息推送成功！");
         }
     }

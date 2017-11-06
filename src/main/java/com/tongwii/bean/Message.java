@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * ${DESCRIPTION}
+ * 消息对象
  *
  * @author Zeral
  * @date 2017-10-23

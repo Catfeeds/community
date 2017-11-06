@@ -8,7 +8,8 @@ public final class ResultConstants {
     public static final String ERR_USER_DISABLED = "用户不可用";
     public static final String ERR_VALIDATION = "参数验证错误";
     public static final String ERR_ARGU_VALIDATION = "参数验证错误";
-    public static final String ERR_Authentication = "用户授权失败，请重新登录";
+    public static final String ERR_AUTHENTICATION = "用户授权失败，请重新登录";
+    public static final String ERR_FILESIZE_LIMITEXCEEDED = "上传文件过大，请重新上传";
 
 
     public static final String ERR_METHOD_NOT_SUPPORTED = "不支持的方法";

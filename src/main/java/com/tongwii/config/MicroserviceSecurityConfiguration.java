@@ -96,7 +96,7 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             // 允许匿名请求接口文档
             .antMatchers("/user/register").permitAll()
             .antMatchers("/user/login").permitAll()
-            .antMatchers("/user/**").hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
+            .antMatchers("/user/**").authenticated()
             // 允许任何授权用户访问
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
