@@ -970,5 +970,7 @@ public class TongWiiProperties {
         private int defaultQos;
 
         private String defaultTopic;
+
+        private Boolean defaultRetained;
     }
 }

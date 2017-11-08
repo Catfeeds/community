@@ -76,15 +76,22 @@ server:
 
 tongwii:
     # By default CORS is disabled. Uncomment to enable.
-#    cors:
-#        allowed-origins: "*"
-#        allowed-methods: "*"
-#        allowed-headers: "*"
-#        # 响应头中允许访问的header，默认为空
-#        exposed-headers:
-#        # 是否允许cookie随请求发送，使用时必须指定具体的域
-#        allow-credentials: true
-#        max-age: 1800
+    #    cors:
+    #        allowed-origins: "*"
+    #        allowed-methods: "*"
+    #        allowed-headers: "*"
+    #        # 响应头中允许访问的header，默认为空
+    #        exposed-headers:
+    #        # 是否允许cookie随请求发送，使用时必须指定具体的域
+    #        allow-credentials: true
+    #        max-age: 1800
+    cors:
+        allowed-origins: "*"
+        allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        allowed-headers: "*"
+        exposed-headers:
+        allow-credentials: true
+        max-age: 1800
     security:
         authentication:
             jwt:
@@ -94,7 +101,8 @@ tongwii:
                 token-validity-in-seconds-for-remember-me: 2592000
     mqtt:
         serverURIs: tcp://106.14.227.231:1883
-        topics: MQTT Examples
+        topics: All, selectUsers
         qos: 2
         defaultQos: 2
+        defaultRetained: false
 

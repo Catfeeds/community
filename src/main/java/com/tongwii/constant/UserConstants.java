@@ -6,17 +6,17 @@ package com.tongwii.constant;
  * Author Zeral
  * Date 2017-07-11
  */
-public interface UserConstants {
+public final class UserConstants {
 	/**获取用户返回状态**/
-	Integer USER_ENABLE = 1;				// 正常使用
-	Integer USER_DISABLE = -1;		// 不可用
+    public static final Integer USER_ENABLE = 1;		// 正常使用
+    public static final Integer USER_DISABLE = -1;		// 不可用
 
 	/**性别状态*/
-	Integer UNKNOWN_SEX = 0;
-	Integer USER_SEX_MALE = 1;
-	Integer USER_SEX_FAMALE = 2;
+    public static final Integer UNKNOWN_SEX = 0;
+    public static final Integer USER_SEX_MALE = 1;
+    public static final Integer USER_SEX_FAMALE = 2;
 
-    int PASSWORD_MIN_LENGTH = 6;
+    public static final Integer PASSWORD_MIN_LENGTH = 6;
 
-    int PASSWORD_MAX_LENGTH = 30;
+    public static final Integer PASSWORD_MAX_LENGTH = 30;
 }

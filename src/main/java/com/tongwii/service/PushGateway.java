@@ -2,19 +2,19 @@ package com.tongwii.service;
 
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
+import org.springframework.integration.mqtt.support.MqttHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 
 /**
- * ${DESCRIPTION}
+ * 推送消息端点
  *
  * @author Zeral
  * @date 2017-09-25
  */
-@MessagingGateway(defaultRequestChannel = "pushToAll")
+@MessagingGateway(defaultRequestChannel = "mqttOutboundChannel")
 public interface PushGateway {
 
-    @Gateway(requestChannel = "pushToAll")
-    void pushAll(String message);
+    @Gateway(requestChannel = "mqttOutboundChannel")
+    void push(String message, @Header(MqttHeaders.TOPIC) String topic);
 
-    @Gateway(requestChannel = "pushToSelectUsers")
-    void push(String message);
 }

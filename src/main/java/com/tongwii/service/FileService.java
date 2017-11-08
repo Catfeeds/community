@@ -36,7 +36,7 @@ public class FileService {
             fileEntity.setFileType(FileUtil.rtnFileType(file.getOriginalFilename()));
             fileEntity.setFilePath(relativeUrl);
             fileEntity.setUploadUserId(userId);
-            filedao.save(fileEntity);
+            filedao.saveAndFlush(fileEntity);
         } catch (IOException e) {
             e.printStackTrace();
         }

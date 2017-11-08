@@ -35,7 +35,7 @@ public class MessageCommentController {
         Integer likeNum = messageEntity.getLikeNum();
         Boolean isLike = false;// 为true表示已经赞过了
         // 通过userId与传来的messageId查询点赞记录
-        List<MessageCommentEntity> commentEntities = messageCommentService.findByMessageIdAndCommentatorIdAndType(messageEntity.getId(), userId, MessageConstants.ISLIKE);
+        List<MessageCommentEntity> commentEntities = messageCommentService.findByMessageIdAndCommentatorIdAndType(messageEntity.getId(), userId, MessageConstants.IS_LIKE);
         // 首先需要通过传来的messageId与commentorId查询是否存在记录，如果不存在则说明该用户还没有点赞过该消息，就要进行信息的增加操作
         if (CollectionUtils.isEmpty(commentEntities)) {
             // 添加记录
@@ -44,7 +44,7 @@ public class MessageCommentController {
             messageCommentEntity.setCommentatorId(userId);
             messageCommentEntity.setMessageId(messageEntity.getId());
             messageCommentEntity.setCommentDate(new Timestamp(System.currentTimeMillis()));
-            messageCommentEntity.setType(MessageConstants.ISLIKE);
+            messageCommentEntity.setType(MessageConstants.IS_LIKE);
             messageCommentService.addMessageComment(messageCommentEntity);
             isLike = false;
         } else {

@@ -85,37 +85,29 @@ public class MqttConfiguration {
     }
 
 
+    /**
+     * Outbound Channel Adapter
+     * 出站通道适配器，可以配置clientId, broker 服务器地址，MqttMessageConverter (optional) mqtt消息转换器，
+     * 连接工厂信息，默认的服务质量，默认的topic，默认的retained值，默认的qos值，异步发送消息（不用等待确认），
+     *
+     * @return
+     */
     @Bean
-    @ServiceActivator(inputChannel = "pushToSelectUsers")
-    public MessageHandler mqttOutboundToSelectUsers() {
+    @ServiceActivator(inputChannel = "mqttOutboundChannel")
+    public MessageHandler mqttOutbound() {
         MqttPahoMessageHandler messageHandler =
             new MqttPahoMessageHandler(UUID.randomUUID().toString(), mqttClientFactory());
         messageHandler.setAsync(true);
+        messageHandler.setAsyncEvents(true);
         messageHandler.setConverter(new DefaultPahoMessageConverter());
         messageHandler.setDefaultQos(tongWiiProperties.getMqtt().getDefaultQos());
-        messageHandler.setDefaultTopic("selectUsers");
+        messageHandler.setDefaultTopic(tongWiiProperties.getMqtt().getDefaultTopic());
+        messageHandler.setDefaultRetained(tongWiiProperties.getMqtt().getDefaultRetained());
         return messageHandler;
     }
 
     @Bean
-    @ServiceActivator(inputChannel = "pushToAll")
-    public MessageHandler mqttOutboundToAll() {
-        MqttPahoMessageHandler messageHandler =
-            new MqttPahoMessageHandler(UUID.randomUUID().toString(), mqttClientFactory());
-        messageHandler.setAsync(true);
-        messageHandler.setConverter(new DefaultPahoMessageConverter());
-        messageHandler.setDefaultQos(tongWiiProperties.getMqtt().getDefaultQos());
-        messageHandler.setDefaultTopic("All");
-        return messageHandler;
-    }
-
-    @Bean
-    public MessageChannel pushToSelectUsers() {
-        return new PublishSubscribeChannel();
-    }
-
-    @Bean
-    public MessageChannel pushToAll() {
+    public MessageChannel mqttOutboundChannel() {
         return new PublishSubscribeChannel();
     }
 }

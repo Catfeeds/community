@@ -1,26 +1,16 @@
 package com.tongwii.service;
 
-import com.gexin.rp.sdk.base.IPushResult;
-import com.gexin.rp.sdk.base.impl.ListMessage;
-import com.gexin.rp.sdk.base.impl.Target;
-import com.gexin.rp.sdk.exceptions.RequestException;
-import com.gexin.rp.sdk.http.IGtPush;
-import com.gexin.rp.sdk.template.TransmissionTemplate;
-import com.tongwii.bean.TongWIIResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tongwii.bean.Message;
 import com.tongwii.constant.MessageConstants;
-import com.tongwii.constant.PushConstants;
-import com.tongwii.constant.UserConstants;
 import com.tongwii.domain.MessageEntity;
-import com.tongwii.domain.UserEntity;
-import com.tongwii.domain.UserRoomEntity;
-import com.tongwii.util.PushTemplate;
+import com.tongwii.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 /**
  * Created by admin on 2017/7/13.
@@ -29,14 +19,29 @@ import java.util.*;
 @Transactional
 public class PushService {
     @Autowired
-    private UserRoomService userRoomService;
+    private PushGateway gateway;
     @Autowired
     private MessageService messageService;
-    @Autowired
-    private RoomService roomService;
-    @Autowired
-    private UserService userService;
-    // 个推应用配置参数设置
+
+    public void push(Message message, String pushTopic) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            gateway.push(objectMapper.writeValueAsString(message), pushTopic);
+            String userId = SecurityUtils.getCurrentUserId();
+            MessageEntity messageEntity = new MessageEntity();
+            messageEntity.setTitle(message.getTitle());
+            messageEntity.setContent(message.getMessage());
+            messageEntity.setCreateUserId(userId);
+            messageEntity.setProcessState(MessageConstants.PROCESSED);
+            messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE);
+            messageService.save(messageEntity);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+   /* // 个推应用配置参数设置
     private static String APPID = "JmL38ikDvT6BxVij26iff2";
     private static String APPKEY = "5ZtUygJRzc6Ssg2jt3dvE7";
     private static String MASTERSECRET = "eE5Y3cabZE9Wy54eAwz6Z1";
@@ -52,7 +57,7 @@ public class PushService {
      * @param pushInfo
      * @param roomCode
      * @return result
-     * */
+     * *//*
     public TongWIIResult listMesssgePush(MessageEntity pushInfo, String roomCode){
         ListMessage message = new ListMessage();
         IPushResult ret = null;
@@ -85,8 +90,7 @@ public class PushService {
         Map<String, Object> transmissionContent = new HashMap<>();
         transmissionContent.put("title",pushInfo.getTitle());
         transmissionContent.put("text",pushInfo.getContent());
-//        将推送者名称返回给前台
-        // 此处需要返回发送者的昵称，因此需要对这个数据做处理
+        // 0此处需要返回发送者的昵称，因此需要对这个数据做处理
         UserEntity userEntity = userService.findById(pushInfo.getCreateUserId());
         transmissionContent.put("sender",userEntity.getNickName());
 
@@ -171,5 +175,5 @@ public class PushService {
             result.setStatus(PushConstants.PUSH_ERROR);
             return result;
         }
-    }
+    }*/
 }

@@ -187,7 +187,7 @@ public class BaseMessageController {
                 Integer likeNum = 0;
                 Integer commentNum = 0;
                 // 封装点赞参数
-                List<MessageCommentEntity> likeMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.ISLIKE);
+                List<MessageCommentEntity> likeMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.IS_LIKE);
                 for(MessageCommentEntity commentEntity: likeMessageEntities){
                     if(commentEntity.getIsLike()!=null && commentEntity.getIsLike()){
                         likeNum++;

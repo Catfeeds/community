@@ -25,7 +25,7 @@ public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Object> processAuthException(AuthenticationException ex) {
-        return new ResponseEntity<>(ResultConstants.ERR_Authentication, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(ResultConstants.ERR_AUTHENTICATION, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(NullPointerException.class)
