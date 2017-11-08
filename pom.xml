@@ -143,6 +143,12 @@
             </exclusions>
         </dependency>
 
+        <!-- spring-integration-ftp -->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-ftp</artifactId>
+        </dependency>
+
         <!-- jackson 支持 -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

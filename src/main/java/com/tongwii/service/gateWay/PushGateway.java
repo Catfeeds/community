@@ -1,4 +1,4 @@
-package com.tongwii.service;
+package com.tongwii.service.gateWay;
 
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;

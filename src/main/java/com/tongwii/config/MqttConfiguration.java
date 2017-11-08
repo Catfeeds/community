@@ -18,13 +18,12 @@ import org.springframework.messaging.MessageHandler;
 import java.util.UUID;
 
 /**
- * ${DESCRIPTION}
+ * MQTT推送配置
  *
  * @author Zeral
  * @date 2017-09-25
  */
 @Configuration
-@IntegrationComponentScan
 public class MqttConfiguration {
     private final TongWiiProperties tongWiiProperties;
 

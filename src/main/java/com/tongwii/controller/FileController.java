@@ -7,7 +7,9 @@ import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.FileService;
 import com.tongwii.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,12 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Created by admin on 2017/7/28.
  */
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/upload")
 public class FileController {
     @Autowired
     private FileService fileService;
@@ -31,7 +35,7 @@ public class FileController {
      *  添加图片文件接口
      *
      * */
-    @PostMapping(path = "/addPicture", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/addPicture")
     public TongWIIResult addPicture(@RequestParam("file") MultipartFile file, HttpServletResponse response){
         try {
             System.out.println("=========开始上传图片======================================");
@@ -49,5 +53,32 @@ public class FileController {
             response.reset();
             return result;
         }
+    }
+
+    @PostMapping("/file")
+    public ResponseEntity uploadFile(@RequestParam("file") MultipartFile uploadFile) {
+
+        if (uploadFile.isEmpty()) {
+            return new ResponseEntity<>("please select a file!", HttpStatus.OK);
+        }
+
+        fileService.uploadFileToFTP(uploadFile);
+
+        return ResponseEntity.ok("Successfully uploaded - " + uploadFile.getOriginalFilename());
+
+    }
+
+    @PostMapping("/files")
+    public ResponseEntity uploadFileMulti(@RequestParam("files") MultipartFile[] uploadFiles) {
+
+        String uploadedFileName = Arrays.stream(uploadFiles).map(MultipartFile::getOriginalFilename)
+            .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
+
+        if (StringUtils.isEmpty(uploadedFileName)) {
+            return ResponseEntity.ok("please select a file!");
+        }
+
+        fileService.uploadFilesToFTP(Arrays.asList(uploadFiles));
+        return new ResponseEntity<>("Successfully uploaded - " + uploadedFileName, HttpStatus.OK);
     }
 }

@@ -6,8 +6,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Calendar;
 
 
@@ -97,6 +96,61 @@ public class FileUtil {
     public static boolean isImage(String fileName) {
         fileName = fileName.toLowerCase();
         return (fileName.endsWith(".png")) || (fileName.endsWith(".jpg")) || (fileName.endsWith(".gif")) || (fileName.endsWith(".jpeg")) || (fileName.endsWith(".bmp"));
+    }
+
+    /**
+     * multiPartFile转File
+     *
+     * @param multipart 待转换的file
+     * @return file
+     */
+    public static File multipartToFile(MultipartFile multipart) {
+        File convFile = new File(multipart.getOriginalFilename());
+        try {
+            FileOutputStream fos = new FileOutputStream(convFile);
+            fos.write(multipart.getBytes());
+            fos.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return convFile;
+    }
+
+    /**
+     * 流保存到文件
+     * @param inputStream
+     * @param savePath
+     * @return
+     */
+    public static File convertInputStreamToFile(InputStream inputStream, String savePath) {
+        OutputStream outputStream = null;
+        File file = new File(savePath);
+        try {
+            outputStream = new FileOutputStream(file);
+            int read;
+            byte[] bytes = new byte[1024];
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return file;
     }
 }
 

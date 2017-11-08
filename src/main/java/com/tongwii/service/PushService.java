@@ -6,6 +6,7 @@ import com.tongwii.bean.Message;
 import com.tongwii.constant.MessageConstants;
 import com.tongwii.domain.MessageEntity;
 import com.tongwii.security.SecurityUtils;
+import com.tongwii.service.gateWay.PushGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
