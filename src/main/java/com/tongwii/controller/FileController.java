@@ -1,13 +1,9 @@
 package com.tongwii.controller;
 
-import com.tongwii.bean.TongWIIResult;
 import com.tongwii.domain.FileEntity;
-import com.tongwii.domain.UserEntity;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.FileService;
-import com.tongwii.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,32 +22,32 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/upload")
 public class FileController {
+
+    private final FileService fileService;
+
     @Autowired
-    private FileService fileService;
-    @Autowired
-    private UserService userService;
-    private TongWIIResult result = new TongWIIResult();
+    public FileController(FileService fileService) {
+        this.fileService = fileService;
+    }
+
     /**
      *  添加图片文件接口
      *
      * */
     @PostMapping("/addPicture")
-    public TongWIIResult addPicture(@RequestParam("file") MultipartFile file, HttpServletResponse response){
+    public ResponseEntity addPicture(@RequestParam("file") MultipartFile file, HttpServletResponse response){
         try {
             System.out.println("=========开始上传图片======================================");
-            String account = SecurityUtils.getCurrentUserLogin();
-            UserEntity userEntity = userService.findByAccount(account);
+            String id = SecurityUtils.getCurrentUserLogin();
             // 上传文件并更新用户地址
-            FileEntity fileEntity = fileService.saveAndUploadFile(userEntity.getId(), file);
-            result.successResult("图片上传成功", fileEntity.getId());
+            FileEntity fileEntity = fileService.saveAndUploadFile(id, file);
             System.out.println("==========图片上传完毕======================================");
             // 使用了上传文件的输出流和response的返回json会出错，重置response
             response.reset();
-            return result;
+            return ResponseEntity.ok(fileEntity.getId());
         } catch (Exception e) {
-            result.errorResult("图片上传失败");
             response.reset();
-            return result;
+            return ResponseEntity.badRequest().body("图片上传失败!");
         }
     }
 
@@ -59,12 +55,12 @@ public class FileController {
     public ResponseEntity uploadFile(@RequestParam("file") MultipartFile uploadFile) {
 
         if (uploadFile.isEmpty()) {
-            return new ResponseEntity<>("please select a file!", HttpStatus.OK);
+            return ResponseEntity.badRequest().body("请选择上传文件!");
         }
+        String userId = SecurityUtils.getCurrentUserId();
+        fileService.saveAndUploadFileToFTP(userId, uploadFile);
 
-        fileService.uploadFileToFTP(uploadFile);
-
-        return ResponseEntity.ok("Successfully uploaded - " + uploadFile.getOriginalFilename());
+        return ResponseEntity.ok("上传成功 - " + uploadFile.getOriginalFilename());
 
     }
 
@@ -75,10 +71,10 @@ public class FileController {
             .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
 
         if (StringUtils.isEmpty(uploadedFileName)) {
-            return ResponseEntity.ok("please select a file!");
+            return ResponseEntity.badRequest().body("请选择上传文件!");
         }
-
-        fileService.uploadFilesToFTP(Arrays.asList(uploadFiles));
-        return new ResponseEntity<>("Successfully uploaded - " + uploadedFileName, HttpStatus.OK);
+        String userId = SecurityUtils.getCurrentUserId();
+        fileService.saveAndUploadFilesToFTP(userId, Arrays.asList(uploadFiles));
+        return ResponseEntity.ok("上传成功 - " + uploadedFileName);
     }
 }

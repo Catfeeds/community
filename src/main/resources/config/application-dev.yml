@@ -105,4 +105,9 @@ tongwii:
         qos: 2
         defaultQos: 2
         defaultRetained: false
+    ftp:
+        host: 192.168.0.190
+        userName: www
+        passWord: www
+        remoteDirectory: /data/upload/community/
 

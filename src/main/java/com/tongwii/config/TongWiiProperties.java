@@ -44,6 +44,8 @@ public class TongWiiProperties {
 
     private final Mqtt mqtt = new Mqtt();
 
+    private final Ftp ftp = new Ftp();
+
     public Async getAsync() {
         return async;
     }
@@ -94,6 +96,10 @@ public class TongWiiProperties {
 
     public Mqtt getMqtt() {
         return mqtt;
+    }
+
+    public Ftp getFtp() {
+        return ftp;
     }
 
     public static class Async {
@@ -961,10 +967,13 @@ public class TongWiiProperties {
     @Setter
     public static class Mqtt {
 
+        // 订阅的主题数组
         private String[] topics;
 
+        // 订阅的broker服务器数组
         private String[] serverURIs;
 
+        // 对应订阅主题的qos
         private int[] qos;
 
         private int defaultQos;
@@ -972,5 +981,21 @@ public class TongWiiProperties {
         private String defaultTopic;
 
         private Boolean defaultRetained;
+    }
+
+    @Getter
+    @Setter
+    public static class Ftp {
+
+        private String host;
+
+        private String userName;
+
+        private String passWord;
+
+        private String port;
+
+        // 远程ftp文件夹路径
+        private String remoteDirectory;
     }
 }

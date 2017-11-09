@@ -3,8 +3,10 @@ package com.tongwii.config;
 import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.expression.common.LiteralExpression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.integration.annotation.ServiceActivator;
+import org.springframework.integration.file.FileHeaders;
 import org.springframework.integration.file.remote.session.CachingSessionFactory;
 import org.springframework.integration.file.remote.session.SessionFactory;
 import org.springframework.integration.ftp.outbound.FtpMessageHandler;
@@ -32,9 +34,9 @@ public class FTPConfiguration {
     @Bean
     public SessionFactory<FTPFile> ftpSessionFactory() {
         DefaultFtpSessionFactory sf = new DefaultFtpSessionFactory();
-        sf.setHost("192.168.0.190");
-        sf.setUsername("www");
-        sf.setPassword("www");
+        sf.setHost(tongWiiProperties.getFtp().getHost());
+        sf.setUsername(tongWiiProperties.getFtp().getUserName());
+        sf.setPassword(tongWiiProperties.getFtp().getPassWord());
         sf.setControlEncoding(StandardCharsets.UTF_8.displayName());
         return new CachingSessionFactory<>(sf);
     }
@@ -43,11 +45,12 @@ public class FTPConfiguration {
     @ServiceActivator(inputChannel = "toFtpChannel")
     public MessageHandler ftpHandler() {
         FtpMessageHandler handler = new FtpMessageHandler(ftpSessionFactory());
-        handler.setRemoteDirectoryExpression(new LiteralExpression("/data/upload/test"));
+        ExpressionParser parser = new SpelExpressionParser();
+        handler.setRemoteDirectoryExpression(parser.parseExpression(  "'"+ tongWiiProperties.getFtp().getRemoteDirectory() +"'" + " + headers['" + FileHeaders.REMOTE_DIRECTORY + "']"));
         handler.setAutoCreateDirectory(true);
         handler.setFileNameGenerator(message -> {
             if (message.getPayload() instanceof File) {
-                return ((File) message.getPayload()).getName();
+                return message.getHeaders().get(FileHeaders.FILENAME).toString();
             } else {
                 throw new IllegalArgumentException("File expected as payload.");
             }

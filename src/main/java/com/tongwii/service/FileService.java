@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -118,12 +119,24 @@ public class FileService {
     /**
      * 单文件上传 (MultipartFile)
      *
-     * @param multipartFile MultipartFile
+     * @param userId 上传用户id
+     * @param multipartFile 上传的文件
+     * @return
      */
-    public void uploadFileToFTP(MultipartFile multipartFile) {
+    public FileEntity saveAndUploadFileToFTP(String userId, MultipartFile multipartFile) {
+        String suffix = FileUtil.getFileSuffix(multipartFile.getOriginalFilename());
+        String fileName = UUID.randomUUID().toString() + suffix;
+        String fileUrl = FileUtil.getRelativeFilePath();
+        FileEntity fileEntity = new FileEntity();
+        fileEntity.setFileName(multipartFile.getOriginalFilename());
+        fileEntity.setFileType(FileUtil.rtnFileType(multipartFile.getOriginalFilename()));
+        fileEntity.setFilePath(fileUrl + "/" + fileName);
+        fileEntity.setUploadUserId(userId);
+        filedao.saveAndFlush(fileEntity);
         File file = FileUtil.multipartToFile(multipartFile);
-        ftpGateway.sendToFtp(file);
+        ftpGateway.sendToFtp(file, fileName, fileUrl);
         file.delete();
+        return fileEntity;
     }
 
     /**
@@ -131,27 +144,7 @@ public class FileService {
      *
      * @param files List<MultipartFile>
      */
-    public void uploadFilesToFTP(List<MultipartFile> files) {
-        uploadFiles(files, true);
-    }
-
-
-    /**
-     * 批量上传 (MultipartFile)
-     *
-     * @param files List<MultipartFile>
-     * @throws IOException
-     */
-    public void uploadFiles(List<MultipartFile> files, boolean deleteSource) {
-        for (MultipartFile multipartFile : files) {
-            if (multipartFile.isEmpty()) {
-                continue;
-            }
-            File file = FileUtil.multipartToFile(multipartFile);
-            ftpGateway.sendToFtp(file);
-            if (deleteSource) {
-                file.delete();
-            }
-        }
+    public List<FileEntity> saveAndUploadFilesToFTP(String userId, List<MultipartFile> multipartFiles) {
+        return multipartFiles.parallelStream().filter(Objects::nonNull).map(file -> this.saveAndUploadFileToFTP(userId, file)).collect(Collectors.toList());
     }
 }

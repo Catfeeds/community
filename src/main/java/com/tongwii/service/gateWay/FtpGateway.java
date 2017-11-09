@@ -2,6 +2,8 @@ package com.tongwii.service.gateWay;
 
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
+import org.springframework.integration.file.FileHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 
 import java.io.File;
 
@@ -14,5 +16,5 @@ import java.io.File;
 @MessagingGateway
 public interface FtpGateway {
     @Gateway(requestChannel = "toFtpChannel")
-    void sendToFtp(File file);
+    void sendToFtp(File file, @Header(FileHeaders.FILENAME) String fileName, @Header(FileHeaders.REMOTE_DIRECTORY) String filrUrl);
 }

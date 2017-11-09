@@ -59,7 +59,7 @@ public class UserService {
     }
 
     public String updateUserAvatorById(String userId, MultipartFile file) {
-        FileEntity fileEntity = fileService.saveAndUploadFile(userId, file);
+        FileEntity fileEntity = fileService.saveAndUploadFileToFTP(userId, file);
         userDao.updateAvatorById(userId, fileEntity.getId());
         return fileEntity.getFilePath();
     }

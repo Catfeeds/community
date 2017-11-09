@@ -93,11 +93,11 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            // 允许匿名请求接口文档
+            .antMatchers("/push").hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.COMMUNITY_ADMIN)
+            .antMatchers("/upload/**").authenticated()
             .antMatchers("/user/register").permitAll()
             .antMatchers("/user/login").permitAll()
             .antMatchers("/user/**").authenticated()
-            // 允许任何授权用户访问
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .and()

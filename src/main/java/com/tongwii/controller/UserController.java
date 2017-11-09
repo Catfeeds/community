@@ -16,7 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,14 +65,16 @@ public class UserController {
 
 	// 上传用户头像
 	@PostMapping("/uploadAvatar")
-	public ResponseEntity uploadAvatar(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
+	public ResponseEntity uploadAvatar(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("请选择上传文件!");
+        }
         System.out.println("=========开始上传头像======================================");
         String userId = SecurityUtils.getCurrentUserId();
         // 上传文件并更新用户地址
         String uploadUrl = userService.updateUserAvatorById(userId, file);
         System.out.println("==========头像上传完毕======================================");
         // 使用了上传文件的输出流和response的返回json会出错，重置response
-        response.reset();
         return ResponseEntity.ok(uploadUrl);
 	}
 

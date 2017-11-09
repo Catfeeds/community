@@ -7,7 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -15,7 +16,7 @@ import java.util.Calendar;
  */
 public class FileUtil {
 
-    private static final String UPLOAD_FOLDER_URL = "/uploadAvatar/";
+    private static final String UPLOAD_FOLDER_URL = "/community/";
     /**
      * 得到要存储的目标文件
      *
@@ -26,7 +27,7 @@ public class FileUtil {
         ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attrs.getRequest();
 
-        String dest = request.getServletContext().getRealPath("/") + UPLOAD_FOLDER_URL + getRelativeFilePath(fileInfoName);
+        String dest = request.getServletContext().getRealPath("/") + UPLOAD_FOLDER_URL + getRelativeFilePath() + fileInfoName;
 
         return new File(dest);
     }
@@ -34,14 +35,12 @@ public class FileUtil {
     /**
      * 得到按日期划分文件夹的相对地址
      *
-     * @param fileInfoName 文件名称
      * @return String 相对地址
      */
-    private static String getRelativeFilePath(String fileInfoName) {
-        Calendar calendar = Calendar.getInstance();
-        String path = calendar.get(1) + "/" + (calendar.get(2) + 1) + "/" + fileInfoName;
-
-        return path;
+    public static String getRelativeFilePath() {
+        /*Calendar calendar = Calendar.getInstance();
+        String path = calendar.get(1) + "/" + (calendar.get(2) + 1) + "/" + fileInfoName;*/
+        return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     }
 
     /**
@@ -54,7 +53,7 @@ public class FileUtil {
     public static String uploadFile(MultipartFile source, String fileInfoName) throws IOException {
         File destFile = FileUtil.getDestFile(fileInfoName);
         FileUtils.copyInputStreamToFile(source.getInputStream(), destFile);
-        return UPLOAD_FOLDER_URL+getRelativeFilePath(fileInfoName);
+        return UPLOAD_FOLDER_URL+getRelativeFilePath()+fileInfoName;
     }
 
     /**
@@ -84,7 +83,11 @@ public class FileUtil {
      * @return String 文件后缀
      */
     public static String getFileSuffix(String fileName) {
-        return fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+        try {
+            return fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**
