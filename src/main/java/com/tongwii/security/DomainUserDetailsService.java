@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Authenticate a createUser from the database.
+ * Authenticate a User from the database.
  */
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
