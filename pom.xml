@@ -49,13 +49,6 @@
         <profile.swagger/>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>getui-nexus</id>
-            <url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
 
         <!-- Spring Boot依赖 -->
@@ -240,13 +233,6 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>${jjwt.version}</version>
-        </dependency>
-
-        <!-- getuipeizhi -->
-        <dependency>
-            <groupId>com.gexin.platform</groupId>
-            <artifactId>gexin-rp-sdk-http</artifactId>
-            <version>4.0.1.9</version>
         </dependency>
 
 
