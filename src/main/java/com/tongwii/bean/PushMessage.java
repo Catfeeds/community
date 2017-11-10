@@ -13,13 +13,11 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class Message {
+public class PushMessage {
     // 消息标题
     private String title;
     // 消息内容
     private String message;
     // 消息推送的用户id
     private List devicesId;
-    // 消息推送的角色
-    private String role;
 }

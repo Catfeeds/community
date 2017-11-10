@@ -1,10 +1,8 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.RoleEntity;
+import com.tongwii.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * ${DESCRIPTION}
@@ -13,7 +11,7 @@ import java.util.List;
  * @date 2017-09-21
  */
 @Repository
-public interface IRoleDao extends JpaRepository<RoleEntity, String> {
-    RoleEntity findByCode(String roleCode);
-    RoleEntity findById(String roleId);
+public interface IRoleDao extends JpaRepository<Role, String> {
+    Role findByCode(String roleCode);
+    Role findById(String roleId);
 }

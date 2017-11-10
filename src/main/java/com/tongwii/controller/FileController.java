@@ -1,6 +1,6 @@
 package com.tongwii.controller;
 
-import com.tongwii.domain.FileEntity;
+import com.tongwii.domain.File;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class FileController {
             System.out.println("=========开始上传图片======================================");
             String id = SecurityUtils.getCurrentUserLogin();
             // 上传文件并更新用户地址
-            FileEntity fileEntity = fileService.saveAndUploadFile(id, file);
+            File fileEntity = fileService.saveAndUploadFile(id, file);
             System.out.println("==========图片上传完毕======================================");
             // 使用了上传文件的输出流和response的返回json会出错，重置response
             response.reset();

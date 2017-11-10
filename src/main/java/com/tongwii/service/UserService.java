@@ -3,10 +3,10 @@ package com.tongwii.service;
 import com.tongwii.constant.AuthoritiesConstants;
 import com.tongwii.constant.UserConstants;
 import com.tongwii.dao.IUserDao;
-import com.tongwii.domain.FileEntity;
-import com.tongwii.domain.RoleEntity;
-import com.tongwii.domain.UserEntity;
-import com.tongwii.domain.UserRoleEntity;
+import com.tongwii.domain.File;
+import com.tongwii.domain.Role;
+import com.tongwii.domain.User;
+import com.tongwii.domain.UserRole;
 import com.tongwii.dto.UserDto;
 import com.tongwii.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,52 +27,56 @@ import java.util.List;
 @Service
 @Transactional
 public class UserService {
-    @Autowired
-    private IUserDao userDao;
-    @Autowired
-    private FileService fileService;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private UserRoleService userRoleService;
+    private final IUserDao userDao;
+    private final FileService fileService;
+    private final UserMapper userMapper;
+    private final RoleService roleService;
+    private final UserRoleService userRoleService;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserService(IUserDao userDao, FileService fileService, UserMapper userMapper, RoleService roleService, UserRoleService userRoleService, PasswordEncoder passwordEncoder) {
+        this.userDao = userDao;
+        this.fileService = fileService;
+        this.userMapper = userMapper;
+        this.roleService = roleService;
+        this.userRoleService = userRoleService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    public UserEntity findByAccount(String account) {
+    public User findByAccount(String account) {
         return userDao.findByAccount(account);
     }
 
-    public UserDto save(UserEntity userEntity) {
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        userEntity.setAddTime(new Date());
-        userEntity.setState(UserConstants.USER_ENABLE);
-        userDao.save(userEntity);
-        RoleEntity roleEntity = roleService.findRoleByCode(AuthoritiesConstants.USER);
-        UserRoleEntity userRoleEntity = new UserRoleEntity();
-        userRoleEntity.setRoleId(roleEntity.getId());
-        userRoleEntity.setUserId(userEntity.getId());
-        userRoleService.save(userRoleEntity);
-        return userMapper.userToUserDTO(userEntity);
+    public UserDto save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setAddTime(new Date());
+        user.setState(UserConstants.USER_ENABLE);
+        userDao.save(user);
+        Role role = roleService.findRoleByCode(AuthoritiesConstants.USER);
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(role.getId());
+        userRole.setUserId(user.getId());
+        userRoleService.save(userRole);
+        return userMapper.userToUserDTO(user);
     }
 
     public String updateUserAvatorById(String userId, MultipartFile file) {
-        FileEntity fileEntity = fileService.saveAndUploadFileToFTP(userId, file);
+        File fileEntity = fileService.saveAndUploadFileToFTP(userId, file);
         userDao.updateAvatorById(userId, fileEntity.getId());
         return fileEntity.getFilePath();
     }
 
-    public UserEntity findById(String createUserId) {
+    public User findById(String createUserId) {
         return userDao.findOne(createUserId);
     }
 
-    public void update(UserEntity userEntity) {
-        userDao.save(userEntity);
+    public void update(User user) {
+        userDao.save(user);
     }
 
-    public List<UserEntity> findAll() {
+    public List<User> findAll() {
         return userDao.findAll();
     }
 }

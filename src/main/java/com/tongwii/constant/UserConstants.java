@@ -16,7 +16,12 @@ public final class UserConstants {
     public static final Integer USER_SEX_MALE = 1;
     public static final Integer USER_SEX_FAMALE = 2;
 
-    public static final Integer PASSWORD_MIN_LENGTH = 6;
+    /**用户类型**/
+    public static final Integer HUZHU = 1;
+    public static final Integer ZUKE = 2;
+    public static final Integer MEMBER = 3;
 
+    /**密码长度约束**/
+    public static final Integer PASSWORD_MIN_LENGTH = 6;
     public static final Integer PASSWORD_MAX_LENGTH = 30;
 }

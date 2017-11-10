@@ -2,12 +2,11 @@ package com.tongwii.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tongwii.bean.Message;
+import com.tongwii.bean.PushMessage;
 import com.tongwii.constant.MessageConstants;
-import com.tongwii.domain.MessageEntity;
+import com.tongwii.domain.Message;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.gateWay.PushGateway;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,23 +18,26 @@ import java.sql.Timestamp;
 @Service
 @Transactional
 public class PushService {
-    @Autowired
-    private PushGateway gateway;
-    @Autowired
-    private MessageService messageService;
+    private final PushGateway gateway;
+    private final MessageService messageService;
 
-    public void push(Message message, String pushTopic) {
+    public PushService(PushGateway gateway, MessageService messageService) {
+        this.gateway = gateway;
+        this.messageService = messageService;
+    }
+
+    public void push(PushMessage pushMessage, String pushTopic) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            gateway.push(objectMapper.writeValueAsString(message), pushTopic);
+            gateway.push(objectMapper.writeValueAsString(pushMessage), pushTopic);
             String userId = SecurityUtils.getCurrentUserId();
-            MessageEntity messageEntity = new MessageEntity();
-            messageEntity.setTitle(message.getTitle());
-            messageEntity.setContent(message.getMessage());
+            Message messageEntity = new Message();
+            messageEntity.setTitle(pushMessage.getTitle());
+            messageEntity.setContent(pushMessage.getMessage());
             messageEntity.setCreateUserId(userId);
             messageEntity.setProcessState(MessageConstants.PROCESSED);
             messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
-            messageEntity.setMessageTypeId(MessageConstants.PUSH_MESSAGE);
+            messageEntity.getMessageType().setCode(MessageConstants.PUSH_MESSAGE);
             messageService.save(messageEntity);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -59,7 +61,7 @@ public class PushService {
      * @param roomCode
      * @return result
      * *//*
-    public TongWIIResult listMesssgePush(MessageEntity pushInfo, String roomCode){
+    public TongWIIResult listMesssgePush(PushMessage pushInfo, String roomCode){
         ListMessage message = new ListMessage();
         IPushResult ret = null;
         IGtPush push = new IGtPush(host,APPKEY, MASTERSECRET);
@@ -68,14 +70,14 @@ public class PushService {
         // 通过roomCode获取roomId
         String roomId = roomService.findRoomByCode(roomCode).getId();
         // 通过roomid获取用户实体
-        List<UserRoomEntity> userEntities = userRoomService.findUsersByRoomId(roomId);
+        List<UserRoom> userEntities = userRoomService.findUsersByRoomId(roomId);
         if(userEntities == null){
             result.setStatus(UserConstants.USER_DISABLE);
             result.setInfo("获取用户列表信息失败!");
             result.setData(userEntities);
             return result;
         }else{
-            for (UserRoomEntity users : userEntities){
+            for (UserRoom users : userEntities){
                 clientIdList.add(users.getUserByUserId().getClientId());
             }
         }
@@ -92,7 +94,7 @@ public class PushService {
         transmissionContent.put("title",pushInfo.getTitle());
         transmissionContent.put("text",pushInfo.getContent());
         // 0此处需要返回发送者的昵称，因此需要对这个数据做处理
-        UserEntity userEntity = userService.findById(pushInfo.getCreateUserId());
+        User userEntity = userService.findById(pushInfo.getCreateUserId());
         transmissionContent.put("sender",userEntity.getNickName());
 
         // 获取发送消息的时间

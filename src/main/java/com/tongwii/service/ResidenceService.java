@@ -1,8 +1,7 @@
 package com.tongwii.service;
 
 import com.tongwii.dao.IResidenceDao;
-import com.tongwii.domain.ResidenceEntity;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tongwii.domain.Residence;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,22 +16,25 @@ import java.util.List;
 @Service
 @Transactional
 public class ResidenceService {
-    @Autowired
-    private IResidenceDao residenceDao;
+    private final IResidenceDao residenceDao;
 
-    public List<ResidenceEntity> findResidenceByRegionCode(String regionId) {
+    public ResidenceService(IResidenceDao residenceDao) {
+        this.residenceDao = residenceDao;
+    }
+
+    public List<Residence> findResidenceByRegionCode(String regionId) {
         return residenceDao.findByRegionCode(regionId);
     }
 
-    public ResidenceEntity findById(String id) {
+    public Residence findById(String id) {
         return residenceDao.findOne(id);
     }
 
-    public void update(ResidenceEntity newResidence) {
+    public void update(Residence newResidence) {
         residenceDao.save(newResidence);
     }
 
-    public ResidenceEntity save(ResidenceEntity residenceEntity) {
-        return residenceDao.save(residenceEntity);
+    public Residence save(Residence residence) {
+        return residenceDao.save(residence);
     }
 }

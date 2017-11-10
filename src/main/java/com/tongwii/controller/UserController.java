@@ -1,6 +1,6 @@
 package com.tongwii.controller;
 
-import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.User;
 import com.tongwii.dto.UserDto;
 import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
@@ -35,7 +35,7 @@ public class UserController {
 
 	// 用户注册接口
 	@PostMapping("/register")
-	public ResponseEntity regist(@Valid @RequestBody UserEntity user)  {
+	public ResponseEntity regist(@Valid @RequestBody User user)  {
         if(StringUtils.isBlank(user.getAccount()) || StringUtils.isBlank(user.getPassword())){
             return ResponseEntity.badRequest().body("用户名或密码不能为空");
         }
@@ -48,7 +48,7 @@ public class UserController {
 
 	// 用户登录接口
 	@PostMapping("/login")
-	public ResponseEntity login(@RequestBody UserEntity user) {
+	public ResponseEntity login(@RequestBody User user) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getAccount(), user.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
@@ -80,9 +80,9 @@ public class UserController {
 
 	// 修改用户昵称
 	@PutMapping("/updateNickName")
-	public ResponseEntity updateNickName(@RequestBody UserEntity user) {
+	public ResponseEntity updateNickName(@RequestBody User user) {
         String userId = SecurityUtils.getCurrentUserId();
-        UserEntity userEntity = userService.findById(userId);
+        User userEntity = userService.findById(userId);
         userEntity.setNickName(user.getNickName());
         userService.update(userEntity);
         UserDto userDto = userMapper.userToUserDTO(userEntity);
@@ -91,9 +91,9 @@ public class UserController {
 
 	// 修改个性签名
 	@PutMapping("/updateSignature")
-	public ResponseEntity updateSignature(@RequestBody UserEntity user) {
+	public ResponseEntity updateSignature(@RequestBody User user) {
         String userId = SecurityUtils.getCurrentUserId();
-        UserEntity userEntity = userService.findById(userId);
+        User userEntity = userService.findById(userId);
         userEntity.setSignature(user.getSignature());
         UserDto userDto = userMapper.userToUserDTO(userEntity);
         return ResponseEntity.ok(userDto);
@@ -101,9 +101,9 @@ public class UserController {
 
     // 修改用户电话
     @PutMapping("/updatePhone")
-    public ResponseEntity updatePhone(@RequestBody UserEntity user) {
+    public ResponseEntity updatePhone(@RequestBody User user) {
         String userId = SecurityUtils.getCurrentUserId();
-        UserEntity userEntity = userService.findById(userId);
+        User userEntity = userService.findById(userId);
         userEntity.setPhone(user.getPhone());
         UserDto userDto = userMapper.userToUserDTO(userEntity);
         return ResponseEntity.ok(userDto);
@@ -111,9 +111,9 @@ public class UserController {
 
     // 修改用户真实姓名
     @PutMapping("/updateRealName")
-    public ResponseEntity updateRealName(@RequestBody UserEntity user) {
+    public ResponseEntity updateRealName(@RequestBody User user) {
         String userId = SecurityUtils.getCurrentUserId();
-        UserEntity userEntity = userService.findById(userId);
+        User userEntity = userService.findById(userId);
         userEntity.setName(user.getName());
         UserDto userDto = userMapper.userToUserDTO(userEntity);
         return ResponseEntity.ok(userDto);
@@ -121,9 +121,9 @@ public class UserController {
 
     // 修改用户出生日期
     @PutMapping("/updateBirth")
-    public ResponseEntity updateBirth(@RequestBody UserEntity user) {
+    public ResponseEntity updateBirth(@RequestBody User user) {
         String userId = SecurityUtils.getCurrentUserId();
-        UserEntity userEntity = userService.findById(userId);
+        User userEntity = userService.findById(userId);
         userEntity.setBirthday(user.getBirthday());
         UserDto userDto = userMapper.userToUserDTO(userEntity);
         return ResponseEntity.ok(userDto);
@@ -131,9 +131,9 @@ public class UserController {
 
     // 修改用户性别
     @PutMapping("/updateGender")
-    public ResponseEntity updateGender(@RequestBody UserEntity user) {
+    public ResponseEntity updateGender(@RequestBody User user) {
         String userId = SecurityUtils.getCurrentUserId();
-        UserEntity userEntity = userService.findById(userId);
+        User userEntity = userService.findById(userId);
         userEntity.setSex(user.getSex());
         UserDto userDto = userMapper.userToUserDTO(userEntity);
         return ResponseEntity.ok(userDto);

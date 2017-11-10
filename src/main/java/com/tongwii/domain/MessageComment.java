@@ -18,36 +18,43 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @Table(name = "message_comment", schema = "cloud_community", catalog = "")
-public class MessageCommentEntity implements Serializable {
+public class MessageComment implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
     @Column(name = "id", unique = true, nullable = false, length = 36)
     private String id;
+
     @Basic
     @Column(name = "message_id")
     private String messageId;
+
     @Basic
     @Column(name = "is_like")
     private Boolean isLike;
+
     @Basic
     @Column(name = "comment")
     private String comment;
+
     @Basic
     @Column(name = "comment_date")
     private Timestamp commentDate;
+
     @Basic
     @Column(name = "commentator_id")
     private String commentatorId;
+
     @Basic
     @Column(name = "type")
     private Integer type;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "message_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private MessageEntity messageByMessageId;
+    private Message messageByMessageId;
 
     @ManyToOne
     @JoinColumn(name = "commentator_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private UserEntity userByCommentatorId;
+    private User userByCommentatorId;
 }

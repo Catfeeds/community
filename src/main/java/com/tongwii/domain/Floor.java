@@ -18,7 +18,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Table(name = "floor", schema = "cloud_community", catalog = "")
-public class FloorEntity implements Serializable {
+public class Floor implements Serializable {
 
     /**
      * The constant DONG. 常量-栋
@@ -35,27 +35,35 @@ public class FloorEntity implements Serializable {
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
     @Column(name = "id", unique = true, nullable = false, length = 36)
     private String id;
+
     @Basic
     @Column(name = "code")
     private String code;
+
     @Basic
     @Column(name = "piles")
     private String floorPiles;
+
     @Basic
     @Column(name = "elev")
     private Boolean elev;
+
     @Basic
     @Column(name = "principal_id")
     private String principalId;
+
     @Basic
     @Column(name = "residence_id")
     private String residenceId;
+
     @ManyToOne
     @JoinColumn(name = "principal_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private UserEntity userByPrincipalId;
+    private User userByPrincipalId;
+
     @ManyToOne
     @JoinColumn(name = "residence_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private ResidenceEntity residenceEntity;
+    private Residence residence;
+
     @OneToMany(mappedBy = "floorByFloorId")
-    private Collection<RoomEntity> roomsById;
+    private Collection<Room> roomsById;
 }

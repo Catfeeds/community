@@ -1,7 +1,7 @@
 package com.tongwii.service;
 
 import com.tongwii.dao.IUserContactDao;
-import com.tongwii.domain.UserContactEntity;
+import com.tongwii.domain.UserContact;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +19,11 @@ public class UserContactService {
         this.userContactDao = userContactDao;
     }
 
-    public void addUserContact(UserContactEntity userContactEntity) {
-        userContactDao.save(userContactEntity);
+    public void addUserContact(UserContact userContact) {
+        userContactDao.save(userContact);
     }
 
-    public List<UserContactEntity> findByUserId(String userId) {
+    public List<UserContact> findByUserId(String userId) {
         return userContactDao.findByUserId(userId);
     }
 

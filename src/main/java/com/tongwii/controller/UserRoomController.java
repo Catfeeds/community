@@ -1,8 +1,7 @@
 package com.tongwii.controller;
 
-import com.tongwii.domain.UserEntity;
-import com.tongwii.domain.UserRoomEntity;
-import com.tongwii.dto.UserDto;
+import com.tongwii.domain.User;
+import com.tongwii.domain.UserRoom;
 import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.service.UserRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +32,13 @@ public class UserRoomController {
      */
     @GetMapping("/getUserByRoomId/{roomId}")
     public ResponseEntity getUserByRoomId(@PathVariable String roomId){
-        List<UserRoomEntity> userRoomEntities = userRoomService.findUsersByRoomId(roomId);
+        List<UserRoom> userRoomEntities = userRoomService.findUsersByRoomId(roomId);
         if(CollectionUtils.isEmpty(userRoomEntities)){
             return ResponseEntity.badRequest().body("该住房暂未出售，无住户!");
         }
-        List<UserEntity> userEntities = new ArrayList<>();
-        for(UserRoomEntity userRoomEntity: userRoomEntities){
-            userEntities.add(userRoomEntity.getUserByUserId());
+        List<User> userEntities = new ArrayList<>();
+        for(UserRoom userRoom : userRoomEntities){
+            userEntities.add(userRoom.getUserByUserId());
         }
         return ResponseEntity.ok(userMapper.usersToUserDTOs(userEntities));
     }

@@ -1,6 +1,6 @@
 package com.tongwii.dto.mapper;
 
-import com.tongwii.domain.MessageEntity;
+import com.tongwii.domain.Message;
 import com.tongwii.dto.MessageDto;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class MessageMapper {
 
-    MessageDto messageToMessageDto(MessageEntity message) {
+    public MessageDto messageToMessageDto(Message message) {
         if ( message == null ) {
             return null;
         }
@@ -27,13 +27,16 @@ public class MessageMapper {
         messageDto.setTitle(message.getTitle());
         messageDto.setContent(message.getContent());
         messageDto.setCreateTime(message.getCreateTime());
-        messageDto.setCreateUser(message.getUserByCreateUserId().getAccount());
+        messageDto.setCreateUser(message.getCreateUser().getAccount());
         messageDto.setMessageTypeId(message.getMessageTypeId());
+        if(Objects.nonNull(message.getMessageType())) {
+            messageDto.setMessageTypeCode(message.getMessageType().getCode());
+        }
         return messageDto;
     }
 
 
-    public List<MessageDto> messagesToMessageDtos(List<MessageEntity> messages) {
+    public List<MessageDto> messagesToMessageDtos(List<Message> messages) {
         return messages.stream()
             .filter(Objects::nonNull)
             .map(this::messageToMessageDto)

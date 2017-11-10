@@ -1,8 +1,7 @@
 package com.tongwii.service;
 
 import com.tongwii.dao.IRegionDao;
-import com.tongwii.domain.RegionEntity;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tongwii.domain.Region;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,11 @@ import java.util.List;
  */
 @Service
 public class RegionService {
-    @Autowired
-    private IRegionDao regionDao;
+    private final IRegionDao regionDao;
+
+    public RegionService(IRegionDao regionDao) {
+        this.regionDao = regionDao;
+    }
 
     /**
      * 根据parentCode查询记录
@@ -21,7 +23,7 @@ public class RegionService {
      *
      * @param parentCode
      */
-    public List<RegionEntity> findByParentCode(String parentCode){
+    public List<Region> findByParentCode(String parentCode){
         return regionDao.findByParentCode(parentCode);
     }
 

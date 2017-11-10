@@ -1,9 +1,9 @@
 package com.tongwii.controller;
 
 import com.tongwii.constant.MessageConstants;
-import com.tongwii.domain.MessageCommentEntity;
-import com.tongwii.domain.MessageEntity;
-import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.Message;
+import com.tongwii.domain.MessageComment;
+import com.tongwii.domain.User;
 import com.tongwii.dto.MessageDto;
 import com.tongwii.dto.NeighborMessageDto;
 import com.tongwii.dto.mapper.MessageMapper;
@@ -12,12 +12,10 @@ import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,34 +31,37 @@ import static com.tongwii.constant.Constants.DEFAULT_PAGE_SIZE;
 @RestController
 @RequestMapping("/message")
 public class BaseMessageController {
-    @Autowired
-    private MessageService messageService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    MessageMapper messageMapper;
-    @Autowired
-    NeighborMessageMapper neighborMessageMapper;
-    @Autowired
-    private MessageCommentService messageCommentService;
+    private final MessageService messageService;
+    private final UserService userService;
+    private final MessageMapper messageMapper;
+    private final NeighborMessageMapper neighborMessageMapper;
+    private final MessageCommentService messageCommentService;
+
+    public BaseMessageController(MessageService messageService, UserService userService, MessageMapper messageMapper, NeighborMessageMapper neighborMessageMapper, MessageCommentService messageCommentService) {
+        this.messageService = messageService;
+        this.userService = userService;
+        this.messageMapper = messageMapper;
+        this.neighborMessageMapper = neighborMessageMapper;
+        this.messageCommentService = messageCommentService;
+    }
 
     /**
      * 添加消息接口
      *
-     * @param messageEntity
+     * @param message 添加的消息
      * @return result
      **/
     @PostMapping("/insertMessage")
-    public ResponseEntity insertMessage(@RequestBody MessageEntity messageEntity) {
-        if (messageEntity.getContent().isEmpty() && messageEntity.getMessageTypeId().isEmpty()) {
+    public ResponseEntity insertMessage(@RequestBody Message message) {
+        if (StringUtils.isEmpty(message.getContent())) {
             return ResponseEntity.badRequest().body("消息体不可为空!");
         }
         String userId = SecurityUtils.getCurrentUserId();
-        messageEntity.setCreateUserId(userId);
+        message.setCreateUserId(userId);
         try {
-            messageEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
-            messageService.save(messageEntity);
-            return ResponseEntity.ok(messageEntity);
+            message.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            messageService.save(message);
+            return ResponseEntity.ok(message);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("消息添加失败!");
         }
@@ -70,25 +71,25 @@ public class BaseMessageController {
     /**
      * 修改消息的进度
      *
-     * @param messageEntity
+     * @param message 消息
      * @return result
      */
     @PutMapping("/updateProcessOfMessage")
-    public ResponseEntity updateProcessOfMessage(@RequestBody MessageEntity messageEntity) {
+    public ResponseEntity updateProcessOfMessage(@RequestBody Message message) {
         // 此消息实体包含id与Process的信息，通过id找到该条消息的数据记录，并将Process的状态更改成传来的值
         // 判空
-        if (messageEntity.getId().isEmpty() || messageEntity.getProcessState().toString().isEmpty()) {
+        if (message.getId().isEmpty() || message.getProcessState().toString().isEmpty()) {
             return ResponseEntity.badRequest().body("消息记录不存在!");
         }
         // 此处更改消息进度状态
-        messageService.updateMessageProcess(messageEntity.getId(), messageEntity.getProcessState() & 0xff);
+        messageService.updateMessageProcess(message.getId(), message.getProcessState() & 0xff);
         return ResponseEntity.ok("修改状态成功!");
     }
 
     /**
      * 删除历史消息
      *
-     * @param messageId
+     * @param messageId 消息id
      */
     @PutMapping("/deleteMessage/{messageId}")
     public ResponseEntity deleteMessage(@PathVariable String messageId) {
@@ -105,23 +106,23 @@ public class BaseMessageController {
     /**
      * 通过消息类型查询消息
      *
-     * @param message
+     * @param message 消息
      * @return result
      */
     @RequestMapping("/selectMessageByType")
-    public ResponseEntity selectMessageByType(@RequestHeader("page") Integer page, @RequestBody MessageEntity message) {
-        if (message.getMessageTypeId() == null || message.getMessageTypeId().isEmpty()) {
+    public ResponseEntity selectMessageByType(@RequestHeader("page") Integer page, @RequestBody Message message) {
+        if (Objects.isNull(message.getMessageType()) || message.getMessageType().getCode().isEmpty()) {
             return ResponseEntity.badRequest().body("消息类型不可为空!");
         }
         Pageable pageInfo = new PageRequest(page, 5);
-        Page<MessageEntity> messageEntityPage = messageService.findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(pageInfo, message.getMessageTypeId(), message.getResidenceId());
-        List<MessageEntity> messageEntities = messageEntityPage.getContent();
-        if (CollectionUtils.isEmpty(messageEntities)) {
-            return ResponseEntity.badRequest().body("信息查询失败!");
+        Page<Message> messageEntityPage = messageService.findByMessageTypeCodeAndResidenceIdOrderByCreateTimeDesc(pageInfo, message.getMessageType().getCode(), message.getResidenceId());
+        if (!messageEntityPage.hasContent()) {
+            return ResponseEntity.badRequest().body("已经到底了");
         }
+        List<Message> messageEntities = messageEntityPage.getContent();
         List<Map> messageJsonArray = new ArrayList<>();
         Map<String, Object> messageObject = new HashMap<>();
-        for (MessageEntity messageEntity : messageEntities) {
+        for (Message messageEntity : messageEntities) {
             messageObject.put("id", messageEntity.getId());
             messageObject.put("title", messageEntity.getTitle());
             messageObject.put("content", messageEntity.getContent());
@@ -130,13 +131,13 @@ public class BaseMessageController {
             String createTime = time.substring(0, time.length() - 2);
             messageObject.put("createTime", createTime);
             // 通过userId查询userName
-            UserEntity userEntity = userService.findById(messageEntity.getCreateUserId());
-            messageObject.put("createUser", userEntity.getAccount());
+            User user = userService.findById(messageEntity.getCreateUserId());
+            messageObject.put("createUser", user.getAccount());
             messageJsonArray.add(messageObject);
         }
         Map<String, Object> data = new HashMap<>();
-        data.put("totalPages", messageEntityPage.getTotalPages());
         data.put("messageInfo", messageJsonArray);
+        data.put("totalPages", messageEntityPage.getTotalPages());
         return ResponseEntity.ok(data);
     }
 
@@ -148,9 +149,12 @@ public class BaseMessageController {
     @GetMapping("/selectAnnounceMessage/{residenceId}")
     public ResponseEntity selectAnnounceMessage(@RequestHeader("page") Integer page, @PathVariable(value = "residenceId") String residenceId) {
         Pageable pageInfo = new PageRequest(page, DEFAULT_PAGE_SIZE);
-        Page<MessageEntity> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeDesc(pageInfo, residenceId);
+        Page<Message> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeDesc(pageInfo, residenceId);
+        if(!messageEntityPage.hasContent()) {
+            return ResponseEntity.badRequest().body("已经到底了");
+        }
         List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
-        Map map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("totalPages", messageEntityPage.getTotalPages());
         map.put("data", messageDtos);
         return ResponseEntity.ok(map);
@@ -164,9 +168,12 @@ public class BaseMessageController {
     @GetMapping("/selectHistroyAnnounceMessage/{residenceId}")
     public ResponseEntity selectHistroyAnnounceMessage(@RequestHeader("page") Integer page, @PathVariable(value = "residenceId") String residenceId) {
         Pageable pageInfo = new PageRequest(page, DEFAULT_PAGE_SIZE);
-        Page<MessageEntity> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeAsc(pageInfo, residenceId);
+        Page<Message> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeAsc(pageInfo, residenceId);
+        if(!messageEntityPage.hasContent()) {
+            return ResponseEntity.badRequest().body("已经到底了");
+        }
         List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
-        Map map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("totalPages", messageEntityPage.getTotalPages());
         map.put("data", messageDtos);
         return ResponseEntity.ok(map);
@@ -179,23 +186,26 @@ public class BaseMessageController {
     public ResponseEntity selectNeighborMessage(@RequestHeader("page") Integer page, @PathVariable(value = "residenceId") String residenceId) {
         Pageable pageInfo = new PageRequest(page, 15);
         try {
-            Page<MessageEntity> messageEntityPage = messageService.findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(pageInfo, MessageConstants.DYNAMIC_MESSAGE.toString(), residenceId);
-            List<MessageEntity> messageEntities = messageEntityPage.getContent();
+            Page<Message> messageEntityPage = messageService.findByMessageTypeCodeAndResidenceIdOrderByCreateTimeDesc(pageInfo, MessageConstants.DYNAMIC_MESSAGE, residenceId);
+            if (!messageEntityPage.hasContent()) {
+                return ResponseEntity.badRequest().body("已经到底了");
+            }
+            List<Message> messageEntities = messageEntityPage.getContent();
             List<NeighborMessageDto> neighborMessageDtoList = neighborMessageMapper.messagesToNeighborMessageDtos(messageEntities);
 
             for(NeighborMessageDto neighborMessageDto: neighborMessageDtoList){
                 Integer likeNum = 0;
                 Integer commentNum = 0;
                 // 封装点赞参数
-                List<MessageCommentEntity> likeMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.IS_LIKE);
-                for(MessageCommentEntity commentEntity: likeMessageEntities){
+                List<MessageComment> likeMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.IS_LIKE);
+                for(MessageComment commentEntity: likeMessageEntities){
                     if(commentEntity.getIsLike()!=null && commentEntity.getIsLike()){
                         likeNum++;
                     }
                 }
                 // 封装评论参数
-                List<MessageCommentEntity> commentMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.COMMENT);
-                for(MessageCommentEntity commentEntity: commentMessageEntities){
+                List<MessageComment> commentMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.COMMENT);
+                for(MessageComment commentEntity: commentMessageEntities){
                     if(commentEntity.getComment()!=null ||!(StringUtils.isEmpty(commentEntity.getComment()))){
                         commentNum++;
                     }
@@ -204,7 +214,7 @@ public class BaseMessageController {
                 neighborMessageDto.setCommentNum(commentNum);
             }
 
-            Map map = new HashMap<>();
+            Map<String, Object> map = new HashMap<>();
             map.put("totalPages", messageEntityPage.getTotalPages());
             map.put("data", neighborMessageDtoList);
             return ResponseEntity.ok(map);
@@ -215,6 +225,6 @@ public class BaseMessageController {
 
     @GetMapping("/getMessageByMessageId/{messageId}")
     public ResponseEntity getMessageByMessageId(@PathVariable String messageId){
-        return ResponseEntity.ok(messageService.findByMessageId(messageId));
+        return ResponseEntity.ok(messageMapper.messageToMessageDto(messageService.findByMessageId(messageId)));
     }
 }

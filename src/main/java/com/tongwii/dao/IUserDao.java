@@ -1,6 +1,6 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,10 +14,10 @@ import org.springframework.stereotype.Repository;
  * @date 2017-09-21
  */
 @Repository
-public interface IUserDao extends JpaRepository<UserEntity, String> {
-    UserEntity findByAccount(String account);
+public interface IUserDao extends JpaRepository<User, String> {
+    User findByAccount(String account);
 
     @Modifying
-    @Query("UPDATE UserEntity u SET u.avatarFileId = :id WHERE u.id = :userId")
+    @Query("UPDATE User u SET u.avatarFileId = :id WHERE u.id = :userId")
     void updateAvatorById(@Param(value = "userId") String userId, @Param(value = "id") String id);
 }

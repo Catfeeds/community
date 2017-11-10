@@ -1,14 +1,12 @@
 package com.tongwii;
 
-import com.tongwii.domain.MessageEntity;
+import com.tongwii.domain.Message;
 import com.tongwii.service.MessageService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -35,9 +33,9 @@ private MessageService messageService;
     @Test
     public void test2(){
         PageRequest pageRequest = new PageRequest(0,20);
-        Page<MessageEntity> messageEntityList = messageService.findByResidenceIdOrderByCreateTimeDesc(pageRequest,"1");
-        for (MessageEntity messageEntity : messageEntityList) {
-            System.out.println(messageEntity.getCreateTime()+"-----"+messageEntity.getContent());
+        Page<Message> messageEntityList = messageService.findByResidenceIdOrderByCreateTimeDesc(pageRequest,"1");
+        for (Message message : messageEntityList) {
+            System.out.println(message.getCreateTime()+"-----"+ message.getContent());
         }
     }
 }

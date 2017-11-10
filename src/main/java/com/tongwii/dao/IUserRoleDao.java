@@ -1,6 +1,6 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.UserRoleEntity;
+import com.tongwii.domain.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2017-09-21
  */
 @Repository
-public interface IUserRoleDao extends JpaRepository<UserRoleEntity, String> {
+public interface IUserRoleDao extends JpaRepository<UserRole, String> {
 
-    List<UserRoleEntity> findByUserId(String userId);
+    List<UserRole> findByUserId(String userId);
 }

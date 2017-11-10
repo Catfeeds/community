@@ -1,6 +1,6 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.RegionEntity;
+import com.tongwii.domain.Region;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +13,6 @@ import java.util.List;
  * @date 2017-09-21
  */
 @Repository
-public interface IRegionDao extends JpaRepository<RegionEntity, String> {
-    List<RegionEntity> findByParentCode(String parentCode);
+public interface IRegionDao extends JpaRepository<Region, String> {
+    List<Region> findByParentCode(String parentCode);
 }

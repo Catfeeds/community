@@ -1,6 +1,6 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.RoomEntity;
+import com.tongwii.domain.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +13,8 @@ import java.util.List;
  * @date 2017-09-21
  */
 @Repository
-public interface IRoomDao extends JpaRepository<RoomEntity, String> {
-    RoomEntity findByRoomCode(String roomCode);
+public interface IRoomDao extends JpaRepository<Room, String> {
+    Room findByRoomCode(String roomCode);
 
-    List<RoomEntity> findByFloorId(String floorId);
+    List<Room> findByFloorId(String floorId);
 }

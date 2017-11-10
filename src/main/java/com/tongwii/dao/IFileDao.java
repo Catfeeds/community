@@ -1,6 +1,6 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.FileEntity;
+import com.tongwii.domain.File;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @date 2017-09-21
  */
 @Repository
-public interface IFileDao extends JpaRepository<FileEntity, String> {
+public interface IFileDao extends JpaRepository<File, String> {
 }

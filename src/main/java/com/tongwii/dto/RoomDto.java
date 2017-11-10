@@ -47,7 +47,7 @@ public class RoomDto {
      */
     private String chargePhone;
     /**
-     * 用户和房间的关系，具体参考 UserRoomEntity 常量定义
+     * 用户和房间的关系，具体参考 UserRoom 常量定义
      *
      */
     private Byte type;

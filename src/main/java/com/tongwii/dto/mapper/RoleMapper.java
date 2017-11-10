@@ -1,6 +1,6 @@
 package com.tongwii.dto.mapper;
 
-import com.tongwii.domain.RoleEntity;
+import com.tongwii.domain.Role;
 import com.tongwii.dto.RoleDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -15,5 +15,5 @@ import org.mapstruct.factory.Mappers;
 public interface RoleMapper {
     RoleMapper INSTANCE = Mappers.getMapper( RoleMapper.class );
 
-    RoleDto RoleToRoleDto(RoleEntity role);
+    RoleDto RoleToRoleDto(Role role);
 }

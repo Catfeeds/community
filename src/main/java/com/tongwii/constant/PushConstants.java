@@ -11,6 +11,10 @@ public final class PushConstants {
 
     public final static Integer PUSH_FIALED = -1;// 推送失败
 
+    /**推送消息主题**/
+    public static final String PUSH_ALL_TOPIC = "All";
+    public static final String PUSH_SELECTED_TOPIC = "selectUsers";
+
     private PushConstants() {
     }
 }

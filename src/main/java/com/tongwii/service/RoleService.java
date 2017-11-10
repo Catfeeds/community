@@ -1,7 +1,7 @@
 package com.tongwii.service;
 
 import com.tongwii.dao.IRoleDao;
-import com.tongwii.domain.RoleEntity;
+import com.tongwii.domain.Role;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,18 +23,18 @@ public class RoleService {
         this.roleDao = roleDao;
     }
 
-    public RoleEntity findRoleByCode(String roleCode) {
-        RoleEntity roleEntity= roleDao.findByCode(roleCode);
-        return roleEntity;
+    public Role findRoleByCode(String roleCode) {
+        Role role = roleDao.findByCode(roleCode);
+        return role;
     }
 
     // 通过id查询role信息
-    public RoleEntity findById(String roleId){
+    public Role findById(String roleId){
         return roleDao.findById(roleId);
     }
 
     // 获取所有角色信息
-    public List<RoleEntity> findAll(){
+    public List<Role> findAll(){
         return roleDao.findAll();
     }
 }

@@ -1,6 +1,6 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.LogEntity;
+import com.tongwii.domain.Log;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @date 2017-09-21
  */
 @Repository
-public interface ILogDao extends JpaRepository<LogEntity, String> {
+public interface ILogDao extends JpaRepository<Log, String> {
 }

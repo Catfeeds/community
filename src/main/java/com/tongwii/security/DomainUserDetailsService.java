@@ -2,7 +2,7 @@ package com.tongwii.security;
 
 import com.tongwii.constant.UserConstants;
 import com.tongwii.dao.IUserDao;
-import com.tongwii.domain.UserEntity;
+import com.tongwii.domain.User;
 import com.tongwii.security.jwt.JwtUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Authenticate a user from the database.
+ * Authenticate a createUser from the database.
  */
 @Component("userDetailsService")
 public class DomainUserDetailsService implements UserDetailsService {
@@ -34,17 +34,17 @@ public class DomainUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(final String account) {
         log.debug("Authenticating {}", account);
-        UserEntity userEntity = userDao.findByAccount(account);
-        if(Objects.isNull(userEntity)) {
+        User user = userDao.findByAccount(account);
+        if(Objects.isNull(user)) {
             throw new UsernameNotFoundException("User " + account + " was not found in the database");
         } else {
-            if(userEntity.getState().equals(UserConstants.USER_DISABLE)) {
+            if(user.getState().equals(UserConstants.USER_DISABLE)) {
                 throw new UserNotActivatedException("User " + account + " was not activated");
             }
-            List<GrantedAuthority> grantedAuthorities = userEntity.getUserRolesById().stream()
+            List<GrantedAuthority> grantedAuthorities = user.getUserRolesById().stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getRoleByRoleId().getCode()))
                     .collect(Collectors.toList());
-            return new JwtUser(userEntity.getId(), userEntity.getAccount(), userEntity.getPassword(), grantedAuthorities, userEntity.getState().equals(UserConstants.USER_ENABLE));
+            return new JwtUser(user.getId(), user.getAccount(), user.getPassword(), grantedAuthorities, user.getState().equals(UserConstants.USER_ENABLE));
         }
     }
 }

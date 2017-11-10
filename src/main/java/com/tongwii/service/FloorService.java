@@ -1,7 +1,7 @@
 package com.tongwii.service;
 
 import com.tongwii.dao.IFloorDao;
-import com.tongwii.domain.FloorEntity;
+import com.tongwii.domain.Floor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,32 +22,32 @@ public class FloorService {
         this.floorDao = floorDao;
     }
 
-    public List<FloorEntity> findFloorByResidenceId(String residenceId) {
+    public List<Floor> findFloorByResidenceId(String residenceId) {
         return floorDao.findByResidenceId(residenceId);
     }
 
-    public void update(FloorEntity model) {
+    public void update(Floor model) {
         floorDao.save(model);
     }
 
-    public Map<String, FloorEntity> findFloorById(String id) {
-        Map<String, FloorEntity> floorMap = new HashMap<>();
-        FloorEntity unitEntity = floorDao.findOne(id);
+    public Map<String, Floor> findFloorById(String id) {
+        Map<String, Floor> floorMap = new HashMap<>();
+        Floor unitEntity = floorDao.findOne(id);
         if (Objects.nonNull(unitEntity)) {
-            floorMap.put(FloorEntity.UNIT, unitEntity);
+            floorMap.put(Floor.UNIT, unitEntity);
         }
         return floorMap;
     }
 
-    public FloorEntity findById(String id) {
+    public Floor findById(String id) {
         return floorDao.findOne(id);
     }
 
-    public FloorEntity save(FloorEntity floorEntity){
-        return floorDao.save(floorEntity);
+    public Floor save(Floor floor){
+        return floorDao.save(floor);
     }
 
-    public List<FloorEntity> findByCodeAndResidenceId(String risidenceId, String floorCode){
+    public List<Floor> findByCodeAndResidenceId(String risidenceId, String floorCode){
         return floorDao.findByCodeAndResidenceId(floorCode, risidenceId);
     }
 }

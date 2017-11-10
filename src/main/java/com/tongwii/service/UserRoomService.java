@@ -1,8 +1,7 @@
 package com.tongwii.service;
 
 import com.tongwii.dao.IUserRoomDao;
-import com.tongwii.domain.UserEntity;
-import com.tongwii.domain.UserRoomEntity;
+import com.tongwii.domain.UserRoom;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +19,15 @@ public class UserRoomService {
         this.userRoomDao = userRoomDao;
     }
 
-    public List<UserRoomEntity> findUsersByRoomId(String roomId) {
+    public List<UserRoom> findUsersByRoomId(String roomId) {
         return userRoomDao.findByRoomId(roomId);
     }
 
-    public List<UserRoomEntity> findRoomByUserId(String userId) {
+    public List<UserRoom> findRoomByUserId(String userId) {
         return userRoomDao.findByUserId(userId);
     }
 
-    public void saveSingle(UserRoomEntity userRoomEntity){
-        userRoomDao.save(userRoomEntity);
+    public void saveSingle(UserRoom userRoom){
+        userRoomDao.save(userRoom);
     }
 }

@@ -1,6 +1,6 @@
 package com.tongwii.dto.mapper;
 
-import com.tongwii.domain.MessageEntity;
+import com.tongwii.domain.Message;
 import com.tongwii.dto.NeighborMessageDto;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class NeighborMessageMapper {
-    NeighborMessageDto messageToNeighborMessageDto(MessageEntity message) {
+    NeighborMessageDto messageToNeighborMessageDto(Message message) {
         if ( message == null ) {
             return null;
         }
@@ -23,13 +23,13 @@ public class NeighborMessageMapper {
         neighborMessageDto.setTitle(message.getTitle());
         neighborMessageDto.setContent(message.getContent());
         neighborMessageDto.setCreateTime(message.getCreateTime());
-        neighborMessageDto.setCreateUser(message.getUserByCreateUserId().getAccount());
+        neighborMessageDto.setCreateUser(message.getCreateUser().getAccount());
         neighborMessageDto.setMessageTypeId(message.getMessageTypeId());
         return neighborMessageDto;
     }
 
 
-    public List<NeighborMessageDto> messagesToNeighborMessageDtos(List<MessageEntity> messages) {
+    public List<NeighborMessageDto> messagesToNeighborMessageDtos(List<Message> messages) {
         return messages.stream()
             .filter(Objects::nonNull)
             .map(this::messageToNeighborMessageDto)

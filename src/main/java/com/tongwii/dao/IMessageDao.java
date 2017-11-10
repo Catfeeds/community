@@ -1,6 +1,6 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.MessageEntity;
+import com.tongwii.domain.Message;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,20 +18,28 @@ import java.util.List;
  * @date 2017-09-21
  */
 @Repository
-public interface IMessageDao extends JpaRepository<MessageEntity, String> {
+public interface IMessageDao extends JpaRepository<Message, String> {
     @Modifying
-    @Query("UPDATE MessageEntity m SET m.processState = :processState WHERE m.id = :messageId")
+    @Query("UPDATE Message m SET m.processState = :processState WHERE m.id = :messageId")
     void updateMessageStateByMessageId(String messageId, Integer processState);
 
-    List<MessageEntity> findAllByMessageTypeIdAndResidenceId(Pageable pageable, String messageTypeId, String residenceId);
+    List<Message> findAllByMessageTypeIdAndResidenceId(Pageable pageable, String messageTypeId, String residenceId);
 
-    @Query("SELECT m FROM MessageEntity m WHERE m.messageTypeId IN (3,6,7) and m.residenceId = :residenceId and m.processState !=-1 order by m.createTime desc")
-    Page<MessageEntity> findByResidenceIdOrderByCreateTimeDesc(Pageable pageable, @Param("residenceId") String residenceId);
+    @Query("SELECT m FROM Message m WHERE m.messageTypeId IN (3,6,7) and m.residenceId = :residenceId and m.processState !=-1 order by m.createTime desc")
+    Page<Message> findByResidenceIdOrderByCreateTimeDesc(Pageable pageable, @Param("residenceId") String residenceId);
 
-    @Query("SELECT m FROM MessageEntity m WHERE m.messageTypeId IN (3,4,6,7) and m.residenceId = :residenceId and m.processState !=-1 order by m.createTime asc")
-    Page<MessageEntity> findByResidenceIdOrderByCreateTimeAsc(Pageable pageable, @Param("residenceId") String residenceId);
+    @Query("SELECT m FROM Message m WHERE m.messageTypeId IN (3,4,6,7) and m.residenceId = :residenceId and m.processState !=-1 order by m.createTime asc")
+    Page<Message> findByResidenceIdOrderByCreateTimeAsc(Pageable pageable, @Param("residenceId") String residenceId);
 
-    Page<MessageEntity> findByMessageTypeIdAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeId, String residenceId);
+    /**
+     * 根据消息类型的Code和社区id通过创建时间逆序分页查询
+     * @param pageable
+     * @param messageTypeCode
+     * @param residenceId
+     * @return
+     */
 
-    MessageEntity findById(String messageId);
+    Page<Message> findByMessageType_CodeAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeCode, String residenceId);
+
+    Message findById(String messageId);
 }

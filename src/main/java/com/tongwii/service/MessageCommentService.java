@@ -1,7 +1,7 @@
 package com.tongwii.service;
 
 import com.tongwii.dao.IMessageCommentDao;
-import com.tongwii.domain.MessageCommentEntity;
+import com.tongwii.domain.MessageComment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,21 +22,21 @@ public class MessageCommentService {
      * 根据messageId获取点赞评论记录
      * @param messageId
      */
-    public List<MessageCommentEntity> findByMessageIdAndType(String messageId, Integer type){
+    public List<MessageComment> findByMessageIdAndType(String messageId, Integer type){
         return messageCommentDao.findByMessageIdAndType(messageId, type);
     }
 
     /**
      * 根据messageId与commentorId查询
      */
-    public List<MessageCommentEntity> findByMessageIdAndCommentatorIdAndType(String messageId, String commentatorId, Integer type){
+    public List<MessageComment> findByMessageIdAndCommentatorIdAndType(String messageId, String commentatorId, Integer type){
         return messageCommentDao.findByMessageIdAndCommentatorIdAndType(messageId, commentatorId, type);
     }
 
     /**
      * 添加点赞评论记录
      */
-    public void addMessageComment(MessageCommentEntity messageCommentEntity){
-        messageCommentDao.save(messageCommentEntity);
+    public void addMessageComment(MessageComment messageComment){
+        messageCommentDao.save(messageComment);
     }
 }

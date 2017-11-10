@@ -1,10 +1,10 @@
 package com.tongwii.controller;
 
-import com.tongwii.constant.Constants;
-import com.tongwii.domain.FloorEntity;
-import com.tongwii.domain.RoomEntity;
-import com.tongwii.domain.UserEntity;
-import com.tongwii.domain.UserRoomEntity;
+import com.tongwii.constant.UserConstants;
+import com.tongwii.domain.Floor;
+import com.tongwii.domain.Room;
+import com.tongwii.domain.User;
+import com.tongwii.domain.UserRoom;
 import com.tongwii.service.RoomService;
 import com.tongwii.service.UserRoomService;
 import com.tongwii.service.UserService;
@@ -41,20 +41,20 @@ public class RoomController {
         if(StringUtils.isEmpty(floorId)){
             return ResponseEntity.badRequest().body("楼宇未选择!");
         }
-        List<RoomEntity> roomEntities = roomService.findByFloorId(floorId);
+        List<Room> roomEntities = roomService.findByFloorId(floorId);
         List<Map> jsonArray = new ArrayList<>();
         if(!CollectionUtils.isEmpty(roomEntities)) {
-            for (RoomEntity room : roomEntities) {
+            for (Room room : roomEntities) {
                 Map<String, Object> object = new HashMap<>();
                 object.put("roomCode", room.getRoomCode()+"室");
                 object.put("roomStyle", room.getHuXing());
                 object.put("roomId", room.getId());
                 object.put("unitCode", room.getRoomCode()+"室"+room.getUnitCode()+"单元");
-                UserEntity userEntity = room.getUserByOwnerId();
-                String ownnerName = userEntity.getName();
-                String ownnerPhone = userEntity.getPhone();
-                FloorEntity floorEntity = room.getFloorByFloorId();
-                String address = floorEntity.getResidenceEntity().getAddress()+floorEntity.getCode()+"栋"+room.getUnitCode()+"单元"+room.getRoomCode()+"室";
+                User user = room.getUserByOwnerId();
+                String ownnerName = user.getName();
+                String ownnerPhone = user.getPhone();
+                Floor floor = room.getFloorByFloorId();
+                String address = floor.getResidence().getAddress()+ floor.getCode()+"栋"+room.getUnitCode()+"单元"+room.getRoomCode()+"室";
                 System.out.println(address);
                 object.put("ownerName", ownnerName);
                 object.put("ownerPhone", ownnerPhone);
@@ -71,28 +71,28 @@ public class RoomController {
      * @param roomEntity
      */
     @PostMapping("/addSingleRoom")
-    public ResponseEntity addSingleRoom(@RequestBody RoomEntity roomEntity){
+    public ResponseEntity addSingleRoom(@RequestBody Room roomEntity){
         // 首先获取户主的account，看是否存在这个用户
-        UserEntity userEntity = userService.findByAccount(roomEntity.getOwnerId());
-        if(userEntity == null){
+        User user = userService.findByAccount(roomEntity.getOwnerId());
+        if(user == null){
             return ResponseEntity.badRequest().body("该户主未在系统注册!");
         }
-        List<RoomEntity> roomEntities = roomService.findByFloorId(roomEntity.getFloorId());
+        List<Room> roomEntities = roomService.findByFloorId(roomEntity.getFloorId());
         boolean exist = true;
-        for(RoomEntity room: roomEntities){
+        for(Room room: roomEntities){
             if(room.getRoomCode().equals(roomEntity.getRoomCode())){
                 exist = false;
             }
         }
         if(exist){
-            roomEntity.setOwnerId(userEntity.getId());
+            roomEntity.setOwnerId(user.getId());
             roomService.save(roomEntity);
-            UserRoomEntity userRoomEntity = new UserRoomEntity();
-            userRoomEntity.setUserId(userEntity.getId());
-            userRoomEntity.setType(Constants.HUZHU);
-            userRoomEntity.setDes("户主");
-            userRoomEntity.setRoomId(roomEntity.getId());
-            userRoomService.saveSingle(userRoomEntity);
+            UserRoom userRoom = new UserRoom();
+            userRoom.setUserId(user.getId());
+            userRoom.setType(UserConstants.HUZHU);
+            userRoom.setDes("户主");
+            userRoom.setRoomId(roomEntity.getId());
+            userRoomService.saveSingle(userRoom);
             return ResponseEntity.ok("添加成功!");
         }
         return ResponseEntity.badRequest().body("该住房已存在!");
@@ -104,11 +104,11 @@ public class RoomController {
      * */
     /*
     @RequestMapping(value = "/updateRoomInfo", method = RequestMethod.POST )
-    public ResponseEntity updateRoomInfo(@RequestBody RoomEntity roomEntity){
+    public ResponseEntity updateRoomInfo(@RequestBody Room roomEntity){
         if(roomEntity.getId() == null || roomEntity.getId().isEmpty()){
             return ResponseEntity.badRequest().body("住房实体不存在!");
         }
-        RoomEntity newRoom = roomService.findById(roomEntity.getId());
+        Room newRoom = roomService.findById(roomEntity.getId());
         if(roomEntity.getRoomCode()!=null && !roomEntity.getRoomCode().isEmpty()){
             newRoom.setRoomCode(roomEntity.getRoomCode());
         }

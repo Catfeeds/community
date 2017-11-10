@@ -1,7 +1,7 @@
 package com.tongwii.service;
 
 import com.tongwii.dao.IRoomDao;
-import com.tongwii.domain.RoomEntity;
+import com.tongwii.domain.Room;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,22 +19,22 @@ public class RoomService {
         this.roomDao = roomDao;
     }
 
-    public RoomEntity findRoomByCode(String roomCode) {
-        RoomEntity roomEntity = roomDao.findByRoomCode(roomCode);
-        return roomEntity;
+    public Room findRoomByCode(String roomCode) {
+        Room room = roomDao.findByRoomCode(roomCode);
+        return room;
     }
 
-    public List<RoomEntity> findByFloorId(String floorId) {
+    public List<Room> findByFloorId(String floorId) {
         return roomDao.findByFloorId(floorId);
     }
 
-    public RoomEntity findById(String id) {
+    public Room findById(String id) {
         return roomDao.findOne(id);
     }
 
-    public void update(RoomEntity newRoom) {
+    public void update(Room newRoom) {
         roomDao.save(newRoom);
     }
 
-    public void save(RoomEntity roomEntity) { roomDao.save(roomEntity); }
+    public void save(Room room) { roomDao.save(room); }
 }

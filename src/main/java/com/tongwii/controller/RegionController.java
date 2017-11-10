@@ -1,6 +1,6 @@
 package com.tongwii.controller;
 
-import com.tongwii.domain.RegionEntity;
+import com.tongwii.domain.Region;
 import com.tongwii.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class RegionController {
      */
     @GetMapping()
     public ResponseEntity getParentRegion(){
-        List<RegionEntity> regionEntities = regionService.findByParentCode("0");
+        List<Region> regionEntities = regionService.findByParentCode("0");
         return ResponseEntity.ok(regionEntities);
     }
 
@@ -35,7 +35,7 @@ public class RegionController {
      */
     @GetMapping("/{parentCode}")
     public ResponseEntity getParentRegion(@PathVariable String parentCode){
-        List<RegionEntity> regionEntities = regionService.findByParentCode(parentCode);
+        List<Region> regionEntities = regionService.findByParentCode(parentCode);
         return ResponseEntity.ok(regionEntities);
     }
 }

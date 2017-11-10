@@ -1,6 +1,6 @@
 package com.tongwii.controller;
 
-import com.tongwii.domain.ResidenceEntity;
+import com.tongwii.domain.Residence;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.ResidenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,13 @@ public class ResidenceController {
      * 添加单个小区信息
      * @author Yamo
      *
-     * @param residenceEntity
+     * @param residence
      */
     @PostMapping("/addSingleResidence")
-    public ResponseEntity addSingleResidence(@RequestBody ResidenceEntity residenceEntity){
+    public ResponseEntity addSingleResidence(@RequestBody Residence residence){
         String userId = SecurityUtils.getCurrentUserId();
-        residenceEntity.setUserId(userId);
-        residenceService.save(residenceEntity);
+        residence.setUserId(userId);
+        residenceService.save(residence);
         return ResponseEntity.ok("添加成功!");
     }
 
@@ -42,8 +42,8 @@ public class ResidenceController {
      */
     @GetMapping("/getResidenceInfo/{residenceId}")
     public ResponseEntity getResidenceInfo(@PathVariable String residenceId){
-        ResidenceEntity residenceEntity = residenceService.findById(residenceId);
-        return ResponseEntity.ok(residenceEntity);
+        Residence residence = residenceService.findById(residenceId);
+        return ResponseEntity.ok(residence);
     }
     /**
      * 根据regionId查询residence信息
@@ -53,17 +53,17 @@ public class ResidenceController {
     @GetMapping("/find/{regionCode}")
     public ResponseEntity findResidenceByRegionId(@PathVariable String regionCode){
 
-        List<ResidenceEntity> residenceEntities = residenceService.findResidenceByRegionCode(regionCode);
+        List<Residence> residenceEntities = residenceService.findResidenceByRegionCode(regionCode);
         if(CollectionUtils.isEmpty(residenceEntities)){
             return ResponseEntity.badRequest().body("抱歉,该区域暂无小区加入本系统!");
         }
         List<Map> jsonArray = new ArrayList<>();
-        for(ResidenceEntity residenceEntity : residenceEntities){
+        for(Residence residence : residenceEntities){
             Map<String ,Object> object = new HashMap<>();
-            object.put("residenceName", residenceEntity.getName());
-            object.put("address",residenceEntity.getAddress() + residenceEntity.getName());
-            object.put("residenceId",residenceEntity.getId());
-            object.put("floorCount", residenceEntity.getFloorCount());
+            object.put("residenceName", residence.getName());
+            object.put("address", residence.getAddress() + residence.getName());
+            object.put("residenceId", residence.getId());
+            object.put("floorCount", residence.getFloorCount());
             jsonArray.add(object);
         }
         return ResponseEntity.ok(jsonArray);
@@ -71,29 +71,29 @@ public class ResidenceController {
 
     /**
      * 修改residence表
-     * @param residenceEntity
+     * @param residence
      * @return result
      * */
     @PostMapping("/updateResidenceInfo")
-    public ResponseEntity updateResidenceInfo(@RequestBody ResidenceEntity residenceEntity){
-        if(residenceEntity.getId() == null || residenceEntity.getId().isEmpty()){
+    public ResponseEntity updateResidenceInfo(@RequestBody Residence residence){
+        if(residence.getId() == null || residence.getId().isEmpty()){
             return ResponseEntity.badRequest().body("社区实体信息不存在!");
         }
-        ResidenceEntity newResidence = residenceService.findById(residenceEntity.getId());
-        if(!StringUtils.isEmpty(residenceEntity.getName())){
-            newResidence.setName(residenceEntity.getName());
+        Residence newResidence = residenceService.findById(residence.getId());
+        if(!StringUtils.isEmpty(residence.getName())){
+            newResidence.setName(residence.getName());
         }
-        if(!StringUtils.isEmpty(residenceEntity.getUserId())){
-            newResidence.setUserId(residenceEntity.getUserId());
+        if(!StringUtils.isEmpty(residence.getUserId())){
+            newResidence.setUserId(residence.getUserId());
         }
-        if(!StringUtils.isEmpty(residenceEntity.getFloorCount())){
-            newResidence.setFloorCount(residenceEntity.getFloorCount());
+        if(!StringUtils.isEmpty(residence.getFloorCount())){
+            newResidence.setFloorCount(residence.getFloorCount());
         }
-        if(!StringUtils.isEmpty(residenceEntity.getRegionCode())){
-            newResidence.setRegionCode(residenceEntity.getRegionCode());
+        if(!StringUtils.isEmpty(residence.getRegionCode())){
+            newResidence.setRegionCode(residence.getRegionCode());
         }
-        if(!StringUtils.isEmpty(residenceEntity.getAddress())){
-            newResidence.setAddress(residenceEntity.getAddress());
+        if(!StringUtils.isEmpty(residence.getAddress())){
+            newResidence.setAddress(residence.getAddress());
         }
         try{
             residenceService.update(newResidence);

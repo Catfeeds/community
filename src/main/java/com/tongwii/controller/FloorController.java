@@ -1,6 +1,6 @@
 package com.tongwii.controller;
 
-import com.tongwii.domain.FloorEntity;
+import com.tongwii.domain.Floor;
 import com.tongwii.service.FloorService;
 import com.tongwii.service.ResidenceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +28,16 @@ public class FloorController {
      * 添加单个楼宇信息
      * @author Yamo
      *
-     * @param floorEntity
+     * @param floor
      */
     @PostMapping("/addSingleFloor")
-    public ResponseEntity addSingleFloor(@RequestBody FloorEntity floorEntity){
+    public ResponseEntity addSingleFloor(@RequestBody Floor floor){
         // TODO 此处需要做楼宇名称的唯一性设置
-        List<FloorEntity> floorEntities = floorService.findFloorByResidenceId(floorEntity.getResidenceId());
+        List<Floor> floorEntities = floorService.findFloorByResidenceId(floor.getResidenceId());
         boolean floorExist = false;
         if(!CollectionUtils.isEmpty(floorEntities)){
-            for(FloorEntity floorEntity1: floorEntities){
-                if(floorEntity1.getCode().equals(floorEntity.getCode())){
+            for(Floor floor1 : floorEntities){
+                if(floor1.getCode().equals(floor.getCode())){
                     floorExist = true;
                 }
             }
@@ -46,7 +46,7 @@ public class FloorController {
             return ResponseEntity.badRequest().body("楼宇已存在!");
         }
         try {
-            floorService.save(floorEntity);
+            floorService.save(floor);
             return ResponseEntity.ok("添加成功!");
         }catch (Exception e){
             return ResponseEntity.badRequest().body("添加失败!");
@@ -61,7 +61,7 @@ public class FloorController {
      */
     @GetMapping("/getFloorByFloorCode/{residenceId}/{floorCode}")
     public ResponseEntity getFloorByFloorCode(@PathVariable String residenceId, @PathVariable String floorCode){
-        List<FloorEntity> floorEntities = floorService.findByCodeAndResidenceId(residenceId, floorCode);
+        List<Floor> floorEntities = floorService.findByCodeAndResidenceId(residenceId, floorCode);
         if(CollectionUtils.isEmpty(floorEntities)){
             return ResponseEntity.badRequest().body("无楼宇信息!");
         }
@@ -74,19 +74,19 @@ public class FloorController {
      * */
     @GetMapping(value = "/floor/{residenceId}")
     public ResponseEntity findFloorByResidenceId(@PathVariable String residenceId){
-        List<FloorEntity> floorEntities = floorService.findFloorByResidenceId(residenceId);
+        List<Floor> floorEntities = floorService.findFloorByResidenceId(residenceId);
         String address = residenceService.findById(residenceId).getAddress();
         if(floorEntities == null){
             return ResponseEntity.badRequest().body("此社区没有楼宇实体!");
         }
         List<Map> jsonArray = new ArrayList<>();
-        for(FloorEntity floorEntity : floorEntities){
+        for(Floor floor : floorEntities){
             Map<String, Object> object = new HashMap<>();
-            object.put("floorName",floorEntity.getCode());
-            object.put("floorPiles", floorEntity.getFloorPiles());
-            object.put("isElev", floorEntity.getElev());
-            object.put("floorId",floorEntity.getId());
-            object.put("address", address+floorEntity.getCode()+"栋");
+            object.put("floorName", floor.getCode());
+            object.put("floorPiles", floor.getFloorPiles());
+            object.put("isElev", floor.getElev());
+            object.put("floorId", floor.getId());
+            object.put("address", address+ floor.getCode()+"栋");
             jsonArray.add(object);
         }
         return ResponseEntity.ok(jsonArray);
@@ -94,23 +94,23 @@ public class FloorController {
 
     /**
      * 修改flooe表信息
-     * @param floorEntity
+     * @param floor
      * @return result
      * */
     @PutMapping(value = "/updateFloorInfo")
-    public ResponseEntity updateFloorInfo(@RequestBody FloorEntity floorEntity){
-        if(StringUtils.isEmpty(floorEntity.getId())){
+    public ResponseEntity updateFloorInfo(@RequestBody Floor floor){
+        if(StringUtils.isEmpty(floor.getId())){
             return ResponseEntity.badRequest().body("楼宇实体不存在!");
         }
-        FloorEntity newFloor= floorService.findById(floorEntity.getId());
-        if(!StringUtils.isEmpty(floorEntity.getCode())){
-            newFloor.setCode(floorEntity.getCode());
+        Floor newFloor= floorService.findById(floor.getId());
+        if(!StringUtils.isEmpty(floor.getCode())){
+            newFloor.setCode(floor.getCode());
         }
-        if(!StringUtils.isEmpty(floorEntity.getPrincipalId())){
-            newFloor.setPrincipalId(floorEntity.getPrincipalId());
+        if(!StringUtils.isEmpty(floor.getPrincipalId())){
+            newFloor.setPrincipalId(floor.getPrincipalId());
         }
-        if(!StringUtils.isEmpty(floorEntity.getResidenceId())){
-            newFloor.setResidenceId(floorEntity.getResidenceId());
+        if(!StringUtils.isEmpty(floor.getResidenceId())){
+            newFloor.setResidenceId(floor.getResidenceId());
         }
         try{
             floorService.update(newFloor);

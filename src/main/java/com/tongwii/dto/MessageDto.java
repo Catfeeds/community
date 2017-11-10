@@ -1,15 +1,13 @@
 package com.tongwii.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.tongwii.domain.MessageCommentEntity;
 import com.tongwii.util.CustomDateSerializer;
 import lombok.Data;
 
-import java.util.Collection;
 import java.util.Date;
 
 /**
- * ${DESCRIPTION}
+ * 消息Dto
  *
  * @author Zeral
  * @date 2017-09-25
@@ -24,4 +22,5 @@ public class MessageDto {
     private Date createTime;
     private String createUser;
     private String messageTypeId;
+    private String messageTypeCode;
 }

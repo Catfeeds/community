@@ -30,7 +30,7 @@ public class UserMapper {
     @Autowired
     private FloorService floorService;
 
-    public UserDto userToUserDTO(UserEntity user) {
+    public UserDto userToUserDTO(User user) {
         UserDto userDTO = new UserDto();
         userDTO.setId(user.getId());
         userDTO.setAccount(user.getAccount());
@@ -46,36 +46,36 @@ public class UserMapper {
         userDTO.setSex(user.getSex());
         userDTO.setState(user.getState());
         if(!CollectionUtils.isEmpty(user.getUserRolesById())) {
-            userDTO.setRoles(user.getUserRolesById().stream().map(UserRoleEntity::getRoleByRoleId).map(RoleEntity::getCode).collect(Collectors.toList()));
+            userDTO.setRoles(user.getUserRolesById().stream().map(UserRole::getRoleByRoleId).map(Role::getCode).collect(Collectors.toList()));
         }
         List<RoomDto> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
-            RoomEntity roomEntity = userRoomEntity.getRoomByRoomId();
+            Room room = userRoomEntity.getRoomByRoomId();
             RoomDto roomDTO = new RoomDto();
-            Map<String, FloorEntity> floorMap = floorService.findFloorById(roomEntity.getFloorId());
-            roomDTO.setRoomId(roomEntity.getId());
-            roomDTO.setUnitCode(roomEntity.getUnitCode());
-            roomDTO.setRoomCode(roomEntity.getRoomCode());
-            roomDTO.setChargeName(roomEntity.getUserByOwnerId().getName());
-            roomDTO.setChargePhone(roomEntity.getUserByOwnerId().getPhone());
-            roomDTO.setRoomFloor(floorMap.get(FloorEntity.UNIT).getCode() + roomEntity.getUnitCode()+ "单元" + roomEntity.getRoomCode());
+            Map<String, Floor> floorMap = floorService.findFloorById(room.getFloorId());
+            roomDTO.setRoomId(room.getId());
+            roomDTO.setUnitCode(room.getUnitCode());
+            roomDTO.setRoomCode(room.getRoomCode());
+            roomDTO.setChargeName(room.getUserByOwnerId().getName());
+            roomDTO.setChargePhone(room.getUserByOwnerId().getPhone());
+            roomDTO.setRoomFloor(floorMap.get(Floor.UNIT).getCode() + room.getUnitCode()+ "单元" + room.getRoomCode());
             return roomDTO;
         }).collect(Collectors.toList());
         userDTO.setRooms(roomDTOS);
         return userDTO;
     }
 
-    public List<UserDto> usersToUserDTOs(List<UserEntity> users) {
+    public List<UserDto> usersToUserDTOs(List<User> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
             .collect(Collectors.toList());
     }
 
-    public UserEntity userDTOToUser(UserDto userDTO) {
+    public User userDTOToUser(UserDto userDTO) {
         if (userDTO == null) {
             return null;
         } else {
-            UserEntity user = new UserEntity();
+            User user = new User();
             user.setId(user.getId());
             user.setAccount(user.getAccount());
             user.setNickName(user.getNickName());
@@ -92,7 +92,7 @@ public class UserMapper {
         }
     }
 
-    public List<UserEntity> userDTOsToUsers(List<UserDto> userDTOs) {
+    public List<User> userDTOsToUsers(List<UserDto> userDTOs) {
         return userDTOs.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
@@ -100,9 +100,9 @@ public class UserMapper {
     }
 
 
-    public List<RoleEntity> rolesFromStrings(Set<String> strings) {
+    public List<Role> rolesFromStrings(Set<String> strings) {
         return strings.stream().map(string -> {
-            RoleEntity role = new RoleEntity();
+            Role role = new Role();
             role.setCode(string);
             return role;
         }).collect(Collectors.toList());

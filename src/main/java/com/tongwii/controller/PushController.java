@@ -1,8 +1,8 @@
 package com.tongwii.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.tongwii.bean.Message;
-import com.tongwii.constant.MessageConstants;
+import com.tongwii.bean.PushMessage;
+import com.tongwii.constant.PushConstants;
 import com.tongwii.service.PushService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,30 +28,30 @@ public class PushController {
 
     /**
      * 全推
-     * @param message
+     * @param pushMessage
      * @return
      */
     @PostMapping("/pushAll")
-    public ResponseEntity pushAll(@RequestBody Message message) throws JsonProcessingException {
-        if (StringUtils.isEmpty(message.getMessage())) {
+    public ResponseEntity pushAll(@RequestBody PushMessage pushMessage) throws JsonProcessingException {
+        if (StringUtils.isEmpty(pushMessage.getMessage())) {
             return ResponseEntity.badRequest().body("消息内容不能为空!");
         } else {
-            pushService.push(message, MessageConstants.PUSH_ALL_TOPIC);
+            pushService.push(pushMessage, PushConstants.PUSH_ALL_TOPIC);
             return ResponseEntity.ok("消息推送成功!");
         }
     }
 
     /**
      * 个推
-     * @param message
+     * @param pushMessage
      * @return
      */
     @PostMapping("/push")
-    public ResponseEntity push(@RequestBody Message message) throws JsonProcessingException {
-        if (StringUtils.isEmpty(message.getMessage())) {
+    public ResponseEntity push(@RequestBody PushMessage pushMessage) throws JsonProcessingException {
+        if (StringUtils.isEmpty(pushMessage.getMessage())) {
             return ResponseEntity.badRequest().body("消息内容不能为空!");
         } else {
-            pushService.push(message, MessageConstants.PUSH_SELECTED_TOPIC);
+            pushService.push(pushMessage, PushConstants.PUSH_SELECTED_TOPIC);
             return ResponseEntity.ok("消息推送成功！");
         }
     }
@@ -60,7 +60,7 @@ public class PushController {
 
     // 根据单个房间推送消息
  /*   @PostMapping("/pushMessageToSingleRoom")
-    public TongWIIResult pushMessageToSingleRoom(String roomCode, @RequestBody MessageEntity messageEntity){
+    public TongWIIResult pushMessageToSingleRoom(String roomCode, @RequestBody PushMessage messageEntity){
         // 判空
         if(messageEntity.getTitle().isEmpty() || messageEntity.getContent().isEmpty() || messageEntity.getTitle().equals("") || messageEntity.getContent().equals("")){
             result.errorResult("消息体为空!");
