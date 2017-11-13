@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 消息评论
@@ -39,7 +40,7 @@ public class MessageComment implements Serializable {
 
     @Basic
     @Column(name = "comment_date")
-    private Timestamp commentDate;
+    private Date commentDate;
 
     @Basic
     @Column(name = "commentator_id")

@@ -42,4 +42,14 @@ public interface IMessageDao extends JpaRepository<Message, String> {
     Page<Message> findByMessageType_CodeAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeCode, String residenceId);
 
     Message findById(String messageId);
+
+    /**
+     * 更新消息附件id
+     * @param messageId 消息id
+     * @param fileId 附件id
+     * @return
+     */
+    @Modifying
+    @Query("UPDATE Message m SET m.fileId = :fileId WHERE m.id = :messageId")
+    void updateMessageFileIdById(@Param(value = "messageId") String messageId, @Param(value = "fileId") String fileId);
 }

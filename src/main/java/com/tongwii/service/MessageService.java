@@ -2,6 +2,7 @@ package com.tongwii.service;
 
 import com.tongwii.dao.IMessageDao;
 import com.tongwii.dao.IMessageTypeDao;
+import com.tongwii.domain.File;
 import com.tongwii.domain.Message;
 import com.tongwii.domain.MessageType;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
@@ -22,15 +24,19 @@ import java.util.Objects;
 public class MessageService {
     private final IMessageDao messageDao;
     private final IMessageTypeDao messageTypeDao;
+    private final FileService fileService;
 
-    public MessageService(IMessageDao messageDao, IMessageTypeDao messageTypeDao) {
+    public MessageService(IMessageDao messageDao, IMessageTypeDao messageTypeDao, FileService fileService) {
         this.messageDao = messageDao;
         this.messageTypeDao = messageTypeDao;
+        this.fileService = fileService;
     }
 
     public void save(Message message) {
         if(Objects.nonNull(message.getMessageType()) && !StringUtils.isEmpty(message.getMessageType().getCode())) {
             MessageType messageType = messageTypeDao.findByCode(message.getMessageType().getCode());
+            // 先清空code
+            message.setMessageType(null);
             message.setMessageTypeId(messageType.getId());
         }
         messageDao.save(message);
@@ -64,4 +70,16 @@ public class MessageService {
         return messageDao.findById(messageId);
     }
 
+    /**
+     * 上传文件并更新消息的文件id
+     * @param userId 用户id
+     * @param messageId 消息id
+     * @param multipartFile 附件
+     * @return
+     */
+    public String updateMessageFileById(String userId, String messageId, MultipartFile multipartFile) {
+        File file = fileService.saveAndUploadFileToFTP(userId, multipartFile);
+        messageDao.updateMessageFileIdById(messageId, file.getId());
+        return file.getFilePath();
+    }
 }

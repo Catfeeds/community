@@ -74,7 +74,6 @@ public class UserController {
         // 上传文件并更新用户地址
         String uploadUrl = userService.updateUserAvatorById(userId, file);
         System.out.println("==========头像上传完毕======================================");
-        // 使用了上传文件的输出流和response的返回json会出错，重置response
         return ResponseEntity.ok(uploadUrl);
 	}
 

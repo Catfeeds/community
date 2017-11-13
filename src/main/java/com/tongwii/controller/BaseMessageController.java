@@ -1,6 +1,8 @@
 package com.tongwii.controller;
 
+import com.google.common.collect.ImmutableMap;
 import com.tongwii.constant.MessageConstants;
+import com.tongwii.domain.File;
 import com.tongwii.domain.Message;
 import com.tongwii.domain.MessageComment;
 import com.tongwii.domain.User;
@@ -8,7 +10,9 @@ import com.tongwii.dto.MessageDto;
 import com.tongwii.dto.NeighborMessageDto;
 import com.tongwii.dto.mapper.MessageMapper;
 import com.tongwii.dto.mapper.NeighborMessageMapper;
+import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
+import com.tongwii.service.FileService;
 import com.tongwii.service.MessageCommentService;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.UserService;
@@ -18,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -36,13 +41,17 @@ public class BaseMessageController {
     private final MessageMapper messageMapper;
     private final NeighborMessageMapper neighborMessageMapper;
     private final MessageCommentService messageCommentService;
+    private final FileService fileService;
+    private final UserMapper userMapper;
 
-    public BaseMessageController(MessageService messageService, UserService userService, MessageMapper messageMapper, NeighborMessageMapper neighborMessageMapper, MessageCommentService messageCommentService) {
+    public BaseMessageController(MessageService messageService, UserService userService, MessageMapper messageMapper, NeighborMessageMapper neighborMessageMapper, MessageCommentService messageCommentService, FileService fileService, UserMapper userMapper) {
         this.messageService = messageService;
         this.userService = userService;
         this.messageMapper = messageMapper;
         this.neighborMessageMapper = neighborMessageMapper;
         this.messageCommentService = messageCommentService;
+        this.fileService = fileService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -66,6 +75,21 @@ public class BaseMessageController {
             return ResponseEntity.badRequest().body("消息添加失败!");
         }
 
+    }
+
+    // 上传消息图片
+    @PostMapping("/uploadPicture")
+    public ResponseEntity uploadAvatar(@RequestParam("file") MultipartFile multipartFile) {
+        if (multipartFile.isEmpty()) {
+            return ResponseEntity.badRequest().body("请选择上传文件!");
+        }
+        String userId = SecurityUtils.getCurrentUserId();
+        File file = fileService.saveAndUploadFileToFTP(userId, multipartFile);
+        Map<String, Object> fileDto = ImmutableMap.<String, Object> builder()
+            .put("url", file.getFilePath())
+            .put("id", file.getId())
+            .build();
+        return ResponseEntity.ok(fileDto);
     }
 
     /**
@@ -117,7 +141,7 @@ public class BaseMessageController {
         Pageable pageInfo = new PageRequest(page, 5);
         Page<Message> messageEntityPage = messageService.findByMessageTypeCodeAndResidenceIdOrderByCreateTimeDesc(pageInfo, message.getMessageType().getCode(), message.getResidenceId());
         if (!messageEntityPage.hasContent()) {
-            return ResponseEntity.badRequest().body("已经到底了");
+            return ResponseEntity.badRequest().body("没有数据了");
         }
         List<Message> messageEntities = messageEntityPage.getContent();
         List<Map> messageJsonArray = new ArrayList<>();
@@ -126,13 +150,15 @@ public class BaseMessageController {
             messageObject.put("id", messageEntity.getId());
             messageObject.put("title", messageEntity.getTitle());
             messageObject.put("content", messageEntity.getContent());
-            messageObject.put("type", messageEntity.getMessageTypeId());
+            messageObject.put("type", messageEntity.getMessageType().getCode());
+            messageObject.put("fileUrl", Objects.nonNull(messageEntity.getFile()) ? messageEntity.getFile().getFilePath() : null);
             String time = messageEntity.getCreateTime().toString();
             String createTime = time.substring(0, time.length() - 2);
             messageObject.put("createTime", createTime);
             // 通过userId查询userName
             User user = userService.findById(messageEntity.getCreateUserId());
             messageObject.put("createUser", user.getAccount());
+            messageObject.put("createUserAvatar", Objects.nonNull(user.getFileByAvatarFileId()) ? user.getFileByAvatarFileId().getFilePath() : null);
             messageJsonArray.add(messageObject);
         }
         Map<String, Object> data = new HashMap<>();
@@ -151,7 +177,7 @@ public class BaseMessageController {
         Pageable pageInfo = new PageRequest(page, DEFAULT_PAGE_SIZE);
         Page<Message> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeDesc(pageInfo, residenceId);
         if(!messageEntityPage.hasContent()) {
-            return ResponseEntity.badRequest().body("已经到底了");
+            return ResponseEntity.badRequest().body("没有数据了");
         }
         List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
         Map<String, Object> map = new HashMap<>();
@@ -170,7 +196,7 @@ public class BaseMessageController {
         Pageable pageInfo = new PageRequest(page, DEFAULT_PAGE_SIZE);
         Page<Message> messageEntityPage = messageService.findByResidenceIdOrderByCreateTimeAsc(pageInfo, residenceId);
         if(!messageEntityPage.hasContent()) {
-            return ResponseEntity.badRequest().body("已经到底了");
+            return ResponseEntity.badRequest().body("没有数据了");
         }
         List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
         Map<String, Object> map = new HashMap<>();
@@ -188,28 +214,18 @@ public class BaseMessageController {
         try {
             Page<Message> messageEntityPage = messageService.findByMessageTypeCodeAndResidenceIdOrderByCreateTimeDesc(pageInfo, MessageConstants.DYNAMIC_MESSAGE, residenceId);
             if (!messageEntityPage.hasContent()) {
-                return ResponseEntity.badRequest().body("已经到底了");
+                return ResponseEntity.badRequest().body("没有数据了");
             }
             List<Message> messageEntities = messageEntityPage.getContent();
             List<NeighborMessageDto> neighborMessageDtoList = neighborMessageMapper.messagesToNeighborMessageDtos(messageEntities);
 
             for(NeighborMessageDto neighborMessageDto: neighborMessageDtoList){
-                Integer likeNum = 0;
-                Integer commentNum = 0;
                 // 封装点赞参数
                 List<MessageComment> likeMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.IS_LIKE);
-                for(MessageComment commentEntity: likeMessageEntities){
-                    if(commentEntity.getIsLike()!=null && commentEntity.getIsLike()){
-                        likeNum++;
-                    }
-                }
+                Integer likeNum = Math.toIntExact(likeMessageEntities.stream().filter(Objects::nonNull).filter(MessageComment::getIsLike).count());
                 // 封装评论参数
                 List<MessageComment> commentMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.COMMENT);
-                for(MessageComment commentEntity: commentMessageEntities){
-                    if(commentEntity.getComment()!=null ||!(StringUtils.isEmpty(commentEntity.getComment()))){
-                        commentNum++;
-                    }
-                }
+                Integer commentNum = Math.toIntExact(commentMessageEntities.stream().filter(messageComment -> !StringUtils.isEmpty(messageComment.getComment())).count());
                 neighborMessageDto.setLikeNum(likeNum);
                 neighborMessageDto.setCommentNum(commentNum);
             }

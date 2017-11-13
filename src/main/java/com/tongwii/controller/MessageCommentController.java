@@ -5,16 +5,13 @@ import com.tongwii.domain.MessageComment;
 import com.tongwii.dto.NeighborMessageDto;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
+import com.tongwii.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by admin on 2017/10/24.
@@ -43,7 +40,7 @@ public class MessageCommentController {
             messageComment.setIsLike(true);
             messageComment.setCommentatorId(userId);
             messageComment.setMessageId(messageEntity.getId());
-            messageComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
+            messageComment.setCommentDate(new Date());
             messageComment.setType(MessageConstants.IS_LIKE);
             messageCommentService.addMessageComment(messageComment);
             isLike = false;
@@ -86,13 +83,11 @@ public class MessageCommentController {
         messageComment.setComment(comment);
         messageComment.setCommentatorId(userId);
         messageComment.setMessageId(neighborMessageDto.getId());
-        messageComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
+        messageComment.setCommentDate(new Date());
         messageComment.setType(MessageConstants.COMMENT);
         messageCommentService.addMessageComment(messageComment);
 
-        Integer commentNum = neighborMessageDto.getCommentNum();
-        commentNum = commentNum++;
-        neighborMessageDto.setCommentNum(commentNum);
+        neighborMessageDto.setCommentNum(messageCommentService.getCommentCounts(neighborMessageDto.getId()));
         return ResponseEntity.ok(neighborMessageDto);
     }
 
@@ -108,7 +103,7 @@ public class MessageCommentController {
             Map<String, Object> commentObject = new HashMap<>();
             commentObject.put("account", messageComment.getUserByCommentatorId().getAccount());
             commentObject.put("comment", messageComment.getComment());
-            commentObject.put("commentDate", messageComment.getCommentDate());
+            commentObject.put("commentDate", DateUtil.date2Str(messageComment.getCommentDate(), DateUtil.DEFAULT_DATE_TIME_FORMAT));
             commentList.add(commentObject);
         }
         return ResponseEntity.ok(commentList);

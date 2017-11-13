@@ -62,10 +62,10 @@ public class UserService {
         return userMapper.userToUserDTO(user);
     }
 
-    public String updateUserAvatorById(String userId, MultipartFile file) {
-        File fileEntity = fileService.saveAndUploadFileToFTP(userId, file);
-        userDao.updateAvatorById(userId, fileEntity.getId());
-        return fileEntity.getFilePath();
+    public String updateUserAvatorById(String userId, MultipartFile multipartFile) {
+        File file = fileService.saveAndUploadFileToFTP(userId, multipartFile);
+        userDao.updateAvatorById(userId, file.getId());
+        return file.getFilePath();
     }
 
     public User findById(String createUserId) {

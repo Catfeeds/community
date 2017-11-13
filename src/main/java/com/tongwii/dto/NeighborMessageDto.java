@@ -19,6 +19,7 @@ public class NeighborMessageDto {
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
     private String createUser;
+    private String createUserAvatar;
     private String messageTypeId;
     private Integer likeNum;
     private Integer commentNum;

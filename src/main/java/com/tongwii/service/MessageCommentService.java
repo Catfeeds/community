@@ -39,4 +39,8 @@ public class MessageCommentService {
     public void addMessageComment(MessageComment messageComment){
         messageCommentDao.save(messageComment);
     }
+
+    public Integer getCommentCounts(String id) {
+       return messageCommentDao.countByMessageId(id);
+    }
 }

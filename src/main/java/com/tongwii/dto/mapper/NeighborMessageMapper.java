@@ -24,6 +24,7 @@ public class NeighborMessageMapper {
         neighborMessageDto.setContent(message.getContent());
         neighborMessageDto.setCreateTime(message.getCreateTime());
         neighborMessageDto.setCreateUser(message.getCreateUser().getAccount());
+        neighborMessageDto.setCreateUserAvatar(Objects.nonNull(message.getCreateUser().getFileByAvatarFileId()) ? message.getCreateUser().getFileByAvatarFileId().getFilePath() : null);
         neighborMessageDto.setMessageTypeId(message.getMessageTypeId());
         return neighborMessageDto;
     }

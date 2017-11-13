@@ -56,22 +56,4 @@ public class PushController {
         }
     }
 
-
-
-    // 根据单个房间推送消息
- /*   @PostMapping("/pushMessageToSingleRoom")
-    public TongWIIResult pushMessageToSingleRoom(String roomCode, @RequestBody PushMessage messageEntity){
-        // 判空
-        if(messageEntity.getTitle().isEmpty() || messageEntity.getContent().isEmpty() || messageEntity.getTitle().equals("") || messageEntity.getContent().equals("")){
-            result.errorResult("消息体为空!");
-            return result;
-        }
-        if(roomCode.isEmpty()){
-            result.errorResult("推送目标为空!");
-            return result;
-        }
-        result = pushService.listMesssgePush(messageEntity,roomCode);
-        return result;
-    }*/
-
 }
