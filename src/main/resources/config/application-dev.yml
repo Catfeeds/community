@@ -98,6 +98,7 @@ tongwii:
                 secret: 1ca841441b9f8fa604a5cf75d4f7052a41bacd7f
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
+                # default use
                 token-validity-in-seconds-for-remember-me: 2592000
     mqtt:
         serverURIs: tcp://106.14.227.231:1883
