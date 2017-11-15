@@ -17,7 +17,7 @@ import java.util.*;
  * Created by admin on 2017/10/24.
  */
 @RestController
-@RequestMapping("/message_comment")
+@RequestMapping("/api/message_comment")
 public class MessageCommentController {
     @Autowired
     private MessageCommentService messageCommentService;

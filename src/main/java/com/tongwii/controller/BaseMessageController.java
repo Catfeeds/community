@@ -34,7 +34,7 @@ import static com.tongwii.constant.Constants.DEFAULT_PAGE_SIZE;
  * Created by admin on 2017/7/14.
  */
 @RestController
-@RequestMapping("/message")
+@RequestMapping("/api/message")
 public class BaseMessageController {
     private final MessageService messageService;
     private final UserService userService;

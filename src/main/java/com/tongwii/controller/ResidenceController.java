@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by admin on 2017/7/18.
  */
 @RestController
-@RequestMapping("/residence")
+@RequestMapping("/api/residence")
 public class ResidenceController {
     @Autowired
     private ResidenceService residenceService;

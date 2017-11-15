@@ -12,7 +12,7 @@ import java.util.List;
  * Created by admin on 2017/9/28.
  */
 @RestController
-@RequestMapping("/region")
+@RequestMapping("/api/region")
 public class RegionController {
     @Autowired
     private RegionService regionService;

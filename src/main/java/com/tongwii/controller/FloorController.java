@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by admin on 2017/7/18.
  */
 @RestController
-@RequestMapping("/floor")
+@RequestMapping("/api/floor")
 public class FloorController {
     @Autowired
     private FloorService floorService;

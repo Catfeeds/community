@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by admin on 2017/7/17.
  */
 @RestController
-@RequestMapping("/room")
+@RequestMapping("/api/room")
 public class RoomController {
     @Autowired
     private RoomService roomService;

@@ -19,7 +19,7 @@ import java.util.List;
  * Created by admin on 2017/9/30.
  */
 @RestController
-@RequestMapping("/userRoom")
+@RequestMapping("/api/userRoom")
 public class UserRoomController {
     @Autowired
     private UserRoomService userRoomService;

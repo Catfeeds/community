@@ -69,7 +69,7 @@ tongwii:
         max-pool-size: 50
         queue-capacity: 10000
     swagger:
-        default-include-pattern: /.*
+        default-include-pattern: /api/.*
         title: community 云社区 API
         description: community 云社区 API文档
         version: 0.0.1

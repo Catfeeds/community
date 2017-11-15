@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by admin on 2017/10/17.
  */
 @RestController
-@RequestMapping("/user_role")
+@RequestMapping("/api/user_role")
 public class UserRoleController {
     @Autowired
     private UserRoleService userRoleService;

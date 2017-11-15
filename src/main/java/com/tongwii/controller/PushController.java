@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 社区管理员和超级管理员拥有推送权限
  */
 @RestController
-@RequestMapping("/push")
+@RequestMapping("/api/push")
 //@PreAuthorize("hasAnyAuthority(T(com.tongwii.constant.AuthoritiesConstants).ADMIN, T(com.tongwii.constant.AuthoritiesConstants).COMMUNITY_ADMIN)")
 public class PushController {
 

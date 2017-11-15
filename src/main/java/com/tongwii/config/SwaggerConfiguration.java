@@ -14,12 +14,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.TypeNameExtractor;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.VendorExtension;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -108,7 +105,7 @@ public class SwaggerConfiguration {
 
         return new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(new ApiInfo(appName + " management API", "Management endpoints documentation",
-                appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<VendorExtension>()))
+                appVersion, "", ApiInfo.DEFAULT_CONTACT, "", "", new ArrayList<>()))
             .groupName("management")
             .host(host)
             .protocols(new HashSet<>(Arrays.asList(protocols)))

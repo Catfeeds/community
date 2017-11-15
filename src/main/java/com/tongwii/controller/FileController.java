@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * Created by admin on 2017/7/28.
  */
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/api/upload")
 public class FileController {
 
     private final FileService fileService;

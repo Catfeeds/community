@@ -17,7 +17,7 @@ import java.util.*;
  * Created by admin on 2017/7/18.
  */
 @RestController
-@RequestMapping("/userContact")
+@RequestMapping("/api/userContact")
 public class UserContactController {
     @Autowired
     private UserContactService userContactService;
