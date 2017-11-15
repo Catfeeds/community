@@ -4,6 +4,7 @@ import com.tongwii.domain.User;
 import com.tongwii.dto.UserDto;
 import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
+import com.tongwii.security.jwt.JWTConfigurer;
 import com.tongwii.security.jwt.TokenProvider;
 import com.tongwii.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +60,7 @@ public class UserController {
         UserDto userDTO = userMapper.userToUserDTO(user);
         Map<String, Object> map = new HashMap<>();
         map.put("userInfo", userDTO);
-        map.put("token", jwt);
+        map.put(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return ResponseEntity.ok(map);
 	}
 
@@ -69,11 +70,9 @@ public class UserController {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("请选择上传文件!");
         }
-        System.out.println("=========开始上传头像======================================");
         String userId = SecurityUtils.getCurrentUserId();
         // 上传文件并更新用户地址
         String uploadUrl = userService.updateUserAvatorById(userId, file);
-        System.out.println("==========头像上传完毕======================================");
         return ResponseEntity.ok(uploadUrl);
 	}
 
