@@ -1,5 +1,12 @@
 package com.tongwii.controller;
 
+import com.tongwii.constant.AuthoritiesConstants;
+import com.tongwii.constant.Constants;
+import com.tongwii.constant.UserConstants;
+import com.tongwii.core.exception.BadRequestAlertException;
+import com.tongwii.core.exception.InternalServerErrorException;
+import com.tongwii.core.exception.InvalidPasswordException;
+import com.tongwii.core.exception.LoginAlreadyUsedException;
 import com.tongwii.domain.User;
 import com.tongwii.dto.UserDto;
 import com.tongwii.dto.mapper.UserMapper;
@@ -7,20 +14,30 @@ import com.tongwii.security.SecurityUtils;
 import com.tongwii.security.jwt.JWTConfigurer;
 import com.tongwii.security.jwt.TokenProvider;
 import com.tongwii.service.UserService;
+import com.tongwii.util.HeaderUtil;
+import com.tongwii.util.PaginationUtil;
+import com.tongwii.util.ResponseUtil;
+import com.tongwii.vm.LoginVM;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -43,26 +60,143 @@ public class UserController {
         if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
             return ResponseEntity.badRequest().body("用户已存在");
         }
-        UserDto userDTO = userService.save(user);
+        UserDto userDTO = userService.register(user);
         return ResponseEntity.ok(userDTO);
 	}
 
-	// 用户登录接口
-	@PostMapping("/login")
-	public ResponseEntity login(@RequestBody User user) {
+    // 用户授权接口
+    @PostMapping("/login")
+    public ResponseEntity login(@Valid @RequestBody LoginVM loginVM) {
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getAccount(), user.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginVM.getAccount(), loginVM.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.createToken(authentication);
+        boolean rememberMe = (loginVM.getRememberMe() == null) ? false : loginVM.getRememberMe();
+        String jwt = tokenProvider.createToken(authentication, rememberMe);
         // 基本用户信息
-        user = userService.findByAccount(user.getAccount());
+        User user = userService.findByAccountAndUpdateDeviceId(loginVM);
         UserDto userDTO = userMapper.userToUserDTO(user);
-        Map<String, Object> map = new HashMap<>();
-        map.put("userInfo", userDTO);
-        map.put(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        return ResponseEntity.ok(map);
-	}
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        return new ResponseEntity<>(userDTO, httpHeaders, HttpStatus.OK);
+    }
+
+
+    // 获取当前登录用户
+    @GetMapping
+    public ResponseEntity user() {
+        UserDto userDto = Optional.ofNullable(userService.findById(SecurityUtils.getCurrentUserId())).map(userMapper::userToUserDTO).orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
+        return ResponseEntity.ok(userDto);
+    }
+
+    // 修改当前登录用户信息
+    @PostMapping
+    public ResponseEntity saveUser(@Valid @RequestBody UserDto userDto) {
+        final String userLogin = SecurityUtils.getCurrentUserLogin();
+        Optional<User> user = userService.findOneByAccount(userLogin);
+        if (!user.isPresent()) {
+            throw new InternalServerErrorException("User could not be found");
+        }
+        userService.updateUser(userDto.getAccount(), userDto.getNickName(), userDto.getName(),
+            userDto.getLangKey());return ResponseEntity.ok(userDto);
+    }
+
+
+    /**
+     * POST  /account/change-password : changes the current user's password
+     *
+     * @param password the new password
+     * @throws InvalidPasswordException 400 (Bad Request) if the new password is incorrect
+     */
+    @PostMapping(path = "/change-password")
+    public void changePassword(@RequestBody String password) {
+        if (!checkPasswordLength(password)) {
+            throw new InvalidPasswordException();
+        }
+        userService.changePassword(password);
+    }
+
+    private static boolean checkPasswordLength(String password) {
+        return !StringUtils.isEmpty(password) &&
+            password.length() >= UserConstants.PASSWORD_MIN_LENGTH &&
+            password.length() <= UserConstants.PASSWORD_MAX_LENGTH;
+    }
+
+
+    /**
+     * GET  /users : get all users.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and with body all users
+     */
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDto>> getAllUsers(Pageable pageable) {
+        final Page<UserDto> page = userService.getAllManagedUsers(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user/users");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * PUT  /users : Updates an existing User.
+     *
+     * @param userDto the user to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated user
+     */
+    @PutMapping("/users")
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto) {
+        Optional<User> existingUser = userService.findOneByAccount(userDto.getAccount());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDto.getId()))) {
+            throw new LoginAlreadyUsedException();
+        }
+        Optional<UserDto> updatedUser = userService.updateUser(userDto);
+
+        return ResponseUtil.wrapOrNotFound(updatedUser,
+            HeaderUtil.createAlert("userManagement.updated", userDto.getAccount()));
+    }
+
+    /**
+     * GET  /users/:login : get the "login" user.
+     *
+     * @param account the login of the user to find
+     * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
+     */
+    @DeleteMapping("/device/{deviceId}")
+    public ResponseEntity deleteUserDevice(@PathVariable String deviceId) {
+
+        this.userService.updateUserDevices(deviceId);
+        return ResponseEntity.ok("删除用户设备成功");
+    }
+
+    /**
+     * GET  /users/:login : get the "login" user.
+     *
+     * @param account the login of the user to find
+     * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
+     */
+    @GetMapping("/users/{account:" + Constants.LOGIN_REGEX + "}")
+    public ResponseEntity<UserDto> getUser(@PathVariable String account) {
+        return ResponseUtil.wrapOrNotFound(
+            userService.getUserWithRolesByAccount(account)
+                .map(userMapper::userToUserDTO));
+    }
+
+    /**
+     * DELETE /users/:login : delete the "login" User.
+     *
+     * @param account the login of the user to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/users/{account:" + Constants.LOGIN_REGEX + "}")
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<Void> deleteUser(@PathVariable String account) {
+        try {
+            userService.deleteUser(account);
+        } catch (Exception e) {
+            throw new BadRequestAlertException("用户删除失败", "userManagement", "userUsed");
+        }
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("userManagement.deleted", account)).build();
+    }
 
 	// 上传用户头像
 	@PostMapping("/uploadAvatar")

@@ -43,6 +43,10 @@ spring:
         show-sql: true
         properties:
             hibernate.format_sql: true
+            hibernate.generate_statistics: true
+            hibernate.cache.use_query_cache: false
+        hibernate:
+          ddl-auto: update
     messages:
         cache-seconds: 1
     thymeleaf:
@@ -89,7 +93,7 @@ tongwii:
         allowed-origins: "*"
         allowed-methods: GET, PUT, POST, DELETE, OPTIONS
         allowed-headers: "*"
-        exposed-headers:
+        exposed-headers: "Authorization"
         allow-credentials: true
         max-age: 1800
     security:

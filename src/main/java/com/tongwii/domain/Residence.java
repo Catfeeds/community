@@ -17,7 +17,7 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
-@Table(name = "residence", schema = "cloud_community", catalog = "")
+@Table(name = "residence", schema = "cloud_community")
 public class Residence implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

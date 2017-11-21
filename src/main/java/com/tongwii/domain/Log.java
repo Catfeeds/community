@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @Entity
 @Setter
 @Getter
-@Table(name = "log", schema = "cloud_community", catalog = "")
+@Table(name = "log", schema = "cloud_community")
 public class Log implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

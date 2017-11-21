@@ -68,6 +68,14 @@ tongwii:
         core-pool-size: 2
         max-pool-size: 50
         queue-capacity: 10000
+    # By default CORS is disabled. Uncomment to enable.
+    #cors:
+        #allowed-origins: "*"
+        #allowed-methods: GET, PUT, POST, DELETE, OPTIONS
+        #allowed-headers: "*"
+        #exposed-headers:
+        #allow-credentials: true
+        #max-age: 1800
     swagger:
         default-include-pattern: /api/.*
         title: community 云社区 API
@@ -79,6 +87,8 @@ tongwii:
         contact-email: zeralzhang@gmail.com
         license:
         license-url:
+    ribbon:
+        display-on-active-profiles: dev
 kms:
     url: ws://192.168.0.27:8888/kurento
 

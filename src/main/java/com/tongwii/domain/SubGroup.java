@@ -17,7 +17,7 @@ import java.util.Collection;
 @Entity
 @Setter
 @Getter
-@Table(name = "subgroup", schema = "cloud_community", catalog = "")
+@Table(name = "subgroup", schema = "cloud_community")
 public class SubGroup implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

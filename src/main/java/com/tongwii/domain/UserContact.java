@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
-@Table(name = "user_contact", schema = "cloud_community", catalog = "")
+@Table(name = "user_contact", schema = "cloud_community")
 public class UserContact implements Serializable {
     public static final String UNKNOWN_NAME = "A_Z";
 
@@ -36,16 +36,9 @@ public class UserContact implements Serializable {
 
     @Basic
     @Column(name = "des")
-    private String des;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private User userByUserId;
+    private String des;     // 联系人备注
 
     @ManyToOne
     @JoinColumn(name = "friend_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User userByFriendId;
-/*    @Basic
-    @Column
-    private String friendAccount;*/
 }

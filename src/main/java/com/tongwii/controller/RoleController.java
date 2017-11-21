@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by admin on 2017/10/17.
@@ -28,7 +26,7 @@ public class RoleController {
     @GetMapping("/getRoleInfo")
     public ResponseEntity getRoleInfo(){
         List<Role> roleEntities = roleService.findAll();
-        List<Map> roleArray = new ArrayList();
+        List<Map> roleArray = new ArrayList<>();
         for(Role r: roleEntities){
             Map<String, Object> role = new HashMap<>();
             role.put("roleName", r.getName());
@@ -38,5 +36,17 @@ public class RoleController {
             roleArray.add(role);
         }
         return ResponseEntity.ok(roleArray);
+    }
+
+    /**
+     * GET  /roles : get all rolesCode.
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body all users
+     */
+    @GetMapping("/rolesCode")
+    public ResponseEntity getAllRoles() {
+        final List<Role> roles = roleService.findAll();
+        List<String> roleCodes = Optional.ofNullable(roles).orElse(new ArrayList<>()).stream().map(Role::getCode).collect(Collectors.toList());
+        return ResponseEntity.ok(roleCodes);
     }
 }

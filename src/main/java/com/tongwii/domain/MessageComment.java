@@ -18,7 +18,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@Table(name = "message_comment", schema = "cloud_community", catalog = "")
+@Table(name = "message_comment", schema = "cloud_community")
 public class MessageComment implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

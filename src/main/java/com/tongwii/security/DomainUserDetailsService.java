@@ -1,6 +1,5 @@
 package com.tongwii.security;
 
-import com.tongwii.constant.UserConstants;
 import com.tongwii.dao.IUserDao;
 import com.tongwii.domain.User;
 import com.tongwii.security.jwt.JwtUser;
@@ -15,8 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,13 +36,13 @@ public class DomainUserDetailsService implements UserDetailsService {
         if(Objects.isNull(user)) {
             throw new UsernameNotFoundException("User " + account + " was not found in the database");
         } else {
-            if(user.getState().equals(UserConstants.USER_DISABLE)) {
+            if(!user.isActivated()) {
                 throw new UserNotActivatedException("User " + account + " was not activated");
             }
-            List<GrantedAuthority> grantedAuthorities = user.getUserRolesById().stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.getRoleByRoleId().getCode()))
+            List<GrantedAuthority> grantedAuthorities = Optional.ofNullable(user.getRoles()).orElse(new HashSet<>()).stream()
+                    .map(authority -> new SimpleGrantedAuthority(authority.getCode()))
                     .collect(Collectors.toList());
-            return new JwtUser(user.getId(), user.getAccount(), user.getPassword(), grantedAuthorities, user.getState().equals(UserConstants.USER_ENABLE));
+            return new JwtUser(user.getId(), user.getAccount(), user.getPassword(), grantedAuthorities, user.isActivated());
         }
     }
 }

@@ -70,7 +70,6 @@ public class UserContactController {
             object.put("contactAccount", friend.getAccount());
             object.put("contactName", friend.getName());
             object.put("contactDesc", userContact.getDes());
-            object.put("contactClientId", friend.getClientId());
             object.put("contactPhone", friend.getPhone());
             if (StringUtils.isNotEmpty(friend.getAvatarFileId())) {
                 object.put("contactPhoto", friend.getFileByAvatarFileId().getFilePath());

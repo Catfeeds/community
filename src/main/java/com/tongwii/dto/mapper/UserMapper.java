@@ -7,12 +7,8 @@ import com.tongwii.service.FloorService;
 import com.tongwii.service.UserRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -39,15 +35,14 @@ public class UserMapper {
         userDTO.setPhone(user.getPhone());
         userDTO.setSignature(user.getSignature());
         userDTO.setAddTime(user.getAddTime());
-        userDTO.setClientId(user.getClientId());
         userDTO.setIdCard(user.getIdCard());
         userDTO.setBirthday(user.getBirthday());
         userDTO.setName(user.getName());
         userDTO.setSex(user.getSex());
-        userDTO.setState(user.getState());
-        if(!CollectionUtils.isEmpty(user.getUserRolesById())) {
-            userDTO.setRoles(user.getUserRolesById().stream().map(UserRole::getRoleByRoleId).map(Role::getCode).collect(Collectors.toList()));
-        }
+        userDTO.setLangKey(user.getLangKey());
+        userDTO.setActivated(user.isActivated());
+        userDTO.setDevices(Optional.ofNullable(user.getDevices()).orElse(new HashSet<>()).stream().map(Device::getDeviceId).collect(Collectors.toSet()));
+        userDTO.setRoles(Optional.ofNullable(user.getRoles()).orElse(new HashSet<>()).stream().map(Role::getCode).collect(Collectors.toSet()));
         List<RoomDto> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
             Room room = userRoomEntity.getRoomByRoomId();
             RoomDto roomDTO = new RoomDto();
@@ -76,18 +71,17 @@ public class UserMapper {
             return null;
         } else {
             User user = new User();
-            user.setId(user.getId());
-            user.setAccount(user.getAccount());
-            user.setNickName(user.getNickName());
-            user.setPhone(user.getPhone());
-            user.setSignature(user.getSignature());
-            user.setAddTime(user.getAddTime());
-            user.setClientId(user.getClientId());
-            user.setIdCard(user.getIdCard());
-            user.setBirthday(user.getBirthday());
-            user.setName(user.getName());
-            user.setSex(user.getSex());
-            user.setState(user.getState());
+            user.setId(userDTO.getId());
+            user.setAccount(userDTO.getAccount());
+            user.setNickName(userDTO.getNickName());
+            user.setPhone(userDTO.getPhone());
+            user.setSignature(userDTO.getSignature());
+            user.setAddTime(userDTO.getAddTime());
+            user.setIdCard(userDTO.getIdCard());
+            user.setBirthday(userDTO.getBirthday());
+            user.setName(userDTO.getName());
+            user.setSex(userDTO.getSex());
+            user.setActivated(userDTO.isActivated());
             return user;
         }
     }
@@ -100,11 +94,11 @@ public class UserMapper {
     }
 
 
-    public List<Role> rolesFromStrings(Set<String> strings) {
+    public Set<Role> rolesFromStrings(Set<String> strings) {
         return strings.stream().map(string -> {
             Role role = new Role();
             role.setCode(string);
             return role;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toSet());
     }
 }

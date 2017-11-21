@@ -6,9 +6,10 @@ import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
- * 用户VO
+ * 用户DTO
  *
  * @author: Zeral
  * @date: 2017/7/13
@@ -22,14 +23,16 @@ public class UserDto {
     private Date birthday;
     private String signature;
     private Integer sex;
-    private String avatarFileSrc;
     private String name;
     private String idCard;
     private String phone;
+    private String langKey;
+    private String avatarFileSrc;
     private String clientId;
     @JsonSerialize(using = CustomDateSerializer.class)
     private Date addTime;
-    private Integer state;
+    private boolean activated;
+    private Set<String> devices;
     private List<RoomDto> rooms;
-    private List<String> roles;
+    private Set<String> roles;
 }

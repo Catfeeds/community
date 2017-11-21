@@ -1,14 +1,21 @@
 package com.tongwii.domain;
 
+import com.tongwii.constant.Constants;
+import com.tongwii.constant.UserConstants;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 用户实体
@@ -19,7 +26,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@Table(name = "user", schema = "cloud_community", catalog = "")
+@Table(name = "user", schema = "cloud_community")
 public class User implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
@@ -27,62 +34,64 @@ public class User implements Serializable {
     @Column(name = "id", unique = true, nullable = false, length = 36)
     private String id;
 
-    @Basic
     @NotNull
-    @Column(name = "account")
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = 50)
+    @Column(length = 50, unique = true, nullable = false)
     private String account;
 
-    @Basic
     @NotNull
     @Column(name = "password")
     private String password;
 
-    @Basic
     @Column(name = "nick_name")
     private String nickName;
 
-    @Basic
     @Column(name = "name")
     private String name;
 
-    @Basic
-    @Column(name = "sex")
-    private Integer sex;
+    @NotNull
+    @Column(name = "sex", nullable = false)
+    private Integer sex = UserConstants.USER_SEX_MALE;      // 性别默认男
 
-    @Basic
     @Column(name = "avatar_file_id")
     private String avatarFileId;
 
-    @Basic
+    @Size(min = 2, max = 6)
+    @Column(name = "lang_key", length = 6)
+    private String langKey;
+
     @Column(name = "id_card")
     private String idCard;
 
-    @Basic
     @Column(name = "phone")
     private String phone;
 
-    @Basic
-    @Column(name = "client_id")
-    private String clientId;
-
-    @Basic
     @Column(name = "birthday")
     private Date birthday;
 
-    @Basic
     @Column(name = "signature")
     private String signature;
 
-    @Basic
     @Column(name = "add_time")
     private Date addTime;
 
-    @Basic
-    @Column(name = "state")
-    private Integer state;
+    @NotNull
+    @Column(nullable = false)
+    private boolean activated = true;
 
-//    @OneToMany(mappedBy = "userByChargeId")
-//    private Collection<AreaEntity> areasById;
+    @ManyToMany
+    @JoinTable(
+        name = "user_role",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    @BatchSize(size = 20)
+    private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    @BatchSize(size = 5)
+    private Set<Device> devices = new HashSet<>();
+
     @OneToMany(mappedBy = "userByUploadUserId")
     private Collection<File> filesById;
 
@@ -104,18 +113,12 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "userByOwnerId")
     private Collection<Room> roomsById;
 
-    @OneToMany(mappedBy = "userByUserId")
-    private Collection<UserRole> userRolesById;
-
     @ManyToOne
     @JoinColumn(name = "avatar_file_id", referencedColumnName = "id", insertable = false, updatable = false)
     private File fileByAvatarFileId;
 
-    @OneToMany(mappedBy = "userByUserId")
-    private Collection<UserContact> userContactsById;
-
     @OneToMany(mappedBy = "userByFriendId")
-    private Collection<UserContact> userContactsById_0;
+    private Collection<UserContact> userContactsById;
 
     @OneToMany(mappedBy = "userByUserId")
     private Collection<UserGroup> userGroupsById;

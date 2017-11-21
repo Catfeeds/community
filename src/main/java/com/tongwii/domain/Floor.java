@@ -17,7 +17,7 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
-@Table(name = "floor", schema = "cloud_community", catalog = "")
+@Table(name = "floor", schema = "cloud_community")
 public class Floor implements Serializable {
 
     /**

@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Entity
 @Setter
 @Getter
-@Table(name = "group_role", schema = "cloud_community", catalog = "")
+@Table(name = "group_role", schema = "cloud_community")
 public class GroupRole implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

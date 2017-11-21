@@ -56,6 +56,30 @@ public class MicroserviceSecurityConfiguration extends WebSecurityConfigurerAdap
         }
     }
 
+/*
+    // 权限继承 参考：https://www.codesd.com/item/spring-boot-spring-security-hierarchical-roles.html
+
+    @Bean
+    public RoleHierarchyImpl roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+        return roleHierarchy;
+    }
+
+    @Bean
+    public RoleHierarchyVoter roleVoter() {
+        return new RoleHierarchyVoter(roleHierarchy());
+    }
+
+    @Bean
+    public SecurityExpressionHandler<FilterInvocation> webExpressionHandler() {
+        DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
+        defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
+        return defaultWebSecurityExpressionHandler;
+    }
+*/
+
+
     @Bean
     public Http401UnauthorizedEntryPoint http401UnauthorizedEntryPoint() {
         return new Http401UnauthorizedEntryPoint();

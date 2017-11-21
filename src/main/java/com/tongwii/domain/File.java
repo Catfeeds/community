@@ -17,7 +17,7 @@ import java.util.Collection;
 @Entity
 @Setter
 @Getter
-@Table(name = "file", schema = "cloud_community", catalog = "")
+@Table(name = "file", schema = "cloud_community")
 public class File implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Entity
 @Setter
 @Getter
-@Table(name = "role", schema = "cloud_community", catalog = "")
+@Table(name = "role", schema = "cloud_community")
 public class Role implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
@@ -35,9 +35,4 @@ public class Role implements Serializable {
     @Basic
     @Column(name = "des")
     private String des;
-
-/*    @OneToMany(mappedBy = "roleByRoleId")
-    private Collection<GroupRole> groupRolesById;
-    @OneToMany(mappedBy = "roleByRoleId")
-    private Collection<UserRole> userRolesById;*/
 }
