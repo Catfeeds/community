@@ -190,7 +190,7 @@ public class UserService {
 
     public User findByAccountAndUpdateDeviceId(LoginVM loginVM) {
         User user = userDao.findByAccount(loginVM.getAccount());
-        if(CollectionUtils.isEmpty(user.getDevices())) {
+        if(CollectionUtils.isEmpty(user.getDevices()) && Objects.nonNull(loginVM.getDeviceId())) {
             Device device = new Device(loginVM.getDeviceId(), user);
             deviceDao.save(device);
         } else if (!StringUtils.isEmpty(loginVM.getDeviceId())) {
@@ -205,7 +205,8 @@ public class UserService {
     public void updateUserDevices(String deviceId) {
         User user = userDao.findOne(SecurityUtils.getCurrentUserId());
         if(user.getDevices().stream().map(Device::getDeviceId).collect(Collectors.toList()).contains(deviceId)) {
-            deviceDao.delete(user.getDevices().stream().filter(device -> device.getDeviceId().equals(deviceId)).findFirst().get());
+            Optional<Device> device = user.getDevices().stream().filter(device1 -> device1.getDeviceId().equals(deviceId)).findFirst();
+            device.ifPresent(deviceDao::delete);
         }
     }
 }

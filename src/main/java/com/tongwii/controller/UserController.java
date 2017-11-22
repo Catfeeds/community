@@ -54,11 +54,8 @@ public class UserController {
 	// 用户注册接口
 	@PostMapping("/register")
 	public ResponseEntity regist(@Valid @RequestBody User user)  {
-        if(StringUtils.isBlank(user.getAccount()) || StringUtils.isBlank(user.getPassword())){
-            return ResponseEntity.badRequest().body("用户名或密码不能为空");
-        }
-        if(Objects.nonNull(userService.findByAccount(user.getAccount()))){
-            return ResponseEntity.badRequest().body("用户已存在");
+        if(Optional.ofNullable(userService.findByAccount(user.getAccount())).isPresent()){
+            throw new LoginAlreadyUsedException();
         }
         UserDto userDTO = userService.register(user);
         return ResponseEntity.ok(userDTO);

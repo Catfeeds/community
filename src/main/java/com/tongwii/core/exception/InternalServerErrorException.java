@@ -1,7 +1,6 @@
 package com.tongwii.core.exception;
 
 import org.zalando.problem.AbstractThrowableProblem;
-import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
 
 /**
@@ -10,6 +9,6 @@ import org.zalando.problem.Status;
 public class InternalServerErrorException extends AbstractThrowableProblem {
 
     public InternalServerErrorException(String message) {
-        super(Problem.DEFAULT_TYPE, message, Status.INTERNAL_SERVER_ERROR);
+        super(ErrorConstants.DEFAULT_TYPE, message, Status.INTERNAL_SERVER_ERROR);
     }
 }

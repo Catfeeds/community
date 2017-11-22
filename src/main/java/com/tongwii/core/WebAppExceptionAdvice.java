@@ -63,7 +63,7 @@ public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BadRequestAlertException.class)
     public ResponseEntity handleBadRequestAlertException(BadRequestAlertException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ex.getEntityName(), ex.getErrorKey(), ex.getMessage())).body(ex);
     }
 
     @ExceptionHandler({Exception.class, RuntimeException.class})
