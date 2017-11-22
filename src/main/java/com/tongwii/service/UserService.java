@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -141,6 +142,32 @@ public class UserService {
             .map(userMapper::userToUserDTO);
     }
 
+    /**
+     * 根据roleCode添加用户角色
+     *
+     * @param userId
+     * @param roleCode
+     */
+    public void addUserRole(String userId, String roleCode) {
+        Optional.of(userDao.findOne(userId)).ifPresent(user -> {
+            Set<Role> managedAuthorities = user.getRoles();
+            managedAuthorities.add(roleService.findRoleByCode(roleCode));
+        });
+    }
+
+    /**
+     * 根据roleCode删除用户角色
+     *
+     * @param userId
+     * @param roleCode
+     */
+    public void removeUserRole(String userId, String roleCode) {
+        Optional.of(userDao.findOne(userId)).ifPresent(user -> {
+            Set<Role> managedAuthorities = user.getRoles();
+            managedAuthorities.remove(roleService.findRoleByCode(roleCode));
+        });
+    }
+
     @Transactional(readOnly = true)
     public Optional<User> getUserWithRolesByAccount(String account) {
         return userDao.findOneWithRolesByAccount(account);
@@ -166,7 +193,7 @@ public class UserService {
         if(CollectionUtils.isEmpty(user.getDevices())) {
             Device device = new Device(loginVM.getDeviceId(), user);
             deviceDao.save(device);
-        } else {
+        } else if (!StringUtils.isEmpty(loginVM.getDeviceId())) {
             if(!user.getDevices().stream().map(Device::getDeviceId).collect(Collectors.toList()).contains(loginVM.getDeviceId())) {
                 Device device = new Device(loginVM.getDeviceId(), user);
                 deviceDao.save(device);

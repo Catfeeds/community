@@ -1,7 +1,6 @@
 package com.tongwii.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -14,8 +13,7 @@ import java.io.Serializable;
  * @date: 2017/7/13
  */
 @Entity
-@Setter
-@Getter
+@Data
 @Table(name = "role", schema = "cloud_community")
 public class Role implements Serializable {
     @Id
