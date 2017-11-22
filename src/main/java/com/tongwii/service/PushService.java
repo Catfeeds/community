@@ -3,13 +3,16 @@ package com.tongwii.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tongwii.constant.MessageConstants;
+import com.tongwii.constant.PushConstants;
 import com.tongwii.domain.Device;
 import com.tongwii.domain.Message;
 import com.tongwii.domain.MessageType;
 import com.tongwii.domain.User;
 import com.tongwii.dto.PushMessageDto;
+import com.tongwii.dto.mapper.PushMessageMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.gateWay.PushGateway;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -61,4 +64,24 @@ public class PushService {
         }
     }
 
+
+    /**
+     * 每三小时查询一次未发送的消息，并发送
+     * 默认全推
+     */
+    @Scheduled(cron = "0 0 0/3 * * ?")
+    public void pushUnhandledMessage() {
+        System.out.println("test");
+        List<Message> messages = messageService.findByProcessState(MessageConstants.UNPROCESS);
+        Optional.ofNullable(messages).ifPresent(messages1 -> messages1.forEach(message -> {
+            PushMessageDto messageDto = PushMessageMapper.messageToPushMessageDto(message);
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                gateway.push(objectMapper.writeValueAsString(messageDto), PushConstants.PUSH_ALL_TOPIC);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            message.setProcessState(MessageConstants.PROCESSED);
+        }));
+    }
 }

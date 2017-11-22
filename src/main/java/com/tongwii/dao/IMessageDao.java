@@ -52,4 +52,6 @@ public interface IMessageDao extends JpaRepository<Message, String> {
     @Modifying
     @Query("UPDATE Message m SET m.fileId = :fileId WHERE m.id = :messageId")
     void updateMessageFileIdById(@Param(value = "messageId") String messageId, @Param(value = "fileId") String fileId);
+
+    List<Message> findByProcessState(int processState);
 }

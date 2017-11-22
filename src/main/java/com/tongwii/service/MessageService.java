@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -81,5 +82,15 @@ public class MessageService {
         File file = fileService.saveAndUploadFileToFTP(userId, multipartFile);
         messageDao.updateMessageFileIdById(messageId, file.getId());
         return file.getFilePath();
+    }
+
+    /**
+     * 根据processState查询消息
+     *
+     * @param processState 消息处理状态
+     * @return
+     */
+    public List<Message> findByProcessState(int processState) {
+        return messageDao.findByProcessState(processState);
     }
 }
