@@ -1,9 +1,14 @@
 package com.tongwii.controller;
 
+import com.tongwii.dao.IResidenceDao;
 import com.tongwii.domain.Residence;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.ResidenceService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tongwii.util.PaginationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -20,8 +25,14 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/residence")
 public class ResidenceController {
-    @Autowired
-    private ResidenceService residenceService;
+    private final ResidenceService residenceService;
+    private final IResidenceDao residenceDao;
+
+    public ResidenceController(ResidenceService residenceService, IResidenceDao residenceDao) {
+        this.residenceService = residenceService;
+        this.residenceDao = residenceDao;
+    }
+
     /**
      * 添加单个小区信息
      * @author Yamo
@@ -107,6 +118,18 @@ public class ResidenceController {
         object.put("regionId",newResidence.getRegionCode());
         object.put("address",newResidence.getAddress());
         return ResponseEntity.ok(object);
+    }
+
+    /**
+     * GET  /residence : get all the labels.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of residences in body
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<Residence>> getAllResidences(Pageable pageable) {
+        final Page<Residence> page = residenceDao.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/residence/all");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 }

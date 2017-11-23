@@ -1,5 +1,6 @@
 package com.tongwii.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -46,9 +47,11 @@ public class Residence implements Serializable {
     @Column(name = "address")
     private String address;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "residence")
     private Collection<Message> messageById;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User userByUserId;
