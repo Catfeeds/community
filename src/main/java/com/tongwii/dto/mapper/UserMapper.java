@@ -1,8 +1,8 @@
 package com.tongwii.dto.mapper;
 
 import com.tongwii.domain.*;
-import com.tongwii.dto.RoomDto;
-import com.tongwii.dto.UserDto;
+import com.tongwii.dto.RoomDTO;
+import com.tongwii.dto.UserDTO;
 import com.tongwii.service.FloorService;
 import com.tongwii.service.UserRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Mapper for the entity User and its DTO called UserDto.
+ * Mapper for the entity User and its DTO called UserDTO.
  *
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
@@ -26,8 +26,8 @@ public class UserMapper {
     @Autowired
     private FloorService floorService;
 
-    public UserDto userToUserDTO(User user) {
-        UserDto userDTO = new UserDto();
+    public UserDTO userToUserDTO(User user) {
+        UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setAccount(user.getAccount());
         userDTO.setNickName(user.getNickName());
@@ -43,9 +43,9 @@ public class UserMapper {
         userDTO.setActivated(user.isActivated());
         userDTO.setDevices(Optional.ofNullable(user.getDevices()).orElse(new HashSet<>()).stream().map(Device::getDeviceId).collect(Collectors.toSet()));
         userDTO.setRoles(Optional.ofNullable(user.getRoles()).orElse(new HashSet<>()).stream().map(Role::getCode).collect(Collectors.toSet()));
-        List<RoomDto> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
+        List<RoomDTO> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
             Room room = userRoomEntity.getRoomByRoomId();
-            RoomDto roomDTO = new RoomDto();
+            RoomDTO roomDTO = new RoomDTO();
             Map<String, Floor> floorMap = floorService.findFloorById(room.getFloorId());
             roomDTO.setRoomId(room.getId());
             roomDTO.setUnitCode(room.getUnitCode());
@@ -59,14 +59,14 @@ public class UserMapper {
         return userDTO;
     }
 
-    public List<UserDto> usersToUserDTOs(List<User> users) {
+    public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream()
             .filter(Objects::nonNull)
             .map(this::userToUserDTO)
             .collect(Collectors.toList());
     }
 
-    public User userDTOToUser(UserDto userDTO) {
+    public User userDTOToUser(UserDTO userDTO) {
         if (userDTO == null) {
             return null;
         } else {
@@ -86,8 +86,8 @@ public class UserMapper {
         }
     }
 
-    public List<User> userDTOsToUsers(List<UserDto> userDTOs) {
-        return userDTOs.stream()
+    public List<User> userDTOsToUsers(List<UserDTO> userDTOS) {
+        return userDTOS.stream()
             .filter(Objects::nonNull)
             .map(this::userDTOToUser)
             .collect(Collectors.toList());

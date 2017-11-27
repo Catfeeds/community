@@ -6,8 +6,8 @@ import com.tongwii.domain.File;
 import com.tongwii.domain.Message;
 import com.tongwii.domain.MessageComment;
 import com.tongwii.domain.User;
-import com.tongwii.dto.MessageDto;
-import com.tongwii.dto.NeighborMessageDto;
+import com.tongwii.dto.MessageDTO;
+import com.tongwii.dto.NeighborMessageDTO;
 import com.tongwii.dto.mapper.MessageMapper;
 import com.tongwii.dto.mapper.NeighborMessageMapper;
 import com.tongwii.dto.mapper.UserMapper;
@@ -179,10 +179,10 @@ public class BaseMessageController {
         if(!messageEntityPage.hasContent()) {
             return ResponseEntity.badRequest().body("没有数据了");
         }
-        List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
+        List<MessageDTO> messageDTOS = messageMapper.toDtos(messageEntityPage.getContent());
         Map<String, Object> map = new HashMap<>();
         map.put("totalPages", messageEntityPage.getTotalPages());
-        map.put("data", messageDtos);
+        map.put("data", messageDTOS);
         return ResponseEntity.ok(map);
     }
 
@@ -198,10 +198,10 @@ public class BaseMessageController {
         if(!messageEntityPage.hasContent()) {
             return ResponseEntity.badRequest().body("没有数据了");
         }
-        List<MessageDto> messageDtos = messageMapper.messagesToMessageDtos(messageEntityPage.getContent());
+        List<MessageDTO> messageDTOS = messageMapper.toDtos(messageEntityPage.getContent());
         Map<String, Object> map = new HashMap<>();
         map.put("totalPages", messageEntityPage.getTotalPages());
-        map.put("data", messageDtos);
+        map.put("data", messageDTOS);
         return ResponseEntity.ok(map);
     }
 
@@ -217,22 +217,22 @@ public class BaseMessageController {
                 return ResponseEntity.badRequest().body("没有数据了");
             }
             List<Message> messageEntities = messageEntityPage.getContent();
-            List<NeighborMessageDto> neighborMessageDtoList = neighborMessageMapper.messagesToNeighborMessageDtos(messageEntities);
+            List<NeighborMessageDTO> neighborMessageDTOList = neighborMessageMapper.toDtos(messageEntities);
 
-            for(NeighborMessageDto neighborMessageDto: neighborMessageDtoList){
+            for(NeighborMessageDTO neighborMessageDTO : neighborMessageDTOList){
                 // 封装点赞参数
-                List<MessageComment> likeMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.IS_LIKE);
+                List<MessageComment> likeMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDTO.getId(), MessageConstants.IS_LIKE);
                 Integer likeNum = Math.toIntExact(likeMessageEntities.stream().filter(Objects::nonNull).filter(MessageComment::getIsLike).count());
                 // 封装评论参数
-                List<MessageComment> commentMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDto.getId(), MessageConstants.COMMENT);
+                List<MessageComment> commentMessageEntities = messageCommentService.findByMessageIdAndType(neighborMessageDTO.getId(), MessageConstants.COMMENT);
                 Integer commentNum = Math.toIntExact(commentMessageEntities.stream().filter(messageComment -> !StringUtils.isEmpty(messageComment.getComment())).count());
-                neighborMessageDto.setLikeNum(likeNum);
-                neighborMessageDto.setCommentNum(commentNum);
+                neighborMessageDTO.setLikeNum(likeNum);
+                neighborMessageDTO.setCommentNum(commentNum);
             }
 
             Map<String, Object> map = new HashMap<>();
             map.put("totalPages", messageEntityPage.getTotalPages());
-            map.put("data", neighborMessageDtoList);
+            map.put("data", neighborMessageDTOList);
             return ResponseEntity.ok(map);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("暂无动态消息!");
@@ -241,6 +241,6 @@ public class BaseMessageController {
 
     @GetMapping("/getMessageByMessageId/{messageId}")
     public ResponseEntity getMessageByMessageId(@PathVariable String messageId){
-        return ResponseEntity.ok(messageMapper.messageToMessageDto(messageService.findByMessageId(messageId)));
+        return ResponseEntity.ok(messageMapper.toDto(messageService.findByMessageId(messageId)));
     }
 }

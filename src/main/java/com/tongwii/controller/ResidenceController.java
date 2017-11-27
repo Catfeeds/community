@@ -1,10 +1,15 @@
 package com.tongwii.controller;
 
+import com.tongwii.core.exception.BadRequestAlertException;
 import com.tongwii.dao.IResidenceDao;
 import com.tongwii.domain.Residence;
+import com.tongwii.dto.ResidenceDTO;
+import com.tongwii.dto.mapper.ResidenceMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.ResidenceService;
+import com.tongwii.util.HeaderUtil;
 import com.tongwii.util.PaginationUtil;
+import com.tongwii.util.ResponseUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -14,10 +19,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 /**
  * Created by admin on 2017/7/18.
@@ -25,12 +29,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/residence")
 public class ResidenceController {
-    private final ResidenceService residenceService;
     private final IResidenceDao residenceDao;
+    private final ResidenceService residenceService;
+    private final ResidenceMapper residenceMapper;
 
-    public ResidenceController(ResidenceService residenceService, IResidenceDao residenceDao) {
+    private static final String ENTITY_NAME = "residence";
+
+    public ResidenceController(ResidenceService residenceService, IResidenceDao residenceDao, ResidenceMapper
+        residenceMapper) {
         this.residenceService = residenceService;
         this.residenceDao = residenceDao;
+        this.residenceMapper = residenceMapper;
     }
 
     /**
@@ -45,6 +54,69 @@ public class ResidenceController {
         residence.setUserId(userId);
         residenceService.save(residence);
         return ResponseEntity.ok("添加成功!");
+    }
+
+    /**
+     * POST  /bank-accounts : Create a new residence.
+     *
+     * @param residenceDTO the residence to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new bankAccount, or with status 400 (Bad Request) if the bankAccount has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping
+    public ResponseEntity<ResidenceDTO> createResidence(@RequestBody ResidenceDTO residenceDTO) throws URISyntaxException {
+        ResidenceDTO result = residenceService.saveDto(residenceDTO);
+        return ResponseEntity.created(new URI("/api/residence/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId()))
+            .body(residenceDTO);
+    }
+
+    /**
+     * PUT  /residences : Updates an existing residence.
+     *
+     * @param residence the residenceDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated residenceDTO,
+     * or with status 400 (Bad Request) if the residenceDTO is not valid,
+     * or with status 500 (Internal Server Error) if the residenceDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping
+    public ResponseEntity<ResidenceDTO> updateResidence(@RequestBody ResidenceDTO residenceDTO) throws URISyntaxException {
+        if (residenceDTO.getId() == null) {
+            return createResidence(residenceDTO);
+        }
+        ResidenceDTO result = residenceService.saveDto(residenceDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, residenceDTO.getId()))
+            .body(result);
+    }
+
+    /**
+     * GET  /residences/:id : get the "id" residence.
+     *
+     * @param id the id of the residenceDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the residenceDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ResidenceDTO> getResidence(@PathVariable String id) {
+        ResidenceDTO residenceDTO = residenceService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(residenceDTO));
+    }
+
+    /**
+     * DELETE  /residences/:id : delete the "id" residence.
+     *
+     * @param id the id of the residenceDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteResidence(@PathVariable String id) {
+        try {
+            residenceDao.delete(id);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "objectUsed",  "社区被使用，无法删除")).build();
+        }
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 
     /**
@@ -125,9 +197,9 @@ public class ResidenceController {
      *
      * @return the ResponseEntity with status 200 (OK) and the list of residences in body
      */
-    @GetMapping("/all")
-    public ResponseEntity<List<Residence>> getAllResidences(Pageable pageable) {
-        final Page<Residence> page = residenceDao.findAll(pageable);
+    @GetMapping("/residences")
+    public ResponseEntity<List<ResidenceDTO>> getAllResidences(Pageable pageable) {
+        final Page<ResidenceDTO> page = residenceDao.findAll(pageable).map(residenceMapper::toDto);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/residence/all");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

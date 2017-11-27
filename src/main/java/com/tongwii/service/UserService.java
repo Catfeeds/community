@@ -8,7 +8,7 @@ import com.tongwii.domain.Device;
 import com.tongwii.domain.File;
 import com.tongwii.domain.Role;
 import com.tongwii.domain.User;
-import com.tongwii.dto.UserDto;
+import com.tongwii.dto.UserDTO;
 import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.vm.LoginVM;
@@ -56,7 +56,7 @@ public class UserService {
         return userDao.findByAccount(account);
     }
 
-    public UserDto register(User user) {
+    public UserDTO register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAddTime(new Date());
         // 新用户默认激活
@@ -90,7 +90,7 @@ public class UserService {
         return userDao.findAll();
     }
 
-    public Page<UserDto> getAllManagedUsers(Pageable pageable) {
+    public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userDao.findAll(pageable).map(userMapper::userToUserDTO);
     }
 
@@ -118,7 +118,7 @@ public class UserService {
      * @param userDTO user to update
      * @return updated user
      */
-    public Optional<UserDto> updateUser(UserDto userDTO) {
+    public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return Optional.of(userDao
             .findOne(userDTO.getId()))
             .map(user -> {

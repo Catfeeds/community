@@ -2,7 +2,7 @@ package com.tongwii.controller;
 
 import com.tongwii.constant.MessageConstants;
 import com.tongwii.domain.MessageComment;
-import com.tongwii.dto.NeighborMessageDto;
+import com.tongwii.dto.NeighborMessageDTO;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
 import com.tongwii.util.DateUtil;
@@ -26,7 +26,7 @@ public class MessageCommentController {
      * 点赞接口
      */
     @PostMapping("/updateIsLikeInfo")
-    public ResponseEntity updateIsLikeInfo(@RequestBody NeighborMessageDto messageEntity) {
+    public ResponseEntity updateIsLikeInfo(@RequestBody NeighborMessageDTO messageEntity) {
         // 得到当前用户Id
         String userId = SecurityUtils.getCurrentUserId();
         Integer likeNum = messageEntity.getLikeNum();
@@ -75,20 +75,20 @@ public class MessageCommentController {
      * 评论接口
      */
     @PostMapping("/commentMessage/{comment}")
-    public ResponseEntity commentMessage(@RequestBody NeighborMessageDto neighborMessageDto, @PathVariable String comment){
+    public ResponseEntity commentMessage(@RequestBody NeighborMessageDTO neighborMessageDTO, @PathVariable String comment){
         // 获取当前用户
         String userId = SecurityUtils.getCurrentUserId();
         // 添加记录
         MessageComment messageComment = new MessageComment();
         messageComment.setComment(comment);
         messageComment.setCommentatorId(userId);
-        messageComment.setMessageId(neighborMessageDto.getId());
+        messageComment.setMessageId(neighborMessageDTO.getId());
         messageComment.setCommentDate(new Date());
         messageComment.setType(MessageConstants.COMMENT);
         messageCommentService.addMessageComment(messageComment);
 
-        neighborMessageDto.setCommentNum(messageCommentService.getCommentCounts(neighborMessageDto.getId()));
-        return ResponseEntity.ok(neighborMessageDto);
+        neighborMessageDTO.setCommentNum(messageCommentService.getCommentCounts(neighborMessageDTO.getId()));
+        return ResponseEntity.ok(neighborMessageDTO);
     }
 
     /**

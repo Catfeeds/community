@@ -1,7 +1,7 @@
 package com.tongwii.dto.mapper;
 
 import com.tongwii.domain.Message;
-import com.tongwii.dto.MessageDto;
+import com.tongwii.dto.MessageDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,29 +17,29 @@ import java.util.stream.Collectors;
 @Service
 public class MessageMapper {
 
-    public MessageDto messageToMessageDto(Message message) {
+    public MessageDTO toDto(Message message) {
         if ( message == null ) {
             return null;
         }
 
-        MessageDto messageDto = new MessageDto();
-        messageDto.setId(message.getId());
-        messageDto.setTitle(message.getTitle());
-        messageDto.setContent(message.getContent());
-        messageDto.setCreateTime(message.getCreateTime());
-        messageDto.setCreateUser(message.getCreateUser().getAccount());
-        messageDto.setMessageTypeId(message.getMessageTypeId());
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setId(message.getId());
+        messageDTO.setTitle(message.getTitle());
+        messageDTO.setContent(message.getContent());
+        messageDTO.setCreateTime(message.getCreateTime());
+        messageDTO.setCreateUser(message.getCreateUser().getAccount());
+        messageDTO.setMessageTypeId(message.getMessageTypeId());
         if(Objects.nonNull(message.getMessageType())) {
-            messageDto.setMessageTypeCode(message.getMessageType().getCode());
+            messageDTO.setMessageTypeCode(message.getMessageType().getCode());
         }
-        return messageDto;
+        return messageDTO;
     }
 
 
-    public List<MessageDto> messagesToMessageDtos(List<Message> messages) {
+    public List<MessageDTO> toDtos(List<Message> messages) {
         return messages.stream()
             .filter(Objects::nonNull)
-            .map(this::messageToMessageDto)
+            .map(this::toDto)
             .collect(Collectors.toList());
     }
 }

@@ -8,7 +8,7 @@ import com.tongwii.domain.Device;
 import com.tongwii.domain.Message;
 import com.tongwii.domain.MessageType;
 import com.tongwii.domain.User;
-import com.tongwii.dto.PushMessageDto;
+import com.tongwii.dto.PushMessageDTO;
 import com.tongwii.dto.mapper.PushMessageMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.gateWay.PushGateway;
@@ -38,7 +38,7 @@ public class PushService {
         this.userService = userService;
     }
 
-    public void push(PushMessageDto pushMessage, String pushTopic) {
+    public void push(PushMessageDTO pushMessage, String pushTopic) {
         try {
             if(!CollectionUtils.isEmpty(pushMessage.getUsersId())) {
                 Set<String> devices = pushMessage.getUsersId().stream().flatMap(userId -> {
@@ -74,7 +74,7 @@ public class PushService {
         System.out.println("test");
         List<Message> messages = messageService.findByProcessState(MessageConstants.UNPROCESS);
         Optional.ofNullable(messages).ifPresent(messages1 -> messages1.forEach(message -> {
-            PushMessageDto messageDto = PushMessageMapper.messageToPushMessageDto(message);
+            PushMessageDTO messageDto = PushMessageMapper.toDto(message);
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 gateway.push(objectMapper.writeValueAsString(messageDto), PushConstants.PUSH_ALL_TOPIC);

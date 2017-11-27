@@ -8,7 +8,7 @@ import com.tongwii.core.exception.InternalServerErrorException;
 import com.tongwii.core.exception.InvalidPasswordException;
 import com.tongwii.core.exception.LoginAlreadyUsedException;
 import com.tongwii.domain.User;
-import com.tongwii.dto.UserDto;
+import com.tongwii.dto.UserDTO;
 import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.security.jwt.JWTConfigurer;
@@ -19,7 +19,6 @@ import com.tongwii.util.PaginationUtil;
 import com.tongwii.util.ResponseUtil;
 import com.tongwii.vm.LoginVM;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -36,28 +35,32 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-	@Autowired
-	private UserService userService;
-	@Autowired
-    private TokenProvider tokenProvider;
-	@Autowired
-    private AuthenticationManager authenticationManager;
-	@Autowired
-    private UserMapper userMapper;
+    private final UserService userService;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
 
-	// 用户注册接口
-	@PostMapping("/register")
-	public ResponseEntity regist(@Valid @RequestBody User user)  {
+    public UserController(UserService userService, TokenProvider tokenProvider, AuthenticationManager
+        authenticationManager, UserMapper userMapper) {
+        this.userService = userService;
+        this.tokenProvider = tokenProvider;
+        this.authenticationManager = authenticationManager;
+        this.userMapper = userMapper;
+    }
+
+
+    // 用户注册接口
+    @PostMapping("/register")
+    public ResponseEntity regist(@Valid @RequestBody User user)  {
         if(Optional.ofNullable(userService.findByAccount(user.getAccount())).isPresent()){
             throw new LoginAlreadyUsedException();
         }
-        UserDto userDTO = userService.register(user);
+        UserDTO userDTO = userService.register(user);
         return ResponseEntity.ok(userDTO);
 	}
 
@@ -72,7 +75,7 @@ public class UserController {
         String jwt = tokenProvider.createToken(authentication, rememberMe);
         // 基本用户信息
         User user = userService.findByAccountAndUpdateDeviceId(loginVM);
-        UserDto userDTO = userMapper.userToUserDTO(user);
+        UserDTO userDTO = userMapper.userToUserDTO(user);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(userDTO, httpHeaders, HttpStatus.OK);
@@ -82,20 +85,21 @@ public class UserController {
     // 获取当前登录用户
     @GetMapping
     public ResponseEntity user() {
-        UserDto userDto = Optional.ofNullable(userService.findById(SecurityUtils.getCurrentUserId())).map(userMapper::userToUserDTO).orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
-        return ResponseEntity.ok(userDto);
+        UserDTO userDTO = Optional.ofNullable(userService.findById(SecurityUtils.getCurrentUserId())).map
+            (userMapper::userToUserDTO).orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
+        return ResponseEntity.ok(userDTO);
     }
 
     // 修改当前登录用户信息
     @PostMapping
-    public ResponseEntity saveUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity saveUser(@Valid @RequestBody UserDTO userDTO) {
         final String userLogin = SecurityUtils.getCurrentUserLogin();
         Optional<User> user = userService.findOneByAccount(userLogin);
         if (!user.isPresent()) {
             throw new InternalServerErrorException("User could not be found");
         }
-        userService.updateUser(userDto.getAccount(), userDto.getNickName(), userDto.getName(),
-            userDto.getLangKey());return ResponseEntity.ok(userDto);
+        userService.updateUser(userDTO.getAccount(), userDTO.getNickName(), userDTO.getName(), userDTO.getLangKey());
+        return ResponseEntity.ok(userDTO);
     }
 
 
@@ -127,8 +131,8 @@ public class UserController {
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
     @GetMapping("/users")
-    public ResponseEntity<List<UserDto>> getAllUsers(Pageable pageable) {
-        final Page<UserDto> page = userService.getAllManagedUsers(pageable);
+    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
+        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -136,28 +140,23 @@ public class UserController {
     /**
      * PUT  /users : Updates an existing User.
      *
-     * @param userDto the user to update
+     * @param userDTO the user to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated user
      */
-    @PutMapping("/users")
+    @PutMapping
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto) {
-        Optional<User> existingUser = userService.findOneByAccount(userDto.getAccount());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDto.getId()))) {
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO userDTO) {
+        Optional<User> existingUser = userService.findOneByAccount(userDTO.getAccount());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
-        Optional<UserDto> updatedUser = userService.updateUser(userDto);
+        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
-        return ResponseUtil.wrapOrNotFound(updatedUser,
-            HeaderUtil.createAlert("userManagement.updated", userDto.getAccount()));
+        return ResponseUtil.wrapOrNotFound(updatedUser, HeaderUtil.createAlert("userManagement.updated", userDTO
+            .getAccount()));
     }
 
-    /**
-     * GET  /users/:login : get the "login" user.
-     *
-     * @param account the login of the user to find
-     * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
-     */
+
     @DeleteMapping("/device/{deviceId}")
     public ResponseEntity deleteUserDevice(@PathVariable String deviceId) {
 
@@ -171,8 +170,8 @@ public class UserController {
      * @param account the login of the user to find
      * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
      */
-    @GetMapping("/users/{account:" + Constants.LOGIN_REGEX + "}")
-    public ResponseEntity<UserDto> getUser(@PathVariable String account) {
+    @GetMapping("/{account:" + Constants.LOGIN_REGEX + "}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String account) {
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithRolesByAccount(account)
                 .map(userMapper::userToUserDTO));
@@ -184,7 +183,7 @@ public class UserController {
      * @param account the login of the user to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping("/users/{account:" + Constants.LOGIN_REGEX + "}")
+    @DeleteMapping("/{account:" + Constants.LOGIN_REGEX + "}")
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteUser(@PathVariable String account) {
         try {
@@ -214,8 +213,8 @@ public class UserController {
         User userEntity = userService.findById(userId);
         userEntity.setNickName(user.getNickName());
         userService.update(userEntity);
-        UserDto userDto = userMapper.userToUserDTO(userEntity);
-        return ResponseEntity.ok(userDto);
+        UserDTO userDTO = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDTO);
     }
 
 	// 修改个性签名
@@ -224,9 +223,9 @@ public class UserController {
         String userId = SecurityUtils.getCurrentUserId();
         User userEntity = userService.findById(userId);
         userEntity.setSignature(user.getSignature());
-        UserDto userDto = userMapper.userToUserDTO(userEntity);
-        return ResponseEntity.ok(userDto);
-	}
+        UserDTO userDTO = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDTO);
+    }
 
     // 修改用户电话
     @PutMapping("/updatePhone")
@@ -234,8 +233,8 @@ public class UserController {
         String userId = SecurityUtils.getCurrentUserId();
         User userEntity = userService.findById(userId);
         userEntity.setPhone(user.getPhone());
-        UserDto userDto = userMapper.userToUserDTO(userEntity);
-        return ResponseEntity.ok(userDto);
+        UserDTO userDTO = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDTO);
     }
 
     // 修改用户真实姓名
@@ -244,8 +243,8 @@ public class UserController {
         String userId = SecurityUtils.getCurrentUserId();
         User userEntity = userService.findById(userId);
         userEntity.setName(user.getName());
-        UserDto userDto = userMapper.userToUserDTO(userEntity);
-        return ResponseEntity.ok(userDto);
+        UserDTO userDTO = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDTO);
     }
 
     // 修改用户出生日期
@@ -254,8 +253,8 @@ public class UserController {
         String userId = SecurityUtils.getCurrentUserId();
         User userEntity = userService.findById(userId);
         userEntity.setBirthday(user.getBirthday());
-        UserDto userDto = userMapper.userToUserDTO(userEntity);
-        return ResponseEntity.ok(userDto);
+        UserDTO userDTO = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDTO);
     }
 
     // 修改用户性别
@@ -264,8 +263,8 @@ public class UserController {
         String userId = SecurityUtils.getCurrentUserId();
         User userEntity = userService.findById(userId);
         userEntity.setSex(user.getSex());
-        UserDto userDto = userMapper.userToUserDTO(userEntity);
-        return ResponseEntity.ok(userDto);
+        UserDTO userDTO = userMapper.userToUserDTO(userEntity);
+        return ResponseEntity.ok(userDTO);
     }
 }
 

@@ -15,7 +15,7 @@ import java.util.Set;
  * @date: 2017/7/13
  */
 @Data
-public class UserDto {
+public class UserDTO {
     private String id;
     private String account;
     private String nickName;
@@ -33,6 +33,6 @@ public class UserDto {
     private Date addTime;
     private boolean activated;
     private Set<String> devices;
-    private List<RoomDto> rooms;
+    private List<RoomDTO> rooms;
     private Set<String> roles;
 }

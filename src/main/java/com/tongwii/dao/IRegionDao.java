@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ${DESCRIPTION}
@@ -15,4 +16,6 @@ import java.util.List;
 @Repository
 public interface IRegionDao extends JpaRepository<Region, String> {
     List<Region> findByParentCode(String parentCode);
+
+    Region findOneByRegionCode(String regionCode);
 }

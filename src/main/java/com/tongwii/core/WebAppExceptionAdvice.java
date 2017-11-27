@@ -2,6 +2,7 @@ package com.tongwii.core;
 
 import com.tongwii.constant.ResultConstants;
 import com.tongwii.core.exception.BadRequestAlertException;
+import com.tongwii.core.exception.FieldErrorVM;
 import com.tongwii.security.UserNotActivatedException;
 import com.tongwii.util.HeaderUtil;
 import org.slf4j.Logger;
@@ -12,18 +13,22 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ValidationException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Exception Handler Controller Advice to catch all controller exceptions and respond gracefully to
  * the caller
  */
 @ControllerAdvice
-public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
+public class WebAppExceptionAdvice {
     private static Logger log = LoggerFactory.getLogger(WebAppExceptionAdvice.class);
 
     @ExceptionHandler(AuthenticationException.class)
@@ -59,6 +64,16 @@ public class WebAppExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotActivatedException.class)
     public ResponseEntity<Object> precessUserNotActivatedException(UserNotActivatedException e) {
         return new ResponseEntity<>(ResultConstants.ERR_USERNOTACTIVATED + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> precessMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        BindingResult result = ex.getBindingResult();
+        List<FieldErrorVM> fieldErrors = result.getFieldErrors().stream()
+            .map(f -> new FieldErrorVM(f.getObjectName(), f.getField(), f.getCode()))
+            .collect(Collectors.toList());
+
+        return ResponseEntity.badRequest().body(Collections.singletonMap("fieldErrors", fieldErrors));
     }
 
     @ExceptionHandler(BadRequestAlertException.class)

@@ -1,7 +1,7 @@
 package com.tongwii.controller;
 
 import com.tongwii.constant.PushConstants;
-import com.tongwii.dto.PushMessageDto;
+import com.tongwii.dto.PushMessageDTO;
 import com.tongwii.service.PushService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class PushController {
      * @return
      */
     @PostMapping("/pushAll")
-    public ResponseEntity pushAll(@RequestBody PushMessageDto pushMessage) {
+    public ResponseEntity pushAll(@RequestBody PushMessageDTO pushMessage) {
         if (StringUtils.isEmpty(pushMessage.getMessage())) {
             return ResponseEntity.badRequest().body("消息内容不能为空!");
         } else {
@@ -46,7 +46,7 @@ public class PushController {
      * @return
      */
     @PostMapping("/push")
-    public ResponseEntity push(@RequestBody PushMessageDto pushMessage) {
+    public ResponseEntity push(@RequestBody PushMessageDTO pushMessage) {
         if (StringUtils.isEmpty(pushMessage.getMessage())) {
             return ResponseEntity.badRequest().body("消息内容不能为空!");
         } else {

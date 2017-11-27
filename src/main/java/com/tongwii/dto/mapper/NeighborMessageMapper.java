@@ -1,7 +1,7 @@
 package com.tongwii.dto.mapper;
 
 import com.tongwii.domain.Message;
-import com.tongwii.dto.NeighborMessageDto;
+import com.tongwii.dto.NeighborMessageDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,27 +13,27 @@ import java.util.stream.Collectors;
  */
 @Service
 public class NeighborMessageMapper {
-    NeighborMessageDto messageToNeighborMessageDto(Message message) {
+    NeighborMessageDTO toDto(Message message) {
         if ( message == null ) {
             return null;
         }
 
-        NeighborMessageDto neighborMessageDto = new NeighborMessageDto();
-        neighborMessageDto.setId(message.getId());
-        neighborMessageDto.setTitle(message.getTitle());
-        neighborMessageDto.setContent(message.getContent());
-        neighborMessageDto.setCreateTime(message.getCreateTime());
-        neighborMessageDto.setCreateUser(message.getCreateUser().getAccount());
-        neighborMessageDto.setCreateUserAvatar(Objects.nonNull(message.getCreateUser().getFileByAvatarFileId()) ? message.getCreateUser().getFileByAvatarFileId().getFilePath() : null);
-        neighborMessageDto.setMessageTypeId(message.getMessageTypeId());
-        return neighborMessageDto;
+        NeighborMessageDTO neighborMessageDTO = new NeighborMessageDTO();
+        neighborMessageDTO.setId(message.getId());
+        neighborMessageDTO.setTitle(message.getTitle());
+        neighborMessageDTO.setContent(message.getContent());
+        neighborMessageDTO.setCreateTime(message.getCreateTime());
+        neighborMessageDTO.setCreateUser(message.getCreateUser().getAccount());
+        neighborMessageDTO.setCreateUserAvatar(Objects.nonNull(message.getCreateUser().getFileByAvatarFileId()) ? message.getCreateUser().getFileByAvatarFileId().getFilePath() : null);
+        neighborMessageDTO.setMessageTypeId(message.getMessageTypeId());
+        return neighborMessageDTO;
     }
 
 
-    public List<NeighborMessageDto> messagesToNeighborMessageDtos(List<Message> messages) {
+    public List<NeighborMessageDTO> toDtos(List<Message> messages) {
         return messages.stream()
             .filter(Objects::nonNull)
-            .map(this::messageToNeighborMessageDto)
+            .map(this::toDto)
             .collect(Collectors.toList());
     }
 }

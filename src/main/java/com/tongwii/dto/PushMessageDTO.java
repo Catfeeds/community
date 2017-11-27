@@ -11,7 +11,7 @@ import java.util.Set;
  * @date 2017-11-22
  */
 @Data
-public class PushMessageDto {
+public class PushMessageDTO {
     // 消息标题
     private String title;
     // 消息内容
