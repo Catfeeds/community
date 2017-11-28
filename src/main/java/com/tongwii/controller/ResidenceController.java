@@ -1,12 +1,10 @@
 package com.tongwii.controller;
 
-import com.tongwii.core.exception.BadRequestAlertException;
-import com.tongwii.dao.IResidenceDao;
 import com.tongwii.domain.Residence;
 import com.tongwii.dto.ResidenceDTO;
-import com.tongwii.dto.mapper.ResidenceMapper;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.ResidenceService;
+import com.tongwii.service.UserService;
 import com.tongwii.util.HeaderUtil;
 import com.tongwii.util.PaginationUtil;
 import com.tongwii.util.ResponseUtil;
@@ -29,17 +27,14 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/residence")
 public class ResidenceController {
-    private final IResidenceDao residenceDao;
     private final ResidenceService residenceService;
-    private final ResidenceMapper residenceMapper;
+    private final UserService userService;
 
     private static final String ENTITY_NAME = "residence";
 
-    public ResidenceController(ResidenceService residenceService, IResidenceDao residenceDao, ResidenceMapper
-        residenceMapper) {
+    public ResidenceController(ResidenceService residenceService, UserService userService) {
         this.residenceService = residenceService;
-        this.residenceDao = residenceDao;
-        this.residenceMapper = residenceMapper;
+        this.userService = userService;
     }
 
     /**
@@ -50,14 +45,12 @@ public class ResidenceController {
      */
     @PostMapping("/addSingleResidence")
     public ResponseEntity addSingleResidence(@RequestBody Residence residence){
-        String userId = SecurityUtils.getCurrentUserId();
-        residence.setUserId(userId);
         residenceService.save(residence);
         return ResponseEntity.ok("添加成功!");
     }
 
     /**
-     * POST  /bank-accounts : Create a new residence.
+     * POST  /residence : Create a new residence.
      *
      * @param residenceDTO the residence to create
      * @return the ResponseEntity with status 201 (Created) and with body the new bankAccount, or with status 400 (Bad Request) if the bankAccount has already an ID
@@ -72,7 +65,7 @@ public class ResidenceController {
     }
 
     /**
-     * PUT  /residences : Updates an existing residence.
+     * PUT  /residence : Updates an existing residence.
      *
      * @param residence the residenceDTO to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated residenceDTO,
@@ -92,7 +85,7 @@ public class ResidenceController {
     }
 
     /**
-     * GET  /residences/:id : get the "id" residence.
+     * GET  /residence/:id : get the "id" residence.
      *
      * @param id the id of the residenceDTO to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the residenceDTO, or with status 404 (Not Found)
@@ -104,7 +97,7 @@ public class ResidenceController {
     }
 
     /**
-     * DELETE  /residences/:id : delete the "id" residence.
+     * DELETE  /residence/:id : delete the "id" residence.
      *
      * @param id the id of the residenceDTO to delete
      * @return the ResponseEntity with status 200 (OK)
@@ -112,7 +105,7 @@ public class ResidenceController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResidence(@PathVariable String id) {
         try {
-            residenceDao.delete(id);
+            residenceService.delete(id);
         } catch (Exception e) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "objectUsed",  "社区被使用，无法删除")).build();
         }
@@ -166,8 +159,8 @@ public class ResidenceController {
         if(!StringUtils.isEmpty(residence.getName())){
             newResidence.setName(residence.getName());
         }
-        if(!StringUtils.isEmpty(residence.getUserId())){
-            newResidence.setUserId(residence.getUserId());
+        if(!StringUtils.isEmpty(residence.getChargeUser().getId())){
+            newResidence.setChargeUser(userService.findById(residence.getChargeUser().getId()));
         }
         if(!StringUtils.isEmpty(residence.getFloorCount())){
             newResidence.setFloorCount(residence.getFloorCount());
@@ -199,7 +192,7 @@ public class ResidenceController {
      */
     @GetMapping("/residences")
     public ResponseEntity<List<ResidenceDTO>> getAllResidences(Pageable pageable) {
-        final Page<ResidenceDTO> page = residenceDao.findAll(pageable).map(residenceMapper::toDto);
+        final Page<ResidenceDTO> page = residenceService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/residence/all");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

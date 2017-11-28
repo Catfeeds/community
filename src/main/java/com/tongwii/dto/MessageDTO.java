@@ -1,9 +1,9 @@
 package com.tongwii.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.tongwii.util.CustomDateSerializer;
+import com.tongwii.domain.MessageType;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,14 +13,13 @@ import java.util.Date;
  * @date 2017-09-25
  */
 @Data
-public class MessageDTO {
+public class MessageDTO implements Serializable {
 
     private String id;
     private String title;
     private String content;
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
     private String createUser;
-    private String messageTypeId;
+    private MessageType messageType;
     private String messageTypeCode;
 }

@@ -4,7 +4,6 @@ import com.tongwii.domain.User;
 import com.tongwii.domain.UserRoom;
 import com.tongwii.dto.mapper.UserMapper;
 import com.tongwii.service.UserRoomService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +20,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/userRoom")
 public class UserRoomController {
-    @Autowired
-    private UserRoomService userRoomService;
-    @Autowired
-    private UserMapper userMapper;
+
+    private final UserRoomService userRoomService;
+    private final UserMapper userMapper;
+
+    public UserRoomController(UserRoomService userRoomService, UserMapper userMapper) {
+        this.userRoomService = userRoomService;
+        this.userMapper = userMapper;
+    }
+
     /**
      * 根据roomId查询用户列表
      * @author Yamo

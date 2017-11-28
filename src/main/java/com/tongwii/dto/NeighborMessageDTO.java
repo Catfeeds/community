@@ -1,10 +1,10 @@
 package com.tongwii.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.tongwii.domain.MessageComment;
-import com.tongwii.util.CustomDateSerializer;
+import com.tongwii.domain.MessageType;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -12,15 +12,14 @@ import java.util.Date;
  * Created by admin on 2017/10/24.
  */
 @Data
-public class NeighborMessageDTO {
+public class NeighborMessageDTO implements Serializable {
     private String id;
     private String title;
     private String content;
-    @JsonSerialize(using = CustomDateSerializer.class)
     private Date createTime;
     private String createUser;
     private String createUserAvatar;
-    private String messageTypeId;
+    private MessageType messageType;
     private Integer likeNum;
     private Integer commentNum;
     private Collection<MessageComment> messageCommentEntities;

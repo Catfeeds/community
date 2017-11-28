@@ -28,10 +28,7 @@ public class MessageMapper {
         messageDTO.setContent(message.getContent());
         messageDTO.setCreateTime(message.getCreateTime());
         messageDTO.setCreateUser(message.getCreateUser().getAccount());
-        messageDTO.setMessageTypeId(message.getMessageTypeId());
-        if(Objects.nonNull(message.getMessageType())) {
-            messageDTO.setMessageTypeCode(message.getMessageType().getCode());
-        }
+        messageDTO.setMessageType(message.getMessageType());
         return messageDTO;
     }
 

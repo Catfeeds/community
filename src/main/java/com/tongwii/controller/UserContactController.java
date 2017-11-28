@@ -6,7 +6,6 @@ import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.UserContactService;
 import com.tongwii.util.PinYinUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,10 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/userContact")
 public class UserContactController {
-    @Autowired
-    private UserContactService userContactService;
+
+    private final UserContactService userContactService;
+
+    public UserContactController(UserContactService userContactService) {this.userContactService = userContactService;}
 
     /**
      * 添加联系人
@@ -72,7 +73,7 @@ public class UserContactController {
             object.put("contactDesc", userContact.getDes());
             object.put("contactPhone", friend.getPhone());
             if (StringUtils.isNotEmpty(friend.getAvatarFileId())) {
-                object.put("contactPhoto", friend.getFileByAvatarFileId().getFilePath());
+                object.put("contactPhoto", friend.getAvatarFile().getFilePath());
             }
             object.put("contactId", userContact.getId());
             if (sortString.matches("[A-Z]")) {

@@ -5,7 +5,6 @@ import com.tongwii.dto.RoomDTO;
 import com.tongwii.dto.UserDTO;
 import com.tongwii.service.FloorService;
 import com.tongwii.service.UserRoomService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,18 +19,21 @@ import java.util.stream.Collectors;
 @Service
 public class UserMapper {
 
-    @Autowired
-    private UserRoomService userRoomService;
+    private final UserRoomService userRoomService;
 
-    @Autowired
-    private FloorService floorService;
+    private final FloorService floorService;
+
+    public UserMapper(UserRoomService userRoomService, FloorService floorService) {
+        this.userRoomService = userRoomService;
+        this.floorService = floorService;
+    }
 
     public UserDTO userToUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setAccount(user.getAccount());
         userDTO.setNickName(user.getNickName());
-        userDTO.setAvatarFileSrc(Objects.nonNull(user.getFileByAvatarFileId()) ? user.getFileByAvatarFileId().getFilePath() : null);
+        userDTO.setAvatarFileSrc(Objects.nonNull(user.getAvatarFile()) ? user.getAvatarFile().getFilePath() : null);
         userDTO.setPhone(user.getPhone());
         userDTO.setSignature(user.getSignature());
         userDTO.setAddTime(user.getAddTime());
@@ -100,5 +102,14 @@ public class UserMapper {
             role.setCode(string);
             return role;
         }).collect(Collectors.toSet());
+    }
+
+    public User userFromId(String id) {
+        if (id == null) {
+            return null;
+        }
+        User user = new User();
+        user.setId(id);
+        return user;
     }
 }

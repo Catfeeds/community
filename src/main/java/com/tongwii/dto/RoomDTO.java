@@ -2,6 +2,8 @@ package com.tongwii.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 房间信息Vo
  *
@@ -9,7 +11,7 @@ import lombok.Data;
  * @date 2017 -07-27
  */
 @Data
-public class RoomDTO {
+public class RoomDTO implements Serializable {
     /**
      * 房间id
      */

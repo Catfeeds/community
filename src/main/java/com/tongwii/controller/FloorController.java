@@ -83,8 +83,8 @@ public class FloorController {
         for(Floor floor : floorEntities){
             Map<String, Object> object = new HashMap<>();
             object.put("floorName", floor.getCode());
-            object.put("floorPiles", floor.getFloorPiles());
-            object.put("isElev", floor.getElev());
+            object.put("floorPiles", floor.getFloorNumber());
+            object.put("isElev", floor.getHasElev());
             object.put("floorId", floor.getId());
             object.put("address", address+ floor.getCode()+"栋");
             jsonArray.add(object);

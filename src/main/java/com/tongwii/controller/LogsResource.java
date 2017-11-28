@@ -1,14 +1,15 @@
-package com.tongwii.logging;
+package com.tongwii.controller;
 
 
 import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
+import com.tongwii.logging.LoggerVM;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller for view and managing Log Level at runtime.
@@ -18,9 +19,12 @@ import java.util.List;
 public class LogsResource {
 
     @GetMapping("/logs")
-    public List<Logger> getList() {
+    public List<LoggerVM> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        return context.getLoggerList();
+        return context.getLoggerList()
+            .stream()
+            .map(LoggerVM::new)
+            .collect(Collectors.toList());
     }
 
     @PutMapping("/logs")

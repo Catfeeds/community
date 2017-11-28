@@ -1,10 +1,14 @@
 package com.tongwii.logging;
 
 import ch.qos.logback.classic.Logger;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * View Model object for storing a Logback logger.
  */
+@Getter@Setter@ToString
 public class LoggerVM {
 
     private String name;
@@ -18,29 +22,5 @@ public class LoggerVM {
 
     public LoggerVM() {
         // Empty public constructor used by Jackson.
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    @Override
-    public String toString() {
-        return "LoggerVM{" +
-            "name='" + name + '\'' +
-            ", level='" + level + '\'' +
-            '}';
     }
 }

@@ -1,10 +1,12 @@
 package com.tongwii.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tongwii.constant.Constants;
 import com.tongwii.constant.UserConstants;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -27,7 +29,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "user", schema = "cloud_community")
-public class User implements Serializable {
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+public class User extends AbstractAuditingEntity implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
@@ -40,14 +43,16 @@ public class User implements Serializable {
     @Column(length = 50, unique = true, nullable = false)
     private String account;
 
+    @JsonIgnore
     @NotNull
-    @Column(name = "password")
+    @Size(min = 60, max = 60)
+    @Column(name = "password", length = 60)
     private String password;
 
-    @Column(name = "nick_name")
+    @Column(name = "nick_name", length = 50)
     private String nickName;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 50)
     private String name;
 
     @NotNull
@@ -80,49 +85,75 @@ public class User implements Serializable {
     @Column(nullable = false)
     private boolean activated = true;
 
+    @ManyToOne
+    private SubGroup group;
+
     @ManyToMany
     @JoinTable(
         name = "user_role",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 20)
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @BatchSize(size = 5)
     private Set<Device> devices = new HashSet<>();
 
-    @OneToMany(mappedBy = "userByUploadUserId")
-    private Collection<File> filesById;
+    @OneToMany(mappedBy = "uploadUser")
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<File> files;
 
     @OneToMany(mappedBy = "userByPrincipalId")
-    private Collection<Floor> floorsById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Floor> floors;
 
     @OneToMany(mappedBy = "userByOperatorId")
-    private Collection<Log> logsById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Log> logs;
 
     @OneToMany(mappedBy = "createUser")
-    private Collection<Message> messagesById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Message> messages;
 
     @OneToMany(mappedBy = "userByCommentatorId")
-    private Collection<MessageComment> messageCommentsById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<MessageComment> messageComments;
 
-    @OneToMany(mappedBy = "userByUserId")
-    private Collection<Residence> residencesById;
+    @OneToMany(mappedBy = "chargeUser")
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Residence> residences;
 
     @OneToMany(mappedBy = "userByOwnerId")
-    private Collection<Room> roomsById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<Room> rooms;
 
     @ManyToOne
     @JoinColumn(name = "avatar_file_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private File fileByAvatarFileId;
+    private File avatarFile;
 
     @OneToMany(mappedBy = "userByFriendId")
-    private Collection<UserContact> userContactsById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<UserContact> userContacts;
 
     @OneToMany(mappedBy = "userByUserId")
-    private Collection<UserGroup> userGroupsById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<UserGroup> userGroups;
 
     @OneToMany(mappedBy = "userByUserId")
-    private Collection<UserRoom> userRoomsById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<UserRoom> userRooms;
 }

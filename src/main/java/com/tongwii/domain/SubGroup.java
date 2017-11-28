@@ -1,12 +1,15 @@
 package com.tongwii.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 群组实体
@@ -18,6 +21,7 @@ import java.util.Collection;
 @Setter
 @Getter
 @Table(name = "subgroup", schema = "cloud_community")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class SubGroup implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
@@ -30,23 +34,27 @@ public class SubGroup implements Serializable {
     private String name;
 
     @Basic
-    @Column(name = "parent_id")
-    private String parentId;
-
-    @Basic
     @Column(name = "des")
     private String des;
 
-    @OneToMany(mappedBy = "subgroupByGroupId")
-    private Collection<GroupRole> groupRolesById;
-
     @ManyToOne
-    @JoinColumn(name = "parent_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private SubGroup subgroupByParentId;
+    @JoinColumn(name = "parent_id", referencedColumnName = "id")
+    private SubGroup group;
 
-    @OneToMany(mappedBy = "subgroupByParentId")
-    private Collection<SubGroup> subgroupsById;
+    @OneToMany(mappedBy = "group")
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<SubGroup> subGroups = new HashSet<>();
 
-    @OneToMany(mappedBy = "subgroupByGroupId")
-    private Collection<UserGroup> userGroupsById;
+    @OneToMany(mappedBy = "group")
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<User> users = new HashSet<>();
+
+    @ManyToMany
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "sub_group_role",
+        joinColumns = @JoinColumn(name="sub_groups_id", referencedColumnName="id"),
+        inverseJoinColumns = @JoinColumn(name="roles_id", referencedColumnName="id"))
+    private Set<Role> roles = new HashSet<>();
 }

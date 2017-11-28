@@ -3,7 +3,6 @@ package com.tongwii.controller;
 import com.tongwii.domain.File;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.FileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +24,6 @@ public class FileController {
 
     private final FileService fileService;
 
-    @Autowired
     public FileController(FileService fileService) {
         this.fileService = fileService;
     }

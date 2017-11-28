@@ -1,6 +1,6 @@
 package com.tongwii.controller;
 
-import com.tongwii.core.exception.BadRequestAlertException;
+import com.tongwii.exception.BadRequestAlertException;
 import com.tongwii.domain.Region;
 import com.tongwii.service.RegionService;
 import com.tongwii.util.HeaderUtil;

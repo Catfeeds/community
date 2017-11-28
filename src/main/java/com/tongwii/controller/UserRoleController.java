@@ -4,7 +4,6 @@ import com.tongwii.domain.Role;
 import com.tongwii.domain.User;
 import com.tongwii.service.UserService;
 import com.tongwii.vm.UserRoleVM;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +16,10 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/user_role")
 public class UserRoleController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
+
+    public UserRoleController(UserService userService) {this.userService = userService;}
 
     /**
      * 查询用户角色接口

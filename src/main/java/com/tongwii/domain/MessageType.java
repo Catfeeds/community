@@ -6,7 +6,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * 消息类型实体
@@ -36,7 +35,4 @@ public class MessageType implements Serializable {
     @Basic
     @Column(name = "des")
     private String des;
-
-    @OneToMany(mappedBy = "messageType")
-    private Collection<Message> messagesById;
 }

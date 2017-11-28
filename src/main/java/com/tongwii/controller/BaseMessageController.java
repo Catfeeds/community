@@ -6,24 +6,33 @@ import com.tongwii.domain.File;
 import com.tongwii.domain.Message;
 import com.tongwii.domain.MessageComment;
 import com.tongwii.domain.User;
+import com.tongwii.dto.MessageAdminDTO;
 import com.tongwii.dto.MessageDTO;
 import com.tongwii.dto.NeighborMessageDTO;
 import com.tongwii.dto.mapper.MessageMapper;
 import com.tongwii.dto.mapper.NeighborMessageMapper;
 import com.tongwii.dto.mapper.UserMapper;
+import com.tongwii.exception.BadRequestAlertException;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.FileService;
 import com.tongwii.service.MessageCommentService;
 import com.tongwii.service.MessageService;
 import com.tongwii.service.UserService;
+import com.tongwii.util.HeaderUtil;
+import com.tongwii.util.PaginationUtil;
+import com.tongwii.util.ResponseUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -42,7 +51,8 @@ public class BaseMessageController {
     private final NeighborMessageMapper neighborMessageMapper;
     private final MessageCommentService messageCommentService;
     private final FileService fileService;
-    private final UserMapper userMapper;
+
+    private static final String ENTITY_NAME = "message";
 
     public BaseMessageController(MessageService messageService, UserService userService, MessageMapper messageMapper, NeighborMessageMapper neighborMessageMapper, MessageCommentService messageCommentService, FileService fileService, UserMapper userMapper) {
         this.messageService = messageService;
@@ -51,7 +61,87 @@ public class BaseMessageController {
         this.neighborMessageMapper = neighborMessageMapper;
         this.messageCommentService = messageCommentService;
         this.fileService = fileService;
-        this.userMapper = userMapper;
+    }
+
+    /**
+     * POST  /messages : Create a new message.
+     *
+     * @param messageDTO the messageDTO to create
+     *
+     * @return the ResponseEntity with status 201 (Created) and with body the new messageDTO, or with status 400 (Bad
+     * Request) if the message has already an ID
+     *
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping
+    public ResponseEntity<MessageAdminDTO> createMessage(@RequestBody MessageAdminDTO messageDTO) throws URISyntaxException {
+        if (messageDTO.getId() != null) {
+            throw new BadRequestAlertException("A new message cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        MessageAdminDTO result = messageService.save(messageDTO);
+        return ResponseEntity.created(new URI("/api/messages/" + result.getId())).headers(HeaderUtil
+            .createEntityCreationAlert(ENTITY_NAME, result.getId())).body(result);
+    }
+
+    /**
+     * PUT  /messages : Updates an existing message.
+     *
+     * @param messageDTO the messageDTO to update
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the updated messageDTO,
+     * or with status 400 (Bad Request) if the messageDTO is not valid,
+     * or with status 500 (Internal Server Error) if the messageDTO couldn't be updated
+     *
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping
+    public ResponseEntity<MessageAdminDTO> updateMessage(@RequestBody MessageAdminDTO messageDTO) throws URISyntaxException {
+        if (messageDTO.getId() == null) {
+            return createMessage(messageDTO);
+        }
+        MessageAdminDTO result = messageService.save(messageDTO);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, messageDTO.getId())).body
+            (result);
+    }
+
+    /**
+     * GET  /messages : get all the messages.
+     *
+     * @param pageable the pagination information
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of messages in body
+     */
+    @GetMapping("/messages")
+    public ResponseEntity<List<MessageAdminDTO>> getAllMessages(Pageable pageable) {
+        Page<MessageAdminDTO> page = messageService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/messages");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /messages/:id : get the "id" message.
+     *
+     * @param id the id of the messageDTO to retrieve
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the messageDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<MessageAdminDTO> getMessage(@PathVariable String id) {
+        MessageAdminDTO messageDTO = messageService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(messageDTO));
+    }
+
+    /**
+     * DELETE  /messages/:id : delete the "id" message.
+     *
+     * @param id the id of the messageDTO to delete
+     *
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMessage(@PathVariable String id) {
+        messageService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 
     /**
@@ -116,7 +206,7 @@ public class BaseMessageController {
      * @param messageId 消息id
      */
     @PutMapping("/deleteMessage/{messageId}")
-    public ResponseEntity deleteMessage(@PathVariable String messageId) {
+    public ResponseEntity updateMessage(@PathVariable String messageId) {
         // 此消息实体包含id,通过id找到该条消息的数据记录，并将Process的状态更改成-1状态
         try {
             messageService.updateMessageProcess(messageId, -1);
@@ -139,7 +229,7 @@ public class BaseMessageController {
             return ResponseEntity.badRequest().body("消息类型不可为空!");
         }
         Pageable pageInfo = new PageRequest(page, 5);
-        Page<Message> messageEntityPage = messageService.findByMessageTypeCodeAndResidenceIdOrderByCreateTimeDesc(pageInfo, message.getMessageType().getCode(), message.getResidenceId());
+        Page<Message> messageEntityPage = messageService.findByMessageTypeCodeAndResidenceIdOrderByCreateTimeDesc(pageInfo, message.getMessageType().getCode(), message.getResidence().getId());
         if (!messageEntityPage.hasContent()) {
             return ResponseEntity.badRequest().body("没有数据了");
         }
@@ -158,7 +248,7 @@ public class BaseMessageController {
             // 通过userId查询userName
             User user = userService.findById(messageEntity.getCreateUserId());
             messageObject.put("createUser", user.getAccount());
-            messageObject.put("createUserAvatar", Objects.nonNull(user.getFileByAvatarFileId()) ? user.getFileByAvatarFileId().getFilePath() : null);
+            messageObject.put("createUserAvatar", Objects.nonNull(user.getAvatarFile()) ? user.getAvatarFile().getFilePath() : null);
             messageJsonArray.add(messageObject);
         }
         Map<String, Object> data = new HashMap<>();

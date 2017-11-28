@@ -1,6 +1,7 @@
 package com.tongwii.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table(name = "device", schema = "cloud_community")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Device implements Serializable {
 
     @Id

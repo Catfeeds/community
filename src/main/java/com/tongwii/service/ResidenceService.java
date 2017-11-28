@@ -4,6 +4,8 @@ import com.tongwii.dao.IResidenceDao;
 import com.tongwii.domain.Residence;
 import com.tongwii.dto.ResidenceDTO;
 import com.tongwii.dto.mapper.ResidenceMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,27 @@ public class ResidenceService {
     public ResidenceDTO findOne(String id) {
         Residence residence = residenceDao.findOne(id);
         return residenceMapper.toDto(residence);
+    }
+
+    /**
+     * Get all the residences.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public Page<ResidenceDTO> findAll(Pageable pageable) {
+        return residenceDao.findAll(pageable)
+            .map(residenceMapper::toDto);
+    }
+
+    /**
+     * Delete the residence by id.
+     *
+     * @param id the id of the entity
+     */
+    public void delete(String id) {
+        residenceDao.delete(id);
     }
 
     public Residence findById(String id) {

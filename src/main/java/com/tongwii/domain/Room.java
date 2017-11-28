@@ -1,8 +1,11 @@
 package com.tongwii.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -17,6 +20,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Table(name = "room", schema = "cloud_community")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Room implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
@@ -57,5 +61,7 @@ public class Room implements Serializable {
     private Floor floorByFloorId;
 
     @OneToMany(mappedBy = "roomByRoomId")
-    private Collection<UserRoom> userRoomsById;
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Collection<UserRoom> userRooms;
 }

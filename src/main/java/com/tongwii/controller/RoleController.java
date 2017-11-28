@@ -2,7 +2,6 @@ package com.tongwii.controller;
 
 import com.tongwii.domain.Role;
 import com.tongwii.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +16,10 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/role")
 public class RoleController {
-    @Autowired
-    private RoleService roleService;
+
+    private final RoleService roleService;
+
+    public RoleController(RoleService roleService) {this.roleService = roleService;}
 
     /**
      * 获取角色信息

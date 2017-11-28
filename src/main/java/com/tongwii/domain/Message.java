@@ -1,7 +1,9 @@
 package com.tongwii.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -19,6 +21,7 @@ import java.util.Date;
 @Setter
 @Getter
 @Table(name = "message", schema = "cloud_community")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Message implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
@@ -39,20 +42,12 @@ public class Message implements Serializable {
     private String fileId;
 
     @Basic
-    @Column(name = "residence_id")
-    private String residenceId;
-
-    @Basic
     @Column(name = "create_time")
     private Date createTime;
 
     @Basic
     @Column(name = "create_user_id")
     private String createUserId;
-
-    @Basic
-    @Column(name = "message_type_id")
-    private String messageTypeId;
 
     @Basic
     @Column(name = "process_state")
@@ -67,6 +62,14 @@ public class Message implements Serializable {
     private Date repairEndTime;
 
     @ManyToOne
+    @JoinColumn(name = "message_type_id", referencedColumnName = "id")
+    private MessageType messageType;
+
+    @ManyToOne
+    @JoinColumn(name = "residence_id", referencedColumnName = "id")
+    private Residence residence;
+
+    @ManyToOne
     @JoinColumn(name = "file_id", referencedColumnName = "id", insertable = false, updatable = false)
     private File file;
 
@@ -74,14 +77,8 @@ public class Message implements Serializable {
     @JoinColumn(name = "create_user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User createUser;
 
-    @ManyToOne
-    @JoinColumn(name = "message_type_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private MessageType messageType;
-
-    @ManyToOne
-    @JoinColumn(name = "residence_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Residence residence;
-
     @OneToMany(mappedBy = "messageByMessageId", fetch = FetchType.EAGER)
+    @JsonIgnore
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<MessageComment> messageComments;
 }

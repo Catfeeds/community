@@ -1,4 +1,4 @@
-package com.tongwii.core.exception;
+package com.tongwii.exception;
 
 import java.io.Serializable;
 

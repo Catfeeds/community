@@ -6,7 +6,6 @@ import com.tongwii.dto.NeighborMessageDTO;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
 import com.tongwii.util.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +18,11 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/message_comment")
 public class MessageCommentController {
-    @Autowired
-    private MessageCommentService messageCommentService;
+
+    private final MessageCommentService messageCommentService;
+
+    public MessageCommentController(MessageCommentService messageCommentService) {this.messageCommentService =
+        messageCommentService;}
 
     /**
      * 点赞接口

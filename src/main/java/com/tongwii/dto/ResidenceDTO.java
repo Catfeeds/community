@@ -2,6 +2,8 @@ package com.tongwii.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 社区Dto
  *
@@ -9,12 +11,12 @@ import lombok.Data;
  * @date 2017-11-24
  */
 @Data
-public class ResidenceDTO {
+public class ResidenceDTO implements Serializable {
     private String id;
     // 社区名称
     private String name;
     // 负责人
-    private UserDTO chargeUser;
+    private String chargeUser;
     // 楼盘总数
     private Integer floorCount;
     // 区域

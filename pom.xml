@@ -43,7 +43,7 @@
 
         <sfjson.version>2.4</sfjson.version>
 
-        <problem-spring-web.version>0.20.0</problem-spring-web.version>
+        <problem-spring-web.version>0.21.0</problem-spring-web.version>
 
         <!-- These remain empty unless the corresponding profile is active -->
         <profile.swagger/>
@@ -92,6 +92,10 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-data</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -136,6 +140,21 @@
             </exclusions>
         </dependency>
 
+        <!-- Cache -->
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
         <!-- spring-integration-ftp -->
         <dependency>
             <groupId>org.springframework.integration</groupId>
@@ -150,6 +169,10 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hppc</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

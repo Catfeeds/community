@@ -2,11 +2,11 @@ package com.tongwii.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * 文件实体
@@ -18,6 +18,7 @@ import java.util.Collection;
 @Setter
 @Getter
 @Table(name = "file", schema = "cloud_community")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class File implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
@@ -51,11 +52,5 @@ public class File implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "upload_user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private User userByUploadUserId;
-
-    @OneToMany(mappedBy = "file")
-    private Collection<Message> messagesById;
-
-    @OneToMany(mappedBy = "fileByAvatarFileId")
-    private Collection<User> usersById;
+    private User uploadUser;
 }

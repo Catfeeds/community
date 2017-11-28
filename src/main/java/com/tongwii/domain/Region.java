@@ -2,6 +2,7 @@ package com.tongwii.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Table(name = "region", schema = "cloud_community")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Region implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

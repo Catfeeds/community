@@ -2,6 +2,7 @@ package com.tongwii.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.sql.Timestamp;
 @Setter
 @Getter
 @Table(name = "log", schema = "cloud_community")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Log implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

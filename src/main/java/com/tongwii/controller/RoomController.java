@@ -8,13 +8,15 @@ import com.tongwii.domain.UserRoom;
 import com.tongwii.service.RoomService;
 import com.tongwii.service.UserRoomService;
 import com.tongwii.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by admin on 2017/7/17.
@@ -22,12 +24,16 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/room")
 public class RoomController {
-    @Autowired
-    private RoomService roomService;
-    @Autowired
-    private UserRoomService userRoomService;
-    @Autowired
-    private UserService userService;
+
+    private final RoomService roomService;
+    private final UserRoomService userRoomService;
+    private final UserService userService;
+
+    public RoomController(RoomService roomService, UserRoomService userRoomService, UserService userService) {this.roomService = roomService;
+        this.userRoomService = userRoomService;
+        this.userService = userService;
+    }
+
     /**
      * 根据楼宇查询住房信息
      * @param floorId

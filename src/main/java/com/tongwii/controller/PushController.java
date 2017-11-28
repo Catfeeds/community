@@ -4,7 +4,6 @@ import com.tongwii.constant.PushConstants;
 import com.tongwii.dto.PushMessageDTO;
 import com.tongwii.service.PushService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 //@PreAuthorize("hasAnyAuthority(T(com.tongwii.constant.AuthoritiesConstants).ADMIN, T(com.tongwii.constant.AuthoritiesConstants).COMMUNITY_ADMIN)")
 public class PushController {
 
-    @Autowired
-    private PushService pushService;
+    private final PushService pushService;
+
+    public PushController(PushService pushService) {this.pushService = pushService;}
 
     /**
      * 全推

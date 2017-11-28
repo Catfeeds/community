@@ -42,7 +42,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(IUserDao userDao, FileService fileService, UserMapper userMapper, RoleService roleService, IDeviceDao deviceDao, PasswordEncoder passwordEncoder) {
+    public UserService(IUserDao userDao, FileService fileService, UserMapper userMapper, RoleService roleService,
+                       IDeviceDao deviceDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.fileService = fileService;
         this.userMapper = userMapper;

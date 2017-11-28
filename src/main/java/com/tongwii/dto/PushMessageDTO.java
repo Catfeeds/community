@@ -2,6 +2,7 @@ package com.tongwii.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Set;
  * @date 2017-11-22
  */
 @Data
-public class PushMessageDTO {
+public class PushMessageDTO implements Serializable {
     // 消息标题
     private String title;
     // 消息内容

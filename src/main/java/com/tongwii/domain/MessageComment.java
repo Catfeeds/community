@@ -3,6 +3,7 @@ package com.tongwii.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "message_comment", schema = "cloud_community")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class MessageComment implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")

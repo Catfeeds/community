@@ -21,12 +21,10 @@ import java.util.stream.Collectors;
 public class ResidenceMapper {
     private final UserService userService;
     private final RegionService regionService;
-    private final UserMapper userMapper;
 
-    public ResidenceMapper(UserService userService, RegionService regionService, UserMapper userMapper) {
+    public ResidenceMapper(UserService userService, RegionService regionService) {
         this.userService = userService;
         this.regionService = regionService;
-        this.userMapper = userMapper;
     }
 
     public ResidenceDTO toDto(Residence residence) {
@@ -39,10 +37,10 @@ public class ResidenceMapper {
         residenceDTO.setName(residence.getName());
         residenceDTO.setAddress(residence.getAddress());
         residenceDTO.setFloorCount(residence.getFloorCount());
+        Optional.ofNullable(residence.getChargeUser()).ifPresent(user -> residenceDTO.setChargeUser(residence.getChargeUser().getAccount()));
         Optional.ofNullable(residence.getRegionCode()).ifPresent(regionCode -> residenceDTO.setRegion(regionService
             .findByRegionCode(regionCode)));
-        Optional.ofNullable(residence.getUserId()).ifPresent(userId -> residenceDTO.setChargeUser(userMapper
-            .userToUserDTO(userService.findById(userId))));
+
         return residenceDTO;
     }
 
@@ -56,12 +54,21 @@ public class ResidenceMapper {
             residence.setAddress(residenceDTO.getAddress());
             residence.setFloorCount(residenceDTO.getFloorCount());
             residence.setRegionCode(residenceDTO.getRegionCode());
-            Optional.ofNullable(residenceDTO.getChargeUser()).ifPresent(chargeUser -> residence.setUserId(chargeUser.getId()));
+            Optional.ofNullable(residenceDTO.getChargeUser()).ifPresent(chargeUser -> residence.setChargeUser(userService.findByAccount(chargeUser)));
             return residence;
         }
     }
 
     public List<ResidenceDTO> toDtos(List<Residence> residences) {
         return residences.stream().filter(Objects::nonNull).map(this::toDto).collect(Collectors.toList());
+    }
+
+    public Residence fromId(String id) {
+        if (id == null) {
+            return null;
+        }
+        Residence residence = new Residence();
+        residence.setId(id);
+        return residence;
     }
 }
