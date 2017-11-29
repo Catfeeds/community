@@ -2,10 +2,17 @@ package com.tongwii.controller;
 
 import com.tongwii.constant.MessageConstants;
 import com.tongwii.domain.MessageComment;
+import com.tongwii.dto.MessageCommentDTO;
 import com.tongwii.dto.NeighborMessageDTO;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
+import com.tongwii.service.UserService;
 import com.tongwii.util.DateUtil;
+import com.tongwii.util.PaginationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +27,38 @@ import java.util.*;
 public class MessageCommentController {
 
     private final MessageCommentService messageCommentService;
+    private final UserService userService;
 
-    public MessageCommentController(MessageCommentService messageCommentService) {this.messageCommentService =
-        messageCommentService;}
+    public MessageCommentController(MessageCommentService messageCommentService, UserService userService) {this.messageCommentService =
+        messageCommentService;
+        this.userService = userService;
+    }
+
+    /**
+     * GET  /message_comment : get all the messageComments.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of messageComments in body
+     */
+    @GetMapping
+    public ResponseEntity<List<MessageCommentDTO>> getAllMessageComments(Pageable pageable) {
+        Page<MessageCommentDTO> page = messageCommentService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/message-comments");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /message-comments : get all the messageComments by messageId.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of messageComments in body
+     */
+    @GetMapping("/messageComments/{messageId}")
+    public ResponseEntity selectAnnounceMessage(@PathVariable String messageId, Pageable pageable) {
+        Page<MessageCommentDTO> page = messageCommentService.findAllByMessageId(messageId, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/message_comment/messageComments/"+messageId);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
 
     /**
      * 点赞接口
@@ -40,7 +76,7 @@ public class MessageCommentController {
             // 添加记录
             MessageComment messageComment = new MessageComment();
             messageComment.setIsLike(true);
-            messageComment.setCommentatorId(userId);
+            messageComment.setCommentator(userService.findById(userId));
             messageComment.setMessageId(messageEntity.getId());
             messageComment.setCommentDate(new Date());
             messageComment.setType(MessageConstants.IS_LIKE);
@@ -83,7 +119,7 @@ public class MessageCommentController {
         // 添加记录
         MessageComment messageComment = new MessageComment();
         messageComment.setComment(comment);
-        messageComment.setCommentatorId(userId);
+        messageComment.setCommentator(userService.findById(userId));
         messageComment.setMessageId(neighborMessageDTO.getId());
         messageComment.setCommentDate(new Date());
         messageComment.setType(MessageConstants.COMMENT);
@@ -103,7 +139,7 @@ public class MessageCommentController {
         List<Map> commentList = new ArrayList<>();
         for(MessageComment messageComment : messageCommentEntities){
             Map<String, Object> commentObject = new HashMap<>();
-            commentObject.put("account", messageComment.getUserByCommentatorId().getAccount());
+            commentObject.put("account", messageComment.getCommentator().getAccount());
             commentObject.put("comment", messageComment.getComment());
             commentObject.put("commentDate", DateUtil.date2Str(messageComment.getCommentDate(), DateUtil.DEFAULT_DATE_TIME_FORMAT));
             commentList.add(commentObject);

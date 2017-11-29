@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +29,7 @@ public class PersistentAuditEvent implements Serializable {
     private String principal;
 
     @Column(name = "event_date")
-    private Date auditEventDate;
+    private Instant auditEventDate;
     @Column(name = "event_type")
     private String auditEventType;
 

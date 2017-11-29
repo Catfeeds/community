@@ -56,7 +56,7 @@ public class UserController {
 
     // 用户注册接口
     @PostMapping("/register")
-    public ResponseEntity regist(@Valid @RequestBody User user)  {
+    public ResponseEntity register(@Valid @RequestBody User user)  {
         if(Optional.ofNullable(userService.findByAccount(user.getAccount())).isPresent()){
             throw new LoginAlreadyUsedException();
         }

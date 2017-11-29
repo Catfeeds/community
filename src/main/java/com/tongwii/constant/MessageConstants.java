@@ -17,7 +17,7 @@ public final class MessageConstants {
     public final static String REPLAY_MESSAGE = "REPLAY_MESSAGE";//回复消息
 
     /**定义消息处理进度*/
-    public final static Integer UNPROCESS = 0;//未处理
+    public final static Integer UN_PROCESS = 0;//未处理
     public final static Integer PROCESSED = 1;//已处理
 
     /**定义动态消息的操作类型*/

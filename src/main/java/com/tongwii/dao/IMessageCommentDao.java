@@ -1,6 +1,8 @@
 package com.tongwii.dao;
 
 import com.tongwii.domain.MessageComment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,4 +24,6 @@ public interface IMessageCommentDao extends JpaRepository<MessageComment, String
     List<MessageComment> findByMessageIdAndCommentatorIdAndType(String messageId, String commentatorId, Integer type);
 
     Integer countByMessageId(String id);
+
+    Page<MessageComment> findAllByMessageId(String messageId, Pageable pageable);
 }

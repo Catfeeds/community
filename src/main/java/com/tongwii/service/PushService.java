@@ -72,7 +72,7 @@ public class PushService {
     @Scheduled(cron = "0 0 0/3 * * ?")
     public void pushUnhandledMessage() {
         System.out.println("test");
-        List<Message> messages = messageService.findByProcessState(MessageConstants.UNPROCESS);
+        List<Message> messages = messageService.findByProcessState(MessageConstants.UN_PROCESS);
         Optional.ofNullable(messages).ifPresent(messages1 -> messages1.forEach(message -> {
             PushMessageDTO messageDto = PushMessageMapper.toDto(message);
             ObjectMapper objectMapper = new ObjectMapper();

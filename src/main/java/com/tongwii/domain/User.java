@@ -123,7 +123,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Message> messages;
 
-    @OneToMany(mappedBy = "userByCommentatorId")
+    @OneToMany(mappedBy = "commentator")
     @JsonIgnore
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<MessageComment> messageComments;

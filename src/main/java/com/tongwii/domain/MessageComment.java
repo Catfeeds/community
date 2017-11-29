@@ -45,19 +45,16 @@ public class MessageComment implements Serializable {
     private Date commentDate;
 
     @Basic
-    @Column(name = "commentator_id")
-    private String commentatorId;
-
-    @Basic
     @Column(name = "type")
     private Integer type;
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "message_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Message messageByMessageId;
+    @JoinColumn(name = "commentator_id", referencedColumnName = "id")
+    private User commentator;
 
     @ManyToOne
-    @JoinColumn(name = "commentator_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private User userByCommentatorId;
+    @JsonIgnore
+    @JoinColumn(name = "message_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private Message message;
 }

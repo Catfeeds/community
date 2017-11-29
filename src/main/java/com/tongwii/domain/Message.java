@@ -1,6 +1,7 @@
 package com.tongwii.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tongwii.constant.MessageConstants;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -51,7 +52,7 @@ public class Message implements Serializable {
 
     @Basic
     @Column(name = "process_state")
-    private Integer processState;
+    private Integer processState = MessageConstants.UN_PROCESS;
 
     @Basic
     @Column(name = "repair_start_time")
@@ -77,7 +78,7 @@ public class Message implements Serializable {
     @JoinColumn(name = "create_user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User createUser;
 
-    @OneToMany(mappedBy = "messageByMessageId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
     @JsonIgnore
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<MessageComment> messageComments;
