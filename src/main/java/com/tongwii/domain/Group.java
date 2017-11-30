@@ -14,15 +14,15 @@ import java.util.Set;
 /**
  * 群组实体
  *
- * @author: Zeral
- * @date: 2017/7/13
+ * @author Zeral
+ * @date 2017/7/13
  */
 @Entity
 @Setter
 @Getter
 @Table(name = "subgroup", schema = "cloud_community")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class SubGroup implements Serializable {
+public class Group implements Serializable {
     @Id
     @GeneratedValue(generator = "uuidGenerator")
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
@@ -39,12 +39,12 @@ public class SubGroup implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
-    private SubGroup group;
+    private Group group;
 
     @OneToMany(mappedBy = "group")
     @JsonIgnore
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<SubGroup> subGroups = new HashSet<>();
+    private Set<Group> groups = new HashSet<>();
 
     @OneToMany(mappedBy = "group")
     @JsonIgnore
@@ -53,8 +53,8 @@ public class SubGroup implements Serializable {
 
     @ManyToMany
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "sub_group_role",
-        joinColumns = @JoinColumn(name="sub_groups_id", referencedColumnName="id"),
+    @JoinTable(name = "group_role",
+        joinColumns = @JoinColumn(name="groups_id", referencedColumnName="id"),
         inverseJoinColumns = @JoinColumn(name="roles_id", referencedColumnName="id"))
     private Set<Role> roles = new HashSet<>();
 }

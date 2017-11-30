@@ -2,6 +2,7 @@ package com.tongwii.dto.mapper;
 
 import com.tongwii.domain.Message;
 import com.tongwii.dto.PushMessageDTO;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,8 +15,9 @@ import java.util.stream.Collectors;
  * @author Zeral
  * @date 2017-11-22
  */
+@Component
 public class PushMessageMapper {
-    public static PushMessageDTO toDto(Message message) {
+    public PushMessageDTO toDto(Message message) {
         if ( message == null ) {
             return null;
         }
@@ -28,10 +30,10 @@ public class PushMessageMapper {
     }
 
 
-    public static List<PushMessageDTO> toDtos(List<Message> messages) {
+    public List<PushMessageDTO> toDto(List<Message> messages) {
         return messages.stream()
             .filter(Objects::nonNull)
-            .map(PushMessageMapper::toDto)
+            .map(this::toDto)
             .collect(Collectors.toList());
     }
 }

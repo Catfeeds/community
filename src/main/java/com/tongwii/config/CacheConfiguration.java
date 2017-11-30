@@ -1,5 +1,6 @@
 package com.tongwii.config;
 
+import com.tongwii.domain.Group;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.expiry.Duration;
@@ -66,11 +67,11 @@ public class CacheConfiguration {
             cm.createCache(com.tongwii.domain.UserRoom.class.getName(), jcacheConfiguration);
             cm.createCache(com.tongwii.domain.Log.class.getName(), jcacheConfiguration);
             cm.createCache(com.tongwii.domain.UserContact.class.getName(), jcacheConfiguration);
-            cm.createCache(com.tongwii.domain.SubGroup.class.getName(), jcacheConfiguration);
+            cm.createCache(Group.class.getName(), jcacheConfiguration);
             cm.createCache(com.tongwii.domain.UserGroup.class.getName(), jcacheConfiguration);
-            cm.createCache(com.tongwii.domain.SubGroup.class.getName() + ".users", jcacheConfiguration);
-            cm.createCache(com.tongwii.domain.SubGroup.class.getName() + ".subGroups", jcacheConfiguration);
-            cm.createCache(com.tongwii.domain.SubGroup.class.getName() + ".roles", jcacheConfiguration);
+            cm.createCache(Group.class.getName() + ".users", jcacheConfiguration);
+            cm.createCache(Group.class.getName() + ".groups", jcacheConfiguration);
+            cm.createCache(Group.class.getName() + ".roles", jcacheConfiguration);
             cm.createCache(com.tongwii.domain.Role.class.getName() + ".groups", jcacheConfiguration);
             cm.createCache(com.tongwii.domain.Device.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry

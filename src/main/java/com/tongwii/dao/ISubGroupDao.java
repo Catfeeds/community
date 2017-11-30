@@ -1,6 +1,6 @@
 package com.tongwii.dao;
 
-import com.tongwii.domain.SubGroup;
+import com.tongwii.domain.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @date 2017-09-21
  */
 @Repository
-public interface ISubGroupDao extends JpaRepository<SubGroup, String> {
+public interface ISubGroupDao extends JpaRepository<Group, String> {
 }

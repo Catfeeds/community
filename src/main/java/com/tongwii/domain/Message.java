@@ -15,8 +15,8 @@ import java.util.Date;
 /**
  * 消息实体
  *
- * @author: Zeral
- * @date: 2017/7/13
+ * @author Zeral
+ * @date 2017/7/13
  */
 @Entity
 @Setter
@@ -78,7 +78,7 @@ public class Message implements Serializable {
     @JoinColumn(name = "create_user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User createUser;
 
-    @OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "message")
     @JsonIgnore
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<MessageComment> messageComments;

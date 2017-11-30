@@ -80,7 +80,7 @@ public class RegionController {
      *
      * @return the ResponseEntity with status 200 (OK) and the list of regions in body
      */
-    @GetMapping("/regions")
+    @GetMapping
     public ResponseEntity<List<Region>> getAllRegions(Pageable pageable) {
         Page<Region> page = regionService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/regions");
@@ -127,7 +127,7 @@ public class RegionController {
      * 根据parentCode查询region信息
      * @author Yamo
      *
-     * @param parentCode
+     * @param parentCode 父级编码
      */
     @GetMapping("/code/{parentCode}")
     public ResponseEntity getParentRegion(@PathVariable String parentCode){

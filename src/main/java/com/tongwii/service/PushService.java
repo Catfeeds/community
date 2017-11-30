@@ -30,12 +30,14 @@ public class PushService {
     private final MessageService messageService;
     private final MessageTypeService messageTypeService;
     private final UserService userService;
+    private final PushMessageMapper pushMessageMapper;
 
-    public PushService(PushGateway gateway, MessageService messageService, MessageTypeService messageTypeService, UserService userService) {
+    public PushService(PushGateway gateway, MessageService messageService, MessageTypeService messageTypeService, UserService userService, PushMessageMapper pushMessageMapper) {
         this.gateway = gateway;
         this.messageService = messageService;
         this.messageTypeService = messageTypeService;
         this.userService = userService;
+        this.pushMessageMapper = pushMessageMapper;
     }
 
     public void push(PushMessageDTO pushMessage, String pushTopic) {
@@ -74,7 +76,7 @@ public class PushService {
         System.out.println("test");
         List<Message> messages = messageService.findByProcessState(MessageConstants.UN_PROCESS);
         Optional.ofNullable(messages).ifPresent(messages1 -> messages1.forEach(message -> {
-            PushMessageDTO messageDto = PushMessageMapper.toDto(message);
+            PushMessageDTO messageDto = pushMessageMapper.toDto(message);
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 gateway.push(objectMapper.writeValueAsString(messageDto), PushConstants.PUSH_ALL_TOPIC);

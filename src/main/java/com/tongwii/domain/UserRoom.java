@@ -1,5 +1,6 @@
 package com.tongwii.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -11,8 +12,8 @@ import java.io.Serializable;
 /**
  * 用户房间关系实体
  *
- * @author: Zeral
- * @date: 2017/7/13
+ * @author Zeral
+ * @date 2017/7/13
  */
 @Entity
 @Getter
@@ -43,10 +44,12 @@ public class UserRoom implements Serializable {
     private String des;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User userByUserId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "room_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Room roomByRoomId;
 }

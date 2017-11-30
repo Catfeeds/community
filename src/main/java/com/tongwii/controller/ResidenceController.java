@@ -2,7 +2,6 @@ package com.tongwii.controller;
 
 import com.tongwii.domain.Residence;
 import com.tongwii.dto.ResidenceDTO;
-import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.ResidenceService;
 import com.tongwii.service.UserService;
 import com.tongwii.util.HeaderUtil;
@@ -41,7 +40,7 @@ public class ResidenceController {
      * 添加单个小区信息
      * @author Yamo
      *
-     * @param residence
+     * @param residence 社区
      */
     @PostMapping("/addSingleResidence")
     public ResponseEntity addSingleResidence(@RequestBody Residence residence){
@@ -67,7 +66,7 @@ public class ResidenceController {
     /**
      * PUT  /residence : Updates an existing residence.
      *
-     * @param residence the residenceDTO to update
+     * @param residenceDTO the residenceDTO to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated residenceDTO,
      * or with status 400 (Bad Request) if the residenceDTO is not valid,
      * or with status 500 (Internal Server Error) if the residenceDTO couldn't be updated
@@ -114,7 +113,7 @@ public class ResidenceController {
 
     /**
      * 根据residenceId获取社区信息
-     * @param residenceId
+     * @param residenceId 社区id
      */
     @GetMapping("/getResidenceInfo/{residenceId}")
     public ResponseEntity getResidenceInfo(@PathVariable String residenceId){
@@ -123,7 +122,7 @@ public class ResidenceController {
     }
     /**
      * 根据regionId查询residence信息
-     * @param regionCode
+     * @param regionCode 社区编码
      * @return result
      * */
     @GetMapping("/find/{regionCode}")
@@ -147,7 +146,7 @@ public class ResidenceController {
 
     /**
      * 修改residence表
-     * @param residence
+     * @param residence 社区
      * @return result
      * */
     @PostMapping("/updateResidenceInfo")
@@ -159,8 +158,8 @@ public class ResidenceController {
         if(!StringUtils.isEmpty(residence.getName())){
             newResidence.setName(residence.getName());
         }
-        if(!StringUtils.isEmpty(residence.getChargeUser().getId())){
-            newResidence.setChargeUser(userService.findById(residence.getChargeUser().getId()));
+        if(!StringUtils.isEmpty(residence.getUserId())){
+            newResidence.setUserId(residence.getUserId());
         }
         if(!StringUtils.isEmpty(residence.getFloorCount())){
             newResidence.setFloorCount(residence.getFloorCount());
@@ -190,7 +189,7 @@ public class ResidenceController {
      *
      * @return the ResponseEntity with status 200 (OK) and the list of residences in body
      */
-    @GetMapping("/residences")
+    @GetMapping
     public ResponseEntity<List<ResidenceDTO>> getAllResidences(Pageable pageable) {
         final Page<ResidenceDTO> page = residenceService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/residence/all");

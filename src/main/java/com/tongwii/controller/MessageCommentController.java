@@ -4,11 +4,14 @@ import com.tongwii.constant.MessageConstants;
 import com.tongwii.domain.MessageComment;
 import com.tongwii.dto.MessageCommentDTO;
 import com.tongwii.dto.NeighborMessageDTO;
+import com.tongwii.exception.BadRequestAlertException;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
 import com.tongwii.service.UserService;
 import com.tongwii.util.DateUtil;
+import com.tongwii.util.HeaderUtil;
 import com.tongwii.util.PaginationUtil;
+import com.tongwii.util.ResponseUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -29,9 +34,23 @@ public class MessageCommentController {
     private final MessageCommentService messageCommentService;
     private final UserService userService;
 
+    private static final String ENTITY_NAME = "messageComment";
+
     public MessageCommentController(MessageCommentService messageCommentService, UserService userService) {this.messageCommentService =
         messageCommentService;
         this.userService = userService;
+    }
+
+    /**
+     * GET  /message-comments/:id : get the "id" messageComment.
+     *
+     * @param id the id of the messageCommentDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the messageCommentDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<MessageCommentDTO> getMessageComment(@PathVariable String id) {
+        MessageCommentDTO messageCommentDTO = messageCommentService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(messageCommentDTO));
     }
 
     /**
@@ -45,6 +64,44 @@ public class MessageCommentController {
         Page<MessageCommentDTO> page = messageCommentService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/message-comments");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * POST  /message-comments : Create a new messageComment.
+     *
+     * @param messageCommentDTO the messageCommentDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new messageCommentDTO, or with status 400 (Bad Request) if the messageComment has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping
+    public ResponseEntity<MessageCommentDTO> createMessageComment(@RequestBody MessageCommentDTO messageCommentDTO) throws URISyntaxException {
+        if (messageCommentDTO.getId() != null) {
+            throw new BadRequestAlertException("A new messageComment cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        MessageCommentDTO result = messageCommentService.save(messageCommentDTO);
+        return ResponseEntity.created(new URI("/api/message-comments/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId()))
+            .body(result);
+    }
+
+    /**
+     * PUT  /message-comments : Updates an existing messageComment.
+     *
+     * @param messageCommentDTO the messageCommentDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated messageCommentDTO,
+     * or with status 400 (Bad Request) if the messageCommentDTO is not valid,
+     * or with status 500 (Internal Server Error) if the messageCommentDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping
+    public ResponseEntity<MessageCommentDTO> updateMessageComment(@RequestBody MessageCommentDTO messageCommentDTO) throws URISyntaxException {
+        if (messageCommentDTO.getId() == null) {
+            return createMessageComment(messageCommentDTO);
+        }
+        MessageCommentDTO result = messageCommentService.save(messageCommentDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, messageCommentDTO.getId()))
+            .body(result);
     }
 
     /**
@@ -145,5 +202,18 @@ public class MessageCommentController {
             commentList.add(commentObject);
         }
         return ResponseEntity.ok(commentList);
+    }
+
+
+    /**
+     * DELETE  /message-comments/:id : delete the "id" messageComment.
+     *
+     * @param id the id of the messageCommentDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMessageComment(@PathVariable String id) {
+        messageCommentService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 }

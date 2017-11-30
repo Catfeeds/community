@@ -79,7 +79,7 @@ public class MessageService {
      * @param userId 用户id
      * @param messageId 消息id
      * @param multipartFile 附件
-     * @return
+     * @return String 文件地址
      */
     public String updateMessageFileById(String userId, String messageId, MultipartFile multipartFile) {
         File file = fileService.saveAndUploadFileToFTP(userId, multipartFile);
@@ -91,7 +91,7 @@ public class MessageService {
      * 根据processState查询消息
      *
      * @param processState 消息处理状态
-     * @return
+     * @return List<Message> </Message>
      */
     public List<Message> findByProcessState(int processState) {
         return messageDao.findByProcessState(processState);
@@ -109,6 +109,7 @@ public class MessageService {
         message = messageDao.save(message);
         return messageAdminMapper.toDto(message);
     }
+
 
     /**
      * Get all the messages.

@@ -13,8 +13,8 @@ import java.util.Collection;
 /**
  * 房间实体
  *
- * @author: Zeral
- * @date: 2017/7/13
+ * @author Zeral
+ * @date 2017/7/13
  */
 @Entity
 @Getter
@@ -53,12 +53,14 @@ public class Room implements Serializable {
     private String floorId;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "owner_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private User userByOwnerId;
+    private User owner;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "floor_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Floor floorByFloorId;
+    private Floor floor;
 
     @OneToMany(mappedBy = "roomByRoomId")
     @JsonIgnore

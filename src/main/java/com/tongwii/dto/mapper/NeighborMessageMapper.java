@@ -2,7 +2,7 @@ package com.tongwii.dto.mapper;
 
 import com.tongwii.domain.Message;
 import com.tongwii.dto.NeighborMessageDTO;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Created by admin on 2017/10/24.
  */
-@Service
+@Component
 public class NeighborMessageMapper {
     NeighborMessageDTO toDto(Message message) {
         if ( message == null ) {
@@ -30,7 +30,7 @@ public class NeighborMessageMapper {
     }
 
 
-    public List<NeighborMessageDTO> toDtos(List<Message> messages) {
+    public List<NeighborMessageDTO> toDto(List<Message> messages) {
         return messages.stream()
             .filter(Objects::nonNull)
             .map(this::toDto)

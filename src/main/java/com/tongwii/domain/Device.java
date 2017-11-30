@@ -33,8 +33,11 @@ public class Device implements Serializable {
     @Column(length = 50)
     private String deviceId;
 
+    @Column(name = "user_id")
+    private String userId;
+
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
 
     public Device() {

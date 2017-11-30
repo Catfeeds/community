@@ -5,7 +5,7 @@ import com.tongwii.dto.RoomDTO;
 import com.tongwii.dto.UserDTO;
 import com.tongwii.service.FloorService;
 import com.tongwii.service.UserRoomService;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
  */
-@Service
+@Component
 public class UserMapper {
 
     private final UserRoomService userRoomService;
@@ -49,11 +49,11 @@ public class UserMapper {
             Room room = userRoomEntity.getRoomByRoomId();
             RoomDTO roomDTO = new RoomDTO();
             Map<String, Floor> floorMap = floorService.findFloorById(room.getFloorId());
-            roomDTO.setRoomId(room.getId());
+            roomDTO.setId(room.getId());
             roomDTO.setUnitCode(room.getUnitCode());
             roomDTO.setRoomCode(room.getRoomCode());
-            roomDTO.setChargeName(room.getUserByOwnerId().getName());
-            roomDTO.setChargePhone(room.getUserByOwnerId().getPhone());
+            roomDTO.setChargeName(room.getOwner().getName());
+            roomDTO.setChargePhone(room.getOwner().getPhone());
             roomDTO.setRoomFloor(floorMap.get(Floor.UNIT).getCode() + room.getUnitCode()+ "单元" + room.getRoomCode());
             return roomDTO;
         }).collect(Collectors.toList());

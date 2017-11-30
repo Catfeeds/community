@@ -111,7 +111,7 @@ public class BaseMessageController {
      *
      * @return the ResponseEntity with status 200 (OK) and the list of messages in body
      */
-    @GetMapping("/messages")
+    @GetMapping
     public ResponseEntity<List<MessageAdminDTO>> getAllMessages(Pageable pageable) {
         Page<MessageAdminDTO> page = messageService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/messages");
@@ -269,7 +269,7 @@ public class BaseMessageController {
         if(!messageEntityPage.hasContent()) {
             return ResponseEntity.badRequest().body("没有数据了");
         }
-        List<MessageDTO> messageDTOS = messageMapper.toDtos(messageEntityPage.getContent());
+        List<MessageDTO> messageDTOS = messageMapper.toDto(messageEntityPage.getContent());
         Map<String, Object> map = new HashMap<>();
         map.put("totalPages", messageEntityPage.getTotalPages());
         map.put("data", messageDTOS);
@@ -288,7 +288,7 @@ public class BaseMessageController {
         if(!messageEntityPage.hasContent()) {
             return ResponseEntity.badRequest().body("没有数据了");
         }
-        List<MessageDTO> messageDTOS = messageMapper.toDtos(messageEntityPage.getContent());
+        List<MessageDTO> messageDTOS = messageMapper.toDto(messageEntityPage.getContent());
         Map<String, Object> map = new HashMap<>();
         map.put("totalPages", messageEntityPage.getTotalPages());
         map.put("data", messageDTOS);
@@ -307,7 +307,7 @@ public class BaseMessageController {
                 return ResponseEntity.badRequest().body("没有数据了");
             }
             List<Message> messageEntities = messageEntityPage.getContent();
-            List<NeighborMessageDTO> neighborMessageDTOList = neighborMessageMapper.toDtos(messageEntities);
+            List<NeighborMessageDTO> neighborMessageDTOList = neighborMessageMapper.toDto(messageEntities);
 
             for(NeighborMessageDTO neighborMessageDTO : neighborMessageDTOList){
                 // 封装点赞参数

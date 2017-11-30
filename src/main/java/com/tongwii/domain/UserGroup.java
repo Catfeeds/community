@@ -11,8 +11,8 @@ import java.io.Serializable;
 /**
  * 用户分组实体
  *
- * @author: Zeral
- * @date: 2017/7/13
+ * @author Zeral
+ * @date 2017/7/13
  */
 @Entity
 @Setter
@@ -40,7 +40,7 @@ public class UserGroup implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private SubGroup subgroupByGroupId;
+    private Group subgroupByGroupId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)

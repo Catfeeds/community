@@ -86,7 +86,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private boolean activated = true;
 
     @ManyToOne
-    private SubGroup group;
+    private Group group;
 
     @ManyToMany
     @JoinTable(
@@ -133,7 +133,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Residence> residences;
 
-    @OneToMany(mappedBy = "userByOwnerId")
+    @OneToMany(mappedBy = "owner")
     @JsonIgnore
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Room> rooms;

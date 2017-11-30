@@ -83,7 +83,7 @@ public class MessageTypeController {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of messageTypes in body
      */
-    @GetMapping("/message-types")
+    @GetMapping
     public ResponseEntity<List<MessageType>> getAllMessageTypes(Pageable pageable) {
         log.debug("REST request to get a page of MessageTypes");
         Page<MessageType> page = messageTypeService.findAll(pageable);

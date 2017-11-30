@@ -15,8 +15,8 @@ import java.util.Set;
 /**
  * 社区实体
  *
- * @author: Zeral
- * @date: 2017/7/13
+ * @author Zeral
+ * @date 2017/7/13
  */
 @Entity
 @Getter
@@ -34,6 +34,10 @@ public class Residence implements Serializable {
     @Basic
     @Column(name = "name")
     private String name;
+
+    @Basic
+    @Column(name = "user_id")
+    private String userId;
 
     @Basic
     @Column(name = "floor_count")
@@ -59,6 +63,6 @@ public class Residence implements Serializable {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User chargeUser;
 }

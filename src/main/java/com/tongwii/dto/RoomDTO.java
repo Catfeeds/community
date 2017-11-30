@@ -15,7 +15,7 @@ public class RoomDTO implements Serializable {
     /**
      * 房间id
      */
-    private String roomId;
+    private String id;
     /**
      * 房间编号
      */

@@ -4,7 +4,7 @@ import com.tongwii.domain.Residence;
 import com.tongwii.dto.ResidenceDTO;
 import com.tongwii.service.RegionService;
 import com.tongwii.service.UserService;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @author Zeral
  * @date 2017-11-24
  */
-@Service
+@Component
 public class ResidenceMapper {
     private final UserService userService;
     private final RegionService regionService;
@@ -37,7 +37,7 @@ public class ResidenceMapper {
         residenceDTO.setName(residence.getName());
         residenceDTO.setAddress(residence.getAddress());
         residenceDTO.setFloorCount(residence.getFloorCount());
-        Optional.ofNullable(residence.getChargeUser()).ifPresent(user -> residenceDTO.setChargeUser(residence.getChargeUser().getAccount()));
+        residenceDTO.setChargeUser(residence.getUserId());
         Optional.ofNullable(residence.getRegionCode()).ifPresent(regionCode -> residenceDTO.setRegion(regionService
             .findByRegionCode(regionCode)));
 
@@ -54,7 +54,7 @@ public class ResidenceMapper {
             residence.setAddress(residenceDTO.getAddress());
             residence.setFloorCount(residenceDTO.getFloorCount());
             residence.setRegionCode(residenceDTO.getRegionCode());
-            Optional.ofNullable(residenceDTO.getChargeUser()).ifPresent(chargeUser -> residence.setChargeUser(userService.findByAccount(chargeUser)));
+            residence.setUserId(residenceDTO.getChargeUser());
             return residence;
         }
     }

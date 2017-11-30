@@ -13,8 +13,8 @@ import java.util.Collection;
 /**
  * 楼层实体
  *
- * @author: Zeral
- * @date: 2017/7/13
+ * @author Zeral
+ * @date 2017/7/13
  */
 @Entity
 @Getter
@@ -67,7 +67,7 @@ public class Floor implements Serializable {
     @JoinColumn(name = "residence_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Residence residence;
 
-    @OneToMany(mappedBy = "floorByFloorId")
+    @OneToMany(mappedBy = "floor")
     @JsonIgnore
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Room> rooms;

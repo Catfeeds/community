@@ -27,7 +27,7 @@ public class MessageCommentService {
     }
     /**
      * 根据messageId获取点赞评论记录
-     * @param messageId
+     * @param messageId 消息id
      */
     public List<MessageComment> findByMessageIdAndType(String messageId, Integer type){
         return messageCommentDao.findByMessageIdAndType(messageId, type);
@@ -56,6 +56,19 @@ public class MessageCommentService {
     }
 
     /**
+     * Save a messageComment.
+     *
+     * @param messageCommentDTO the entity to save
+     * @return the persisted entity
+     */
+    public MessageCommentDTO save(MessageCommentDTO messageCommentDTO) {
+        MessageComment messageComment = messageCommentMapper.toEntity(messageCommentDTO);
+        messageComment = messageCommentDao.save(messageComment);
+        return messageCommentMapper.toDto(messageComment);
+    }
+
+
+    /**
      * Get all the messageComments.
      *
      * @param pageable the pagination information
@@ -65,5 +78,26 @@ public class MessageCommentService {
     public Page<MessageCommentDTO> findAll(Pageable pageable) {
         return messageCommentDao.findAll(pageable)
             .map(messageCommentMapper::toDto);
+    }
+
+    /**
+     * Get one messageComment by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Transactional(readOnly = true)
+    public MessageCommentDTO findOne(String id) {
+        MessageComment messageComment = messageCommentDao.findOne(id);
+        return messageCommentMapper.toDto(messageComment);
+    }
+
+    /**
+     * Delete the messageComment by id.
+     *
+     * @param id the id of the entity
+     */
+    public void delete(String id) {
+        messageCommentDao.delete(id);
     }
 }
