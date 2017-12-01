@@ -2,6 +2,7 @@ package com.tongwii.exception;
 
 import com.tongwii.util.HeaderUtil;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -77,6 +78,15 @@ public class ExceptionTranslator implements ProblemHandling {
             .withStatus(defaultConstraintViolationStatus())
             .with("message", ErrorConstants.ERR_VALIDATION)
             .with("fieldErrors", fieldErrors)
+            .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Problem> handleBConstraintViolationException(DataIntegrityViolationException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withStatus(Status.INTERNAL_SERVER_ERROR)
+            .with("message", ErrorConstants.ERR_DATAINTEGRITYVIOLATION)
             .build();
         return create(ex, problem, request);
     }

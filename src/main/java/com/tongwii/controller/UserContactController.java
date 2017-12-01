@@ -72,8 +72,8 @@ public class UserContactController {
             object.put("contactName", friend.getName());
             object.put("contactDesc", userContact.getDes());
             object.put("contactPhone", friend.getPhone());
-            if (StringUtils.isNotEmpty(friend.getAvatarFileId())) {
-                object.put("contactPhoto", friend.getAvatarFile().getFilePath());
+            if (StringUtils.isNotEmpty(friend.getImageUrl())) {
+                object.put("contactPhoto", friend.getImageUrl());
             }
             object.put("contactId", userContact.getId());
             if (sortString.matches("[A-Z]")) {

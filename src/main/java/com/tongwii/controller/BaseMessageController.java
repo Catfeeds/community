@@ -119,7 +119,7 @@ public class BaseMessageController {
     }
 
     /**
-     * GET  /messages/:id : get the "id" message.
+     * GET  /message/:id : get the "id" message.
      *
      * @param id the id of the messageDTO to retrieve
      *
@@ -132,7 +132,7 @@ public class BaseMessageController {
     }
 
     /**
-     * DELETE  /messages/:id : delete the "id" message.
+     * DELETE  /message/:id : delete the "id" message.
      *
      * @param id the id of the messageDTO to delete
      *
@@ -248,7 +248,7 @@ public class BaseMessageController {
             // 通过userId查询userName
             User user = userService.findById(messageEntity.getCreateUserId());
             messageObject.put("createUser", user.getAccount());
-            messageObject.put("createUserAvatar", Objects.nonNull(user.getAvatarFile()) ? user.getAvatarFile().getFilePath() : null);
+            messageObject.put("createUserAvatar", user.getImageUrl());
             messageJsonArray.add(messageObject);
         }
         Map<String, Object> data = new HashMap<>();

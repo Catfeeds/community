@@ -103,11 +103,7 @@ public class ResidenceController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteResidence(@PathVariable String id) {
-        try {
-            residenceService.delete(id);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "objectUsed",  "社区被使用，无法删除")).build();
-        }
+        residenceService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
 

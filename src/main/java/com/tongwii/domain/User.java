@@ -59,12 +59,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "sex", nullable = false)
     private Integer sex = UserConstants.USER_SEX_MALE;      // 性别默认男
 
-    @Column(name = "avatar_file_id")
-    private String avatarFileId;
-
     @Size(min = 2, max = 6)
     @Column(name = "lang_key", length = 6)
     private String langKey;
+
+    @Size(max = 256)
+    @Column(name = "image_url", length = 256)
+    private String imageUrl;
 
     @Column(name = "id_card")
     private String idCard;
@@ -84,9 +85,6 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @Column(nullable = false)
     private boolean activated = true;
-
-    @ManyToOne
-    private Group group;
 
     @ManyToMany
     @JoinTable(
@@ -138,19 +136,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<Room> rooms;
 
-    @ManyToOne
-    @JoinColumn(name = "avatar_file_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private File avatarFile;
-
     @OneToMany(mappedBy = "userByFriendId")
     @JsonIgnore
     @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Collection<UserContact> userContacts;
-
-    @OneToMany(mappedBy = "userByUserId")
-    @JsonIgnore
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Collection<UserGroup> userGroups;
 
     @OneToMany(mappedBy = "userByUserId")
     @JsonIgnore

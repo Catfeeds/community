@@ -1,6 +1,7 @@
 package com.tongwii.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,6 +19,7 @@ import java.io.Serializable;
  */
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "device", schema = "cloud_community")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Device implements Serializable {
@@ -31,7 +33,7 @@ public class Device implements Serializable {
     @NotNull
     @Size(max = 50)
     @Column(length = 50)
-    private String deviceId;
+    private String deviceCode;
 
     @Column(name = "user_id")
     private String userId;
@@ -40,11 +42,9 @@ public class Device implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     private User user;
 
-    public Device() {
-    }
 
-    public Device(String deviceId, User user) {
-        this.deviceId = deviceId;
+    public Device(String deviceCode, User user) {
+        this.deviceCode = deviceCode;
         this.user = user;
     }
 }

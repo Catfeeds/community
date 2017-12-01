@@ -1,15 +1,12 @@
 package com.tongwii.controller;
 
 import com.tongwii.constant.AuthoritiesConstants;
-import com.tongwii.constant.Constants;
-import com.tongwii.constant.UserConstants;
-import com.tongwii.exception.BadRequestAlertException;
-import com.tongwii.exception.InternalServerErrorException;
-import com.tongwii.exception.InvalidPasswordException;
-import com.tongwii.exception.LoginAlreadyUsedException;
 import com.tongwii.domain.User;
 import com.tongwii.dto.UserDTO;
 import com.tongwii.dto.mapper.UserMapper;
+import com.tongwii.exception.InternalServerErrorException;
+import com.tongwii.exception.InvalidPasswordException;
+import com.tongwii.exception.LoginAlreadyUsedException;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.security.jwt.JWTConfigurer;
 import com.tongwii.security.jwt.TokenProvider;
@@ -18,6 +15,7 @@ import com.tongwii.util.HeaderUtil;
 import com.tongwii.util.PaginationUtil;
 import com.tongwii.util.ResponseUtil;
 import com.tongwii.vm.LoginVM;
+import com.tongwii.vm.ManagedUserVM;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,11 +54,12 @@ public class UserController {
 
     // 用户注册接口
     @PostMapping("/register")
-    public ResponseEntity register(@Valid @RequestBody User user)  {
-        if(Optional.ofNullable(userService.findByAccount(user.getAccount())).isPresent()){
-            throw new LoginAlreadyUsedException();
+    public ResponseEntity register(@Valid @RequestBody ManagedUserVM managedUserVM)  {
+        if (!checkPasswordLength(managedUserVM.getPassword())) {
+            throw new InvalidPasswordException();
         }
-        UserDTO userDTO = userService.register(user);
+        userService.findOneByAccount(managedUserVM.getAccount()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
+        UserDTO userDTO = userService.register(managedUserVM, managedUserVM.getPassword());
         return ResponseEntity.ok(userDTO);
 	}
 
@@ -117,13 +116,6 @@ public class UserController {
         userService.changePassword(password);
     }
 
-    private static boolean checkPasswordLength(String password) {
-        return !StringUtils.isEmpty(password) &&
-            password.length() >= UserConstants.PASSWORD_MIN_LENGTH &&
-            password.length() <= UserConstants.PASSWORD_MAX_LENGTH;
-    }
-
-
     /**
      * GET  /users : get all users.
      *
@@ -165,33 +157,28 @@ public class UserController {
     }
 
     /**
-     * GET  /users/:login : get the "login" user.
+     * GET  /user/:id : get the "id" user.
      *
-     * @param account the login of the user to find
-     * @return the ResponseEntity with status 200 (OK) and with body the "login" user, or with status 404 (Not Found)
+     * @param id the login of the user to find
+     * @return the ResponseEntity with status 200 (OK) and with body the "id" user, or with status 404 (Not Found)
      */
-    @GetMapping("/{account:" + Constants.LOGIN_REGEX + "}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable String account) {
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
         return ResponseUtil.wrapOrNotFound(
-            userService.getUserWithRolesByAccount(account)
-                .map(userMapper::userToUserDTO));
+            Optional.ofNullable(userService.findById(id)).map(userMapper::userToUserDTO));
     }
 
     /**
-     * DELETE /users/:login : delete the "login" User.
+     * DELETE /user/:id : delete the "id" User.
      *
-     * @param account the login of the user to delete
+     * @param id the login of the user to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping("/{account:" + Constants.LOGIN_REGEX + "}")
+    @DeleteMapping("/{id}")
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<Void> deleteUser(@PathVariable String account) {
-        try {
-            userService.deleteUser(account);
-        } catch (Exception e) {
-            throw new BadRequestAlertException("用户删除失败", "userManagement", "userUsed");
-        }
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert("userManagement.deleted", account)).build();
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        userService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("userManagement.deleted", id)).build();
     }
 
 	// 上传用户头像
@@ -202,7 +189,7 @@ public class UserController {
         }
         String userId = SecurityUtils.getCurrentUserId();
         // 上传文件并更新用户地址
-        String uploadUrl = userService.updateUserAvatorById(userId, file);
+        String uploadUrl = userService.updateUserAvatarById(userId, file);
         return ResponseEntity.ok(uploadUrl);
 	}
 
@@ -266,5 +253,12 @@ public class UserController {
         UserDTO userDTO = userMapper.userToUserDTO(userEntity);
         return ResponseEntity.ok(userDTO);
     }
+
+    private static boolean checkPasswordLength(String password) {
+        return !StringUtils.isEmpty(password) &&
+            password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
+            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+    }
+
 }
 

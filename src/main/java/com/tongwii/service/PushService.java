@@ -45,7 +45,7 @@ public class PushService {
             if(!CollectionUtils.isEmpty(pushMessage.getUsersId())) {
                 Set<String> devices = pushMessage.getUsersId().stream().flatMap(userId -> {
                     User user = userService.findById(userId);
-                    return Optional.ofNullable(user.getDevices()).orElse(new HashSet<>()).stream().map(Device::getDeviceId).collect(Collectors.toSet()).stream();
+                    return Optional.ofNullable(user.getDevices()).orElse(new HashSet<>()).stream().map(Device::getDeviceCode).collect(Collectors.toSet()).stream();
                 }).collect(Collectors.toSet());
                 pushMessage.setDevicesId(devices);
             }

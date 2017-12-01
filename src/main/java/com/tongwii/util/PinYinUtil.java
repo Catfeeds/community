@@ -26,19 +26,17 @@ public class PinYinUtil {
         format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
         format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         format.setVCharType(HanyuPinyinVCharType.WITH_V);
-        String output = "";
+        StringBuilder output = new StringBuilder();
         if (inputString != null && inputString.length() > 0
                 && !"null".equals(inputString)) {
             char[] input = inputString.trim().toCharArray();
             try {
-                for (int i = 0; i < input.length; i++) {
-                    if (java.lang.Character.toString(input[i]).matches(
-                            "[\\u4E00-\\u9FA5]+")) {
-                        String[] temp = PinyinHelper.toHanyuPinyinStringArray(
-                                input[i], format);
-                        output += temp[0];
+                for (char anInput : input) {
+                    if (Character.toString(anInput).matches("[\\u4E00-\\u9FA5]+")) {
+                        String[] temp = PinyinHelper.toHanyuPinyinStringArray(anInput, format);
+                        output.append(temp[0]);
                     } else
-                        output += java.lang.Character.toString(input[i]);
+                        output.append(Character.toString(anInput));
                 }
             } catch (BadHanyuPinyinOutputFormatCombination e) {
                 e.printStackTrace();
@@ -46,7 +44,7 @@ public class PinYinUtil {
         } else {
             return "*";
         }
-        return output;
+        return output.toString();
     }
 
     /**
@@ -56,24 +54,23 @@ public class PinYinUtil {
      * @return 拼音
      */
     public static String converterToFirstSpell(String chines) {
-        String pinyinName = "";
+        StringBuilder pinyinName = new StringBuilder();
         char[] nameChar = chines.toCharArray();
         HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
         defaultFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
         defaultFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-        for (int i = 0; i < nameChar.length; i++) {
-            if (nameChar[i] > 128) {
+        for (char aNameChar : nameChar) {
+            if (aNameChar > 128) {
                 try {
-                    pinyinName += PinyinHelper.toHanyuPinyinStringArray(
-                            nameChar[i], defaultFormat)[0].charAt(0);
+                    pinyinName.append(PinyinHelper.toHanyuPinyinStringArray(aNameChar, defaultFormat)[0].charAt(0));
                 } catch (BadHanyuPinyinOutputFormatCombination e) {
                     e.printStackTrace();
                 }
             } else {
-                pinyinName += nameChar[i];
+                pinyinName.append(aNameChar);
             }
         }
-        return pinyinName;
+        return pinyinName.toString();
     }
 
     /**

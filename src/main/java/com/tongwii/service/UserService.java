@@ -52,35 +52,61 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public UserDTO register(UserDTO userDTO, String password) {
+        User newUser = new User();
+        String encryptedPassword = passwordEncoder.encode(password);
+        newUser.setAccount(userDTO.getAccount());
+        // new user gets initially a generated password
+        newUser.setPassword(encryptedPassword);
+        // 新用户默认激活
+        newUser.setActivated(true);
+        if (newUser.getLangKey() == null) {
+            newUser.setLangKey(UserConstants.DEFAULT_LANGUAGE); // 默认语言
+        } else {
+            newUser.setLangKey(userDTO.getLangKey());
+        }
+        Role role = roleService.findRoleByCode(AuthoritiesConstants.USER);
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        newUser.setRoles(roles);
+        newUser.setAddTime(new Date());
+        userDao.save(newUser);
+        return userMapper.userToUserDTO(newUser);
+    }
+
 
     public User findByAccount(String account) {
         return userDao.findByAccount(account);
     }
 
-    public UserDTO register(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setAddTime(new Date());
-        // 新用户默认激活
-        user.setActivated(true);
-        if (user.getLangKey() == null) {
-            user.setLangKey(UserConstants.DEFAULT_LANGUAGE); // 默认语言
-        } else {
-            user.setLangKey(user.getLangKey());
-        }
-        Role role = roleService.findRoleByCode(AuthoritiesConstants.USER);
-        user.setRoles(Collections.singleton(role));
-        userDao.save(user);
-        return userMapper.userToUserDTO(user);
-    }
-
-    public String updateUserAvatorById(String userId, MultipartFile multipartFile) {
+    public String updateUserAvatarById(String userId, MultipartFile multipartFile) {
         File file = fileService.saveAndUploadFileToFTP(userId, multipartFile);
-        userDao.updateAvatorById(userId, file.getId());
+        userDao.updateAvatarById(userId, file.getFilePath());
         return file.getFilePath();
     }
 
+    @Transactional(readOnly = true)
     public User findById(String createUserId) {
         return userDao.findOne(createUserId);
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserWithDevicesById(String id) {
+        return userDao.findOneWithDevicesById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> getUserWithRolesByAccount(String account) {
+        return userDao.findOneWithRolesByAccount(account);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> findOneByAccount(String account) {
+        return userDao.findOneByAccount(account);
+    }
+
+    public void delete(String id) {
+        userDao.delete(id);
     }
 
     public void update(User user) {
@@ -146,8 +172,8 @@ public class UserService {
     /**
      * 根据roleCode添加用户角色
      *
-     * @param userId
-     * @param roleCode
+     * @param userId 用户id
+     * @param roleCode 角色code
      */
     public void addUserRole(String userId, String roleCode) {
         Optional.of(userDao.findOne(userId)).ifPresent(user -> {
@@ -159,8 +185,8 @@ public class UserService {
     /**
      * 根据roleCode删除用户角色
      *
-     * @param userId
-     * @param roleCode
+     * @param userId 用户id
+     * @param roleCode 角色code
      */
     public void removeUserRole(String userId, String roleCode) {
         Optional.of(userDao.findOne(userId)).ifPresent(user -> {
@@ -169,17 +195,8 @@ public class UserService {
         });
     }
 
-    @Transactional(readOnly = true)
-    public Optional<User> getUserWithRolesByAccount(String account) {
-        return userDao.findOneWithRolesByAccount(account);
-    }
-
     public void deleteUser(String account) {
         userDao.findOneByAccount(account).ifPresent(userDao::delete);
-    }
-
-    public Optional<User> findOneByAccount(String account) {
-        return userDao.findOneByAccount(account);
     }
 
     public void changePassword(String password) {
@@ -190,12 +207,12 @@ public class UserService {
     }
 
     public User findByAccountAndUpdateDeviceId(LoginVM loginVM) {
-        User user = userDao.findByAccount(loginVM.getAccount());
+        User user = userDao.findOneWithDevicesByAccount(loginVM.getAccount());
         if(CollectionUtils.isEmpty(user.getDevices()) && Objects.nonNull(loginVM.getDeviceId())) {
             Device device = new Device(loginVM.getDeviceId(), user);
             deviceDao.save(device);
         } else if (!StringUtils.isEmpty(loginVM.getDeviceId())) {
-            if(!user.getDevices().stream().map(Device::getDeviceId).collect(Collectors.toList()).contains(loginVM.getDeviceId())) {
+            if(!user.getDevices().stream().map(Device::getDeviceCode).collect(Collectors.toList()).contains(loginVM.getDeviceId())) {
                 Device device = new Device(loginVM.getDeviceId(), user);
                 deviceDao.save(device);
             }
@@ -204,9 +221,9 @@ public class UserService {
     }
 
     public void updateUserDevices(String deviceId) {
-        User user = userDao.findOne(SecurityUtils.getCurrentUserId());
-        if(user.getDevices().stream().map(Device::getDeviceId).collect(Collectors.toList()).contains(deviceId)) {
-            Optional<Device> device = user.getDevices().stream().filter(device1 -> device1.getDeviceId().equals(deviceId)).findFirst();
+        User user = userDao.findOneWithDevicesById(SecurityUtils.getCurrentUserId());
+        if(user.getDevices().stream().map(Device::getDeviceCode).collect(Collectors.toList()).contains(deviceId)) {
+            Optional<Device> device = user.getDevices().stream().filter(device1 -> device1.getDeviceCode().equals(deviceId)).findFirst();
             device.ifPresent(deviceDao::delete);
         }
     }

@@ -4,6 +4,10 @@ import com.tongwii.dao.IFileDao;
 import com.tongwii.domain.File;
 import com.tongwii.service.gateWay.FtpGateway;
 import com.tongwii.util.FileUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.integration.ftp.session.FtpRemoteFileTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,18 +32,73 @@ import java.util.stream.Stream;
 @Transactional
 public class FileService {
 
-    private final IFileDao filedao;
+    private final Logger log = LoggerFactory.getLogger(FileService.class);
+
+    private final IFileDao fileDao;
 
     private final FtpGateway ftpGateway;
 
     private FtpRemoteFileTemplate remoteFileTemplate;
 
-    public FileService(IFileDao filedao, FtpGateway ftpGateway, FtpRemoteFileTemplate remoteFileTemplate) {
-        this.filedao = filedao;
+    public FileService(IFileDao fileDao, FtpGateway ftpGateway, FtpRemoteFileTemplate remoteFileTemplate) {
+        this.fileDao = fileDao;
         this.ftpGateway = ftpGateway;
         this.remoteFileTemplate = remoteFileTemplate;
     }
 
+    /**
+     * Save a file.
+     *
+     * @param file the entity to save
+     * @return the persisted entity
+     */
+    public File save(File file) {
+        log.debug("Request to save File : {}", file);
+        return fileDao.save(file);
+    }
+
+    /**
+     * Get all the files.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public Page<File> findAll(Pageable pageable) {
+        log.debug("Request to get all Files");
+        return fileDao.findAll(pageable);
+    }
+
+    /**
+     * Get one file by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Transactional(readOnly = true)
+    public File findOne(String id) {
+        log.debug("Request to get File : {}", id);
+        return fileDao.findOne(id);
+    }
+
+    /**
+     * Delete the file by id.
+     *
+     * @param id the id of the entity
+     */
+    public void delete(String id) {
+        log.debug("Request to delete File : {}", id);
+        fileDao.delete(id);
+    }
+
+    /**
+     * 上传并保存图片
+     *
+     * @param userId 用户id
+     * @param file 文件
+     * @return file 上传的文件实体
+     * @throws IOException
+     */
     public File saveAndUploadFile(String userId, MultipartFile file) throws IOException {
         String id = UUID.randomUUID().toString();
         String suffix = FileUtil.getFileSuffix(file.getOriginalFilename());
@@ -49,7 +108,7 @@ public class FileService {
         fileEntity.setFileType(FileUtil.rtnFileType(file.getOriginalFilename()));
         fileEntity.setFilePath(relativeUrl);
         fileEntity.setUploadUserId(userId);
-        filedao.saveAndFlush(fileEntity);
+        fileDao.saveAndFlush(fileEntity);
         return fileEntity;
     }
 
@@ -126,7 +185,7 @@ public class FileService {
         fileEntity.setFileType(FileUtil.rtnFileType(multipartFile.getOriginalFilename()));
         fileEntity.setFilePath(fileUrl + "/" + fileName);
         fileEntity.setUploadUserId(userId);
-        filedao.saveAndFlush(fileEntity);
+        fileDao.saveAndFlush(fileEntity);
         java.io.File file = FileUtil.multipartToFile(multipartFile);
         ftpGateway.sendToFtp(file, fileName, fileUrl);
         file.delete();

@@ -33,7 +33,7 @@ public class UserMapper {
         userDTO.setId(user.getId());
         userDTO.setAccount(user.getAccount());
         userDTO.setNickName(user.getNickName());
-        userDTO.setAvatarFileSrc(Objects.nonNull(user.getAvatarFile()) ? user.getAvatarFile().getFilePath() : null);
+        userDTO.setAvatarFileSrc(user.getImageUrl());
         userDTO.setPhone(user.getPhone());
         userDTO.setSignature(user.getSignature());
         userDTO.setAddTime(user.getAddTime());
@@ -43,7 +43,7 @@ public class UserMapper {
         userDTO.setSex(user.getSex());
         userDTO.setLangKey(user.getLangKey());
         userDTO.setActivated(user.isActivated());
-        userDTO.setDevices(Optional.ofNullable(user.getDevices()).orElse(new HashSet<>()).stream().map(Device::getDeviceId).collect(Collectors.toSet()));
+        userDTO.setDevices(Optional.ofNullable(user.getDevices()).orElse(new HashSet<>()).stream().map(Device::getDeviceCode).collect(Collectors.toSet()));
         userDTO.setRoles(Optional.ofNullable(user.getRoles()).orElse(new HashSet<>()).stream().map(Role::getCode).collect(Collectors.toSet()));
         List<RoomDTO> roomDTOS = userRoomService.findRoomByUserId(userDTO.getId()).stream().map(userRoomEntity -> {
             Room room = userRoomEntity.getRoomByRoomId();

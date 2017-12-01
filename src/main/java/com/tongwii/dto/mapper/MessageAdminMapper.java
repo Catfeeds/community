@@ -96,15 +96,11 @@ public class MessageAdminMapper {
         if ( message == null ) {
             return null;
         }
-        User createUser = message.getCreateUser();
-        if ( createUser == null ) {
+        String id = message.getCreateUserId();
+        if ( id == null ) {
             return null;
         }
-        String account = createUser.getAccount();
-        if ( account == null ) {
-            return null;
-        }
-        return account;
+        return id;
     }
 
     private String messageFileId(Message message) {
