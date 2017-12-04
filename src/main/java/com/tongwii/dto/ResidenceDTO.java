@@ -18,7 +18,7 @@ public class ResidenceDTO implements Serializable {
     // 负责人
     private String chargeUser;
     // 楼盘总数
-    private Integer floorCount;
+    private int floorCount;
     // 区域
     private String region;
     // 区域code

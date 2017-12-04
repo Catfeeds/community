@@ -46,14 +46,14 @@ public class MessageService {
         messageDao.save(message);
     }
 
-    public void updateMessageProcess(String messageId, Integer processState) {
+    public void updateMessageProcess(String messageId, int processState) {
         Message message = messageDao.findById(messageId);
         message.setProcessState(processState);
     }
 
 
     public Page<Message> findByMessageTypeCodeAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeCode, String residenceId) {
-        return messageDao.findByMessageType_CodeAndResidence_IdOrderByCreateTimeDesc(pageable, messageTypeCode, residenceId);
+        return messageDao.findByMessageType_CodeAndResidenceIdOrderByCreateTimeDesc(pageable, messageTypeCode, residenceId);
     }
 
     /**

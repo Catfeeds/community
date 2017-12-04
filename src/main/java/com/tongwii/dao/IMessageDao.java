@@ -28,7 +28,7 @@ public interface IMessageDao extends JpaRepository<Message, String> {
      */
     @Modifying
     @Query("UPDATE Message m SET m.processState = :processState WHERE m.id = :messageId")
-    void updateMessageStateByMessageId(String messageId, Integer processState);
+    void updateMessageStateByMessageId(String messageId, int processState);
 
 
     /**
@@ -71,7 +71,7 @@ public interface IMessageDao extends JpaRepository<Message, String> {
      * @param residenceId 社区id
      * @return
      */
-    Page<Message> findByMessageType_CodeAndResidence_IdOrderByCreateTimeDesc(Pageable pageable, String messageTypeCode, String residenceId);
+    Page<Message> findByMessageType_CodeAndResidenceIdOrderByCreateTimeDesc(Pageable pageable, String messageTypeCode, String residenceId);
 
     Message findById(String messageId);
 

@@ -4,11 +4,11 @@ import com.tongwii.constant.MessageConstants;
 import com.tongwii.domain.MessageComment;
 import com.tongwii.dto.MessageCommentDTO;
 import com.tongwii.dto.NeighborMessageDTO;
+import com.tongwii.dto.mapper.MessageCommentMapper;
 import com.tongwii.exception.BadRequestAlertException;
 import com.tongwii.security.SecurityUtils;
 import com.tongwii.service.MessageCommentService;
 import com.tongwii.service.UserService;
-import com.tongwii.util.DateUtil;
 import com.tongwii.util.HeaderUtil;
 import com.tongwii.util.PaginationUtil;
 import com.tongwii.util.ResponseUtil;
@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by admin on 2017/10/24.
@@ -31,12 +34,15 @@ import java.util.*;
 @RequestMapping("/api/message_comment")
 public class MessageCommentController {
 
+    private final MessageCommentMapper messageCommentMapper;
     private final MessageCommentService messageCommentService;
     private final UserService userService;
 
     private static final String ENTITY_NAME = "messageComment";
 
-    public MessageCommentController(MessageCommentService messageCommentService, UserService userService) {this.messageCommentService =
+    public MessageCommentController(MessageCommentMapper messageCommentMapper, MessageCommentService messageCommentService, UserService userService) {
+        this.messageCommentMapper = messageCommentMapper;
+        this.messageCommentService =
         messageCommentService;
         this.userService = userService;
     }
@@ -124,7 +130,7 @@ public class MessageCommentController {
     public ResponseEntity updateIsLikeInfo(@RequestBody NeighborMessageDTO messageEntity) {
         // 得到当前用户Id
         String userId = SecurityUtils.getCurrentUserId();
-        Integer likeNum = messageEntity.getLikeNum();
+        int likeNum = messageEntity.getLikeNum();
         Boolean isLike = false;// 为true表示已经赞过了
         // 通过userId与传来的messageId查询点赞记录
         List<MessageComment> commentEntities = messageCommentService.findByMessageIdAndCommentatorIdAndType(messageEntity.getId(), userId, MessageConstants.IS_LIKE);
@@ -181,6 +187,7 @@ public class MessageCommentController {
         messageComment.setCommentDate(new Date());
         messageComment.setType(MessageConstants.COMMENT);
         messageCommentService.addMessageComment(messageComment);
+        neighborMessageDTO.setMessageComments(Collections.singletonList(messageCommentMapper.toDto(messageComment)));
 
         neighborMessageDTO.setCommentNum(messageCommentService.getCommentCounts(neighborMessageDTO.getId()));
         return ResponseEntity.ok(neighborMessageDTO);
@@ -191,17 +198,8 @@ public class MessageCommentController {
      */
     @GetMapping("/getCommentList/{messageId}")
     public ResponseEntity getCommentList(@PathVariable String messageId){
-        List<MessageComment> messageCommentEntities = messageCommentService.findByMessageIdAndType(messageId, MessageConstants.COMMENT);
-        // 封装返回到前台的数据
-        List<Map> commentList = new ArrayList<>();
-        for(MessageComment messageComment : messageCommentEntities){
-            Map<String, Object> commentObject = new HashMap<>();
-            commentObject.put("account", messageComment.getCommentator().getAccount());
-            commentObject.put("comment", messageComment.getComment());
-            commentObject.put("commentDate", DateUtil.date2Str(messageComment.getCommentDate(), DateUtil.DEFAULT_DATE_TIME_FORMAT));
-            commentList.add(commentObject);
-        }
-        return ResponseEntity.ok(commentList);
+        List<MessageCommentDTO> messageCommentEntities = messageCommentService.findByMessageIdAndType(messageId, MessageConstants.COMMENT);
+        return ResponseEntity.ok(messageCommentEntities);
     }
 
 

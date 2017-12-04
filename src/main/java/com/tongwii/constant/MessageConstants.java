@@ -17,12 +17,12 @@ public final class MessageConstants {
     public final static String REPLAY_MESSAGE = "REPLAY_MESSAGE";//回复消息
 
     /**定义消息处理进度*/
-    public final static Integer UN_PROCESS = 0;//未处理
-    public final static Integer PROCESSED = 1;//已处理
+    public final static int UN_PROCESS = 0;//未处理
+    public final static int PROCESSED = 1;//已处理
 
     /**定义动态消息的操作类型*/
-    public final static Integer IS_LIKE = 1; // 点赞
-    public final static Integer COMMENT = 0; // 评论
+    public final static int IS_LIKE = 1; // 点赞
+    public final static int COMMENT = 0; // 评论
 
     private MessageConstants() {
     }

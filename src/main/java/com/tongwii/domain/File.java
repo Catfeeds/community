@@ -44,7 +44,7 @@ public class File implements Serializable {
 
     @Basic
     @Column(name = "state")
-    private Byte state;
+    private Integer state;
 
     @Basic
     @Column(name = "upload_user_id")

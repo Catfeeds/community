@@ -15,7 +15,7 @@ public class FloorDTO implements Serializable {
 
     private String code;
 
-    private Integer floorNumber;
+    private int floorNumber;
 
     private Boolean hasElev;
 

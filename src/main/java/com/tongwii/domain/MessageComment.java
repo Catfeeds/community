@@ -42,11 +42,11 @@ public class MessageComment implements Serializable {
 
     @Basic
     @Column(name = "comment_date")
-    private Date commentDate;
+    private Date commentDate = new Date();
 
     @Basic
     @Column(name = "type")
-    private Integer type;
+    private int type;
 
     @ManyToOne
     @JsonIgnore

@@ -21,7 +21,7 @@ public class FileDTO implements Serializable {
 
     private String des;
 
-    private Integer state;
+    private int state;
 
     private String uploadUserId;
 }

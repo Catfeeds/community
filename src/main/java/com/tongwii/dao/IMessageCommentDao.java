@@ -18,12 +18,16 @@ import java.util.List;
 public interface IMessageCommentDao extends JpaRepository<MessageComment, String> {
 
     // 根据messageId查询消息评论记录
-    List<MessageComment> findByMessageIdAndType(String messageId, Integer type);
+    List<MessageComment> findByMessageIdAndType(String messageId, int type);
 
     // 根据messageId与commentatorId查询消息点赞评论记录
-    List<MessageComment> findByMessageIdAndCommentatorIdAndType(String messageId, String commentatorId, Integer type);
+    List<MessageComment> findByMessageIdAndCommentatorIdAndType(String messageId, String commentatorId, int type);
 
-    Integer countByMessageId(String id);
+    // 根据消息id查询评论数
+    int countByMessageId(String id);
+
+    // 根据消息id和类型查询评论数量
+    int countByMessageIdAndType(String messageId, int type);
 
     Page<MessageComment> findAllByMessageId(String messageId, Pageable pageable);
 }

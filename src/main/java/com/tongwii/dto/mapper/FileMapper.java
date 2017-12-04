@@ -54,9 +54,7 @@ public class FileMapper {
         fileDTO_.setFilePath( file.getFilePath() );
         fileDTO_.setFileType( file.getFileType() );
         fileDTO_.setDes( file.getDes() );
-        if ( file.getState() != null ) {
-            fileDTO_.setState( file.getState().intValue() );
-        }
+        fileDTO_.setState( file.getState() );
 
         return fileDTO_;
     }
@@ -74,9 +72,7 @@ public class FileMapper {
         file_.setFilePath( fileDTO.getFilePath() );
         file_.setFileType( fileDTO.getFileType() );
         file_.setDes( fileDTO.getDes() );
-        if ( fileDTO.getState() != null ) {
-            file_.setState( fileDTO.getState().byteValue() );
-        }
+        file_.setState( fileDTO.getState() );
         file_.setUploadUserId( fileDTO.getUploadUserId() );
 
         return file_;

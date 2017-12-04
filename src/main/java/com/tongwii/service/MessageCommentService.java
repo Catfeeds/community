@@ -9,7 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Created by admin on 2017/10/23.
@@ -29,14 +32,26 @@ public class MessageCommentService {
      * 根据messageId获取点赞评论记录
      * @param messageId 消息id
      */
-    public List<MessageComment> findByMessageIdAndType(String messageId, Integer type){
-        return messageCommentDao.findByMessageIdAndType(messageId, type);
+    public List<MessageCommentDTO> findByMessageIdAndType(String messageId, int type){
+        return Optional.ofNullable(messageCommentDao.findByMessageIdAndType(messageId, type)).orElse(new ArrayList<>()).stream().map(messageCommentMapper::toDto).collect(Collectors.toList());
+    }
+
+
+    /**
+     * 根据消息id和类型获取评论数量
+     *
+     * @param messageId 消息id
+     * @param type type
+     * @return
+     */
+    public int getCountByMessageIdAndType(String messageId, int type) {
+        return messageCommentDao.countByMessageIdAndType(messageId, type);
     }
 
     /**
      * 根据messageId与commentorId查询
      */
-    public List<MessageComment> findByMessageIdAndCommentatorIdAndType(String messageId, String commentatorId, Integer type){
+    public List<MessageComment> findByMessageIdAndCommentatorIdAndType(String messageId, String commentatorId, int type){
         return messageCommentDao.findByMessageIdAndCommentatorIdAndType(messageId, commentatorId, type);
     }
 
@@ -47,7 +62,7 @@ public class MessageCommentService {
         messageCommentDao.save(messageComment);
     }
 
-    public Integer getCommentCounts(String id) {
+    public int getCommentCounts(String id) {
        return messageCommentDao.countByMessageId(id);
     }
 
@@ -100,4 +115,5 @@ public class MessageCommentService {
     public void delete(String id) {
         messageCommentDao.delete(id);
     }
+
 }

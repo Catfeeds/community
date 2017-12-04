@@ -1,6 +1,5 @@
 package com.tongwii.dto;
 
-import com.tongwii.domain.MessageComment;
 import com.tongwii.domain.MessageType;
 import lombok.Data;
 
@@ -20,7 +19,7 @@ public class NeighborMessageDTO implements Serializable {
     private String createUser;
     private String createUserAvatar;
     private MessageType messageType;
-    private Integer likeNum;
-    private Integer commentNum;
-    private Collection<MessageComment> messageCommentEntities;
+    private int likeNum;
+    private int commentNum;
+    private Collection<MessageCommentDTO> messageComments;
 }

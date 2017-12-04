@@ -21,7 +21,7 @@ public class MessageAdminDTO implements Serializable {
 
     private Date createTime;
 
-    private Integer processState;
+    private int processState;
 
     private Date repairStartTime;
 

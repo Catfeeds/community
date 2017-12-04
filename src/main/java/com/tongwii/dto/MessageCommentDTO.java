@@ -20,7 +20,7 @@ public class MessageCommentDTO implements Serializable {
 
     private Date commentDate;
 
-    private Integer type;
+    private int type;
 
     private String commentator;
 
